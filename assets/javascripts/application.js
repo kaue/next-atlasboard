@@ -4,6 +4,9 @@
 //= underscore
 
 $(function() {
+    if (!$("#widgets-container").length)
+        return
+
     var gutter = parseInt($("#main-container").css("paddingTop")) * 2;
     var gridsterGutter = gutter/2;
     var height = 1080 - $("#widgets-container").offset().top - gridsterGutter;
