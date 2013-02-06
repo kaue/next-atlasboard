@@ -2,17 +2,19 @@ Getting Started - A Dashboard in 5 Steps
 ============
 1. Install node
 2. Install atlasboard
+
     2.1 Ideally, this will one day be published as an official npm package, but at the moment you'll need to download the source directly, then tell node that the module can be found there.
 
-    # Clone the repo
-    $ git clone git@bitbucket.org:atlassian/atlasboard.git
-     
-    # Tell node that the atlasboard module is located here
-    $ cd atlasboard
-    $ npm link
-    $ cd path/to/my-wallboard
-    $ npm link atlasboard
-    $ npm install # This will install atlasboard's dependencies too
+        # Clone the repo
+        $ git clone git@bitbucket.org:atlassian/atlasboard.git
+
+        # Tell node that the atlasboard module is located here
+        $ cd atlasboard
+        $ npm link
+        $ cd path/to/my-wallboard
+        $ npm link atlasboard
+        $ npm install # This will install atlasboard's dependencies too
+
 3. Create a new dashboard with `atlasboard new mydashboard`
 4. Start your server with `atlasboard start`
 5. Check it out at http://localhost:4444/
