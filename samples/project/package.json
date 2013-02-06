@@ -1,0 +1,33 @@
+{
+    "private":true,
+    "license":"Apache License, Version 2.0",
+    "author":"AtlasBoard",
+    "name":"dashboard",
+    "description":"A dashboard built for AtlasBoard",
+    "version":"0.0.1",
+    "homepage":"",
+    "repository":{
+        "type":"git",
+        "url":""
+    },
+    "engines":{
+        "node":"~0.6.10"
+    },
+    "scripts":{
+        "start":"supervisor server.js"
+    },
+    "dependencies":{
+        "atlasboard":"~0.0.3",
+        "pg": "0.8.6",
+        "temp": "0.4.0",
+        "underscore": "1.4.2",
+        "socket.io": "0.9.13",
+        "cheerio": "0.10.5",
+        "request": "2.12.0",
+        "dateformat": "~1.0.0",
+        "ical": "~0.0.3"
+    },
+    "devDependencies":{
+        "supervisor":"0.5.0"
+    }
+}

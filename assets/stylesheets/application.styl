@@ -1,0 +1,227 @@
+@import "normalize.css"
+@import "helpers.css"
+@import "jquery.gridster.css"
+
+// nib is a powerful lib for stylus that provides cross-browser css3 mixins.
+// No more vendor prefixes. http://visionmedia.github.com/nib/
+@import 'nib'
+
+gutter = 36px
+dimmed = #444444
+background = #181818
+widgetheader = #454545
+
+// Apply a natural box layout model to all elements.
+// http://paulirish.com/2012/box-sizing-border-box-ftw/
+*
+  box-sizing: border-box
+
+@font-face {
+  font-family: 'helvetica_neueregular';
+  src: url('../fonts/helveticaneue-condensed-webfont.eot');
+  src: url('../fonts/helveticaneue-condensed-webfont.eot?#iefix') format('embedded-opentype'),
+       url('../fonts/helveticaneue-condensed-webfont.woff') format('woff'),
+       url('../fonts/helveticaneue-condensed-webfont.ttf') format('truetype'),
+       url('../fonts/helveticaneue-condensed-webfont.svg#helvetica_neueregular') format('svg');
+  font-weight: normal;
+  font-style: normal;
+
+}
+
+body
+  background: #ccc
+  font-family: helvetica_neueregular
+  overflow: hidden
+
+.starter #widgets-container,
+.starter #daysUntil
+    visibility: hidden
+
+.starter #main-container h1
+   position: absolute
+   top: 50%
+   left: 50%
+   margin-top: -90px
+   margin-left: -310px
+   font-size: 180px
+
+
+
+.starter button
+      position: absolute
+      top: 62%
+      left: 46%
+      background: -moz-linear-gradient(top, #4687ce 0%, #3068a2 100%);
+      background: -webkit-linear-gradient(top, #4687ce 0%,#3068a2 100%);
+      background: -o-linear-gradient(top, #4687ce 0%,#3068a2 100%);
+      background: -ms-linear-gradient(top, #4687ce 0%,#3068a2 100%);
+      background: linear-gradient(top, #4687ce 0%,#3068a2 100%);
+      border-color: #486582;
+      color: #fff;
+      font-weight: bold;
+      -webkit-font-smoothing: antialiased;
+      text-shadow: 0 1px 0 #205081;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
+      cursor: pointer;
+      display: inline-block;
+      font-family: sans-serif;
+      font-size: 26px;
+      font-variant: normal;
+      font-weight: normal;
+      height: 2.1428571428571em;
+      line-height: 1.4285714285714;
+      margin: 0;
+      padding: 4px 10px;
+      text-decoration: none;
+      vertical-align: baseline;
+      white-space: nowrap;
+
+.uppercase
+	text-transform: uppercase
+
+#main-container
+  width: 1920px
+  height: 1080px
+  background: background
+  padding: (gutter/2)
+
+  h1
+     float: left
+     margin: 0 0 (gutter/2) 0
+     color: dimmed
+     font-size: 50px;
+     line-height: 80%
+     font-weight: bold
+     text-shadow: 0 0 2px (dimmed * .6)
+     margin: (gutter/2) (gutter/2)
+     //-webkit-filter: contrast(10)  unquote('invert(1)')
+     //opacity: .9
+
+
+     &.dragged
+        width: 220px
+        outline: 5px dashed #ccc
+
+     .logo
+        float: left
+
+
+  #widgets-container
+
+      clear: both
+
+      ul
+        list-style: none
+        padding: 0
+
+      li
+        background: rgb(15, 15, 15)
+        color: #fff
+        padding: (gutter / 2)
+        border-radius: (gutter / 8)
+        box-shadow: 0 0 5px #111
+        overflow: hidden
+
+        &.editing
+           z-index: 32767
+           box-shadow: 0 0 15px #333
+
+        &:hover .edit
+            display: block
+
+        .edit
+            display: none
+            width: 20px
+            height: 20px
+            position: absolute
+            top: (gutter/2)
+            right:  (gutter/2)
+            border: none
+            text-indent: -9999px
+            background: transparent no-repeat unquote('url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAQAAAC1+jfqAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAGSSURBVCjPVVFNSwJhEF78Ad79Cf6PvXQRsotUlzKICosuRYmR2RJR0KE6lBFFZVEbpFBSqKu2rum6llFS9HHI4iUhT153n6ZtIWMOM+/MM88z7wwH7s9Ub16SJcnbmrNcxVm2q7Z8/QPvEOtntpj92NkCqITLepEpjix7xQtiLOoQ2b6+E7YAN/5nfOEJ2WbKqOIOJ4bYVMEQx4LfBBQDsvFMhUcCVU1/CxVXmDBGA5ZETrhDCQVcYAPbyEJBhvrnBVPiSpNr6cYDNCQwo4zzU/ySckkgDYuNuVpI42T9k4gLKGMPs/xPzzovQiY2hQYe0jlJfyNNhTqiWDYBq/wBMcSRpnyPzu1oS7WtxjVBSthU1vgVksiQ3Dn6Gp5ah2YOKQo5GiuHPA6xT1EKpxQNCNYejgIR457KKio0S56YckjSa9jo//3mrj+BV0QQagqGTOo+Y7gZIf1puP3WHoLhEb2PjTlCTCWGXtbp8DCX3hZuOdaIc9A+aQvWk4ihq95p67a7nP+u+Ws+r0dql9z/zv0NCYhdCPKZ7oYAAAAASUVORK5CYII=)')
+
+      &.loading
+         color: #333
+
+        h2
+            font-size: gutter
+            // Stylus is trying to be damn too clever.
+            margin-top: 0
+            margin-left: -(gutter/2)
+            margin-right: -(gutter/2)
+            margin-bottom: (gutter/2)
+            padding: 0 (gutter/2) (gutter/2) (gutter/2)
+            border-bottom: 1px solid #000000
+            text-transform: uppercase
+            color: widgetheader
+            line-height: 90%
+
+big
+         color: #fff
+         font-size: gutter * 2
+         font-weight: bold
+
+#editor
+    height: 400px
+    position: absolute
+    left: 0
+    right: 0
+    bottom: 0
+    background: #000
+    box-shadow: 0 -5px 5px #000
+    z-index: 1000
+    -webkit-transition: all .5s ease-in
+
+    &::before
+        display: block;
+        content: ""
+        position: absolute
+        top: -1500px
+        left: 0
+        right: 0
+        bottom: 400px
+        background: #000
+        opacity: .5
+
+
+    &.hide
+        bottom: -420px
+
+     &.hide::before
+        display: none;
+
+       ul
+         display: table
+         width: 100%
+         height: 100%
+         list-style: none
+
+         li
+           display: table-cell
+           width: 25%
+           height: 100%
+           position: relative
+           h4
+             color: #fff
+
+           article
+             display: block
+             position: absolute
+             top: 50px
+             left: 0
+             right: 0
+             bottom: 0
+             background: #111
+             color: #fff
+             border: 1px solid #333
+
+.error-display
+	display: none
+	padding-left: 20px
+	padding-bottom: 3px
+
+.error-display.show
+	display: inline !important

@@ -1,0 +1,11 @@
+{
+    "title": false,
+    "customJS" : ["jquery.peity.js"],
+    "widgets" : [
+        {"row" : 1, "col" : 1, "width" : 2, "height" : 1, "widget" : "linegraph",    "events" : ["sales-graph-config"]},
+        {"row" : 1, "col" : 3, "width" : 2, "height" : 2, "widget" : "image",        "events" : ["picture-of-the-day-natgeo"]},
+        {"row" : 1, "col" : 5, "width" : 2, "height" : 4, "widget" : "quotes",       "events" : ["quotes-famous"]},
+        {"row" : 2, "col" : 1, "width" : 2, "height" : 3, "widget" : "keyvaluelist", "events" : ["issue-types-product"]},
+        {"row" : 3, "col" : 2, "width" : 2, "height" : 2, "widget" : "calendar",     "events" : ["google-calendar-holidays"]}
+    ]
+}
