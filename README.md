@@ -1,37 +1,58 @@
-# Developing AtlasBoard for your own project
-## Starting a new project from scratch
-That's easy! Simply run `atlasboard new PROJECTNAME` where PROJECTNAME is the name of your project. AtlasBoard will do the rest.
-## Making your own custom dashboard
-Create a new file in my-dashboard/dashboards/
-The file can be JSON (preferred) or EJS.
-To speed up the process, using `atlasboard generate dashboard NAME` will make a new dashboard with the name you specified. You can then access this dashboard while the server is running at http://localhost:4444/NAME by default
+Getting Started - A Dashboard in 5 Steps
+============
+1. Install node
+2. Install atlasboard
+    2.1 Ideally, this will one day be published as an official npm package, but at the moment you'll need to download the source directly, then tell node that the module can be found there.
 
-## Making your own widgets
-Widgets are located in my-wallboard/widgets/ hosted in an independent folder. Each folder contains an html file, a js file and a css file, all matching the name of the widget directory.
-To create your own widget, run `atlasboard generate widget NAME` where NAME is the name you want for your new widget.
+    # Clone the repo
+    $ git clone git@bitbucket.org:atlassian/atlasboard.git
+     
+    # Tell node that the atlasboard module is located here
+    $ cd atlasboard
+    $ npm link
+    $ cd path/to/my-wallboard
+    $ npm link atlasboard
+    $ npm install # This will install atlasboard's dependencies too
+3. Create a new dashboard with `atlasboard new mydashboard`
+4. Start your server with `atlasboard start`
+5. Check it out at http://localhost:4444/
 
-## Making your own jobs
-Jobs are located in my-wallboard/jobs and contain a .json file for parameters and a .js file for the job itself. An event name takes the form of %job-directory%-%json-file-name%. See existing files for templates.
-To create a new job, run `atlasboard generate job NAME` where NAME is the name you want for your new widget.
-
-### Need Authentication? No problem
-Add your passwords in the file my-wallboard/globalAuth.json. See globalAuth.json.sample for a template.
-
-# Hosting an AtlasBoard server
-Step 1. Install the server dependencies with `npm install` if they're not already there.
-Step 2. Start the server with `atlasboard start` in the my-dashboard/ directory.
-
-# License: Apache License 2.0
+Everything Else
+=============
+Creating your own Dashboard Project, Job, Widget or Dashboard
+-----------
+AtlasBoard has a built-in project/job/widget generator, so this is all very straightforward and simple.
+**To create a wallboard project:**
+`$ atlasboard new PROJECTNAME` Creates a folder in this directory called PROJECTNAME which contains all the necessities for a fully functional AtlasBoard server
+**To create a new job/widget/dashboard:**
+`$ atlasboard generate job JOBNAME` (Replace job with widget or dashboard depending on what you want.) Creates an item with that name in the relevant place. Dashboard is then accessible at localhost:4444/NAME
+**To run your AtlasBoard server:**
+`$ atlasboard start`
+FAQs
+-------
+**What Programming Languages do I need to know?**
+JavaScript. That's it. If you want things to look nicer, some very basic level HTML and CSS might come in handy too.
+**Which port is the AtlasBoard server hosted on?**
+By default, this is port 4444 (i.e. the server will be at http://localhost:4444). Currently, this can be changed in the atlasboard/lib/atlasboard.js file (this will involve editing the node module's source code, so bear that in mind if you update AtlasBoard).
+**Does dragging the widgets around on my screen affect other people's dashboards?**
+No, this is just a local thing. Unfortunately, these changes you make don't persist (yet) either.
+**Where can I learn about making widgets/jobs/dashboards?**
+I recommend making a sample project by using atlasboard new PROJECTNAME. This will generate the dashboard shown here, and contains some great sample code for a range of different widget/job types.
+**What format should my dashboard be in?**
+If you're writing a new dashboard file (i.e. a file that lets you view a different set of widgets while still connecting to the same server), you can write this as a JSON file (easiest, preferred, see existing examples) or an EJS file.
+Legal
+==============
+License: Apache License 2.0
 Copyright 2013 Atlassian
 
-   Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
 
-       http://www.apache.org/licenses/LICENSE-2.0
+http://www.apache.org/licenses/LICENSE-2.0
 
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
