@@ -12,9 +12,7 @@
 }
 
 blockquote {
-    font-family: Georgia, serif;
     font-size: 35px;
-    font-style: italic;
     margin: 0.25em 0;
     padding: 0.25em 40px;
     line-height: 1.45;
@@ -34,7 +32,6 @@ blockquote:before {
 
 blockquote cite {
     color: #9A4473;
-    font-size: 35px;
     display: block;
     margin-top: 5px;
 }

@@ -1,6 +1,5 @@
 Widgets.linegraph = {
     onData: function(el, data) {
-        $('.error-display', el).removeClass("show");
 
         if (data.title) {
             $('h2', el).text(data.title);

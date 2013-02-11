@@ -7,14 +7,6 @@ module.exports = function(widgets, scheduler, config) {
     scheduler.schedule(function() {
         var options = {
             url: config.url
-            /*
-             * I don't need authorization here, but if I did, I could get my username and password from the globalAuth.json file
-             * The contents of this file are accessed via config.globalAuth
-             *
-            headers: {
-                "authorization": "Basic " + new Buffer(config.globalAuth.nasa.username + ":" + config.globalAuth.nasa.password).toString("base64")
-            }
-            */
         };
 
         request(options, function(error, response, body) {

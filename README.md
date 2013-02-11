@@ -112,6 +112,103 @@ This is a basic "Hello World" job:
         }, refreshTime);
     }
 
+**Database Query Jobs**
+
+For database jobs, the pg node module is recommended
+
+    var pg = require('pg');
+
+This sample code accesses a database and operates on the returned rows
+
+    // Use config parameters for database connections, including username/password combinations from globalAuth.json
+    var database = config.database;
+    var conString = "tcp://" + config.globalAuth.salesdb.username + ":" + config.globalAuth.salesdb.password + "@" + database.host + ":" + database.port + "/" + database.database;
+
+    var salesQueryString = 	"SELECT * FROM issues limit 100"
+
+    pg.connect(conString, function(err, client) {
+        var issues = [];
+        /*
+        * Our database details (retrieved from the database defined in the JSON config file) won't work here,
+        * so the err if statement will trigger. Normally, we'd go through to the client.query() section when
+        * the connection works.
+        */
+        if (err) {
+            console.log("ERROR connecting to %s:%d at %s", database.database, database.port, database.host);
+            return;
+        }
+        client.query(salesQueryString, function(err, result) {
+            //Example operation on query results
+            result.rows.forEach(function(row) {
+            issues.push({"issueType" : row.type, "frequency" : row.count});
+            });
+
+            widgets.sendData({issues: issues, title: config.widgetTitle});
+        });
+    });
+
+
+**HTTP Query Jobs**
+For HTTP request jobs, the request and cheerio node modules are recommended
+
+    var request = require('request'),
+        $ = require('cheerio');
+
+This sample code grabs a HTTP page and operates on its contents using cheerio
+
+    //Sample connection options, including authorization headers (if they're required)
+    var options = {
+        url: config.url,
+        headers: {
+            "authorization": "Basic " + new Buffer(config.globalAuth.natgeo.username + ":" + config.globalAuth.natgeo.password).toString("base64")
+        }
+    };
+
+    request(options, function(error, response, body) {
+        // body contains our web page HTML
+
+        if (!response || response.statusCode != 200) {
+            console.log("ERROR: Couldn't access the web page at %s", options.url)
+            return;
+        } else {
+            var result = $('.primary_photo img', body).attr('src');
+        }
+
+        widgets.sendData({imageSrc: result, title: config.widgetTitle});
+    });
+
+**iCal Parsing**
+To parse a calendar with a .ics file extension, use the ical node module. In this example, we'll use underscore as well.
+
+    var ical = require('ical'),
+        _ = require('underscore');
+
+This sample code downloads an .ics calendar from a given URL and gets the newest events from it
+
+    var formatDate = function(date) {
+        var d = date.getDate();
+        var m = date.getMonth()+1;
+        return '' + (m<=9?'0'+m:m) + '/' + (d<=9?'0'+d:d);
+    };
+
+    ical.fromURL(config.calendarUrl, {}, function(err, data) {
+
+        var events = _.sortBy(data, function(event) { return event.start; });
+        events = _.filter(events, function(event) { return event.end >= new Date(); });
+
+        var result = [];
+        var counter = 0;
+        events.forEach(function(event) {
+            if (counter < config.maxEntries) {
+                counter++;
+                result.push({startDate: formatDate(event.start), endDate: formatDate(event.end), summary: event.summary});
+            }
+        });
+
+        widgets.sendData({events: result, title: config.widgetTitle});
+    })
+
+
 Widgets
 -----------
 
