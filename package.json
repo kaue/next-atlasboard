@@ -1,46 +1,56 @@
 {
-    "author":"Atlassian",
-    "license":"Apache License, Version 2.0",
-    "contributors" : [
-        {"name" : "William Archinal",   "email" : "william.archinal@gmail.com"},
-        {"name" : "Christoph Kiehl",    "email" : "ckiehl@atlassian.com"},
-        {"name" : "Alexander Dickson",  "email" : "alex@alexanderdickson.com"}
+    "author":         "Atlassian",
+    "license":        "Apache License, Version 2.0",
+    "contributors":   [
+        {
+            "name": "William Archinal",
+            "email":"william.archinal@gmail.com"
+        },
+        {
+            "name": "Christoph Kiehl",
+            "email":"ckiehl@atlassian.com"
+        },
+        {
+            "name": "Alexander Dickson",
+            "email":"alex@alexanderdickson.com"
+        }
     ],
-    "name":"atlasboard",
-    "description":"AtlasBoard is a Dashing clone in NodeJS.",
-    "version":"0.0.3",
-    "homepage":"",
-    "repository":{
+    "name":           "atlasboard",
+    "description":    "AtlasBoard is dashboard/wallboard framework written all in JS",
+    "version":        "0.0.3",
+    "homepage":       "https://bitbucket.org/atlassian/atlasboard",
+    "repository":     {
         "type":"git",
-        "url":""
+        "url": "git@bitbucket.org:atlassian/atlasboard.git"
     },
-    "engines":{
+    "engines":        {
         "node":"~0.6.10"
     },
-    "bin" :
-    { "atlasboard" : "lib/cli-generator.js"},
-    "main": "./lib/atlasboard.js",
-    "dependencies":{
-        "express":"3.0.0",
-        "path": "0.4.9",
-        "temp": "0.4.0",
-        "underscore": "1.4.2",
-        "socket.io": "0.9.13",
-        "stylus": "0.31.0",
-        "nib": "0.9.0",
-        "connect-assets": "2.3.3",
-        "ejs": "0.8.3",
-        "async": "0.1.22",
-        "optimist": "~0.3.5",
-        "hardhat": "~0.0.7",
-        "npm": "~1.2.3",
-        "css-parse": "1.0.4"
+    "bin":            {
+        "atlasboard":"lib/cli-generator.js"
+    },
+    "main":           "./lib/atlasboard.js",
+    "dependencies":   {
+        "express":       "3.0.0",
+        "path":          "0.4.9",
+        "temp":          "0.4.0",
+        "underscore":    "1.4.2",
+        "socket.io":     "0.9.13",
+        "stylus":        "0.31.0",
+        "nib":           "0.9.0",
+        "connect-assets":"2.3.3",
+        "ejs":           "0.8.3",
+        "async":         "0.1.22",
+        "optimist":      "~0.3.5",
+        "hardhat":       "~0.0.7",
+        "npm":           "~1.2.3",
+        "css-parse":     "1.0.4"
     },
     "devDependencies":{
-        "mocha":"0.14.0",
-        "expect.js":"0.1.2",
+        "mocha":     "0.14.0",
+        "expect.js": "0.1.2",
         "supervisor":"0.5.0"
     },
-    "preferGlobal" : true,
-    "keywords" : ["server", "dashboard"]
+    "preferGlobal":   true,
+    "keywords":       ["server", "dashboard"]
 }
