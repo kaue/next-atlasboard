@@ -1,7 +1,18 @@
 {
-    "title": false,
-    "customJS" : [],
-    "widgets" : [
-        {"row" : 1, "col" : 1, "width" : 2, "height" : 3, "widget" : "quotes", "events" : ["quotes-famous"]}
-    ]
+  "layout": {
+      "title": false,
+      "customJS" : [],
+      "widgets" : [
+        {"row" : 1, "col" : 1, "width" : 2, "height" : 3, "widget" : "quotes", "job" : "quotes"} 
+      ]
+  }, 
+
+
+  "config": {
+
+      "quotes" : {
+        "interval" : 10000,
+        "someotherconfig" :  "here"
+      },
+  }
 }

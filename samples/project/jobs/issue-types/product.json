@@ -1,8 +1,0 @@
-{
-    "widgetTitle" : "Issues Types in the Project",
-    "database" : {
-        "host": "mydatabase.mycompany.com",
-        "port": 1000,
-        "database": "salesdb"
-    }
-}

@@ -23,13 +23,15 @@ $(function() {
         var eventId = $(li).attr("data-event-id");
 
         $(li).load("/widgets/" + widgetId, function() {
-            // only add the event listener once the widget HTML is loaded
-            widgetsSocket.on(eventId, function (data) {
-                Widgets[widgetId].onData($(li), data);
-            })
-            console.log("Sending resend for " + eventId);
-            // trigger the server to send the last event for the given event id again
-            widgetsSocket.emit("resend", eventId);
+            if (Widgets[widgetId]){ //make sure this widget is activable
+                // only add the event listener once the widget HTML is loaded
+                widgetsSocket.on(eventId, function (data) {
+                    Widgets[widgetId].onData($(li), data);
+                })
+                console.log("Sending resend for " + eventId);
+                // trigger the server to send the last event for the given event id again
+                widgetsSocket.emit("resend", eventId);
+            }
         });
     })
 
