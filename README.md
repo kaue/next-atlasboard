@@ -1,3 +1,5 @@
+![Atlasboard](screenshot.png)
+
 Getting Started - A Dashboard in 5 Steps
 ============
 1. Install node
