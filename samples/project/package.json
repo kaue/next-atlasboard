@@ -17,7 +17,6 @@
         "start":"supervisor server.js"
     },
     "dependencies":{
-        "atlasboard":"~0.0.3",
         "pg": "0.8.6",
         "temp": "0.4.0",
         "underscore": "1.4.2",

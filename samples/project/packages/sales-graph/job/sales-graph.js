@@ -1,17 +1,8 @@
-module.exports = function(widgets, scheduler, config) {
-    var jobFrequency = 7 * 1000; //Fires once every 7 seconds
-
-    scheduler.schedule(function() {
-
-        //To generate a line graph, simply create an array of numbers and send it through to the linegraph widget
-        var salesData = getSalesData(15);
-        widgets.sendData({linegraph: salesData, title: config.widgetTitle, dataDisplay: "soldThisMonth"});
-
-
-
-    }, jobFrequency);
-
-}
+module.exports = function(widgets, config, dependencies) {
+    //To generate a line graph, simply create an array of numbers and send it through to the linegraph widget
+    var salesData = getSalesData(15);
+    widgets.sendData({linegraph: salesData, title: config.widgetTitle, dataDisplay: "soldThisMonth"});
+};
 
 function getSalesData(days) {
     //Generates some random numbers
@@ -22,5 +13,4 @@ function getSalesData(days) {
     }
 
     return results;
-
 }

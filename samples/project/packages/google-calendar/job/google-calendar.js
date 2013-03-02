@@ -1,8 +1,7 @@
 var ical = require('ical'),
     _ = require('underscore');
 
-module.exports = function(widgets, scheduler, config) {
-    var jobFrequency = 15 * 60 * 1000; //fires once every 15 minutes
+module.exports = function(widgets, config, dependencies) {
     var maxEntries = config.maxEntries;
     var formatDate = function(date) {
         var d = date.getDate();
@@ -10,23 +9,25 @@ module.exports = function(widgets, scheduler, config) {
         return '' + (m<=9?'0'+m:m) + '/' + (d<=9?'0'+d:d);
     };
 
+    ical.fromURL(config.calendarUrl, {}, function(err, data){
 
-    scheduler.schedule(function() {
-        ical.fromURL(config.calendarUrl, {}, function(err, data){
+        if (err){
+            widgets.sendData({error: "error loading calendar"});
+            return;
+        }
 
-            var events = _.sortBy(data, function(event) { return event.start; });
-            events = _.filter(events, function(event) { return event.end >= new Date(); });
+        var events = _.sortBy(data, function(event) { return event.start; });
+        events = _.filter(events, function(event) { return event.end >= new Date(); });
 
-            var result = [];
-            var counter = 0;
-            events.forEach(function(event) {
-                if (counter < maxEntries) {
-                    counter++;
-                    result.push({startDate: formatDate(event.start), endDate: formatDate(event.end), summary: event.summary});
-                }
-            });
+        var result = [];
+        var counter = 0;
+        events.forEach(function(event) {
+            if (counter < maxEntries) {
+                counter++;
+                result.push({startDate: formatDate(event.start), endDate: formatDate(event.end), summary: event.summary});
+            }
+        });
 
-            widgets.sendData({events: result, title: config.widgetTitle});
-        })
-    }, jobFrequency);
-}
+        widgets.sendData({events: result, title: config.widgetTitle});
+    });
+};

@@ -65,10 +65,30 @@ describe ('cli-generator', function(){
     });
 
     it('should create widget successfully', function(done){
-      cli_generator.commands.generate(temp_folder, "widget", "newcalendar", function(err){
+      cli_generator.commands.generate(temp_folder, "widget", "newcalendar", function(err, data){
         assert.ok(!err);
         assert.ok(fs.existsSync(path.join(temp_folder, "packages", "newcalendar")));
         assert.ok(fs.existsSync(path.join(temp_folder, "packages", "newcalendar", "widget")));
+        assert.equal(path.join(temp_folder, "packages", "newcalendar", "widget"), data.path);
+        done();
+      });
+    });
+
+    it('should create job successfully', function(done){
+      cli_generator.commands.generate(temp_folder, "job", "newcalendar", function(err, data){
+        assert.ok(!err);
+        assert.ok(fs.existsSync(path.join(temp_folder, "packages", "newcalendar")));
+        assert.ok(fs.existsSync(path.join(temp_folder, "packages", "newcalendar", "job")));
+        assert.equal(path.join(temp_folder, "packages", "newcalendar", "job"), data.path);
+        done();
+      });
+    });
+
+    it('should create dashboard successfully', function(done){
+      cli_generator.commands.generate(temp_folder, "dashboard", "newdashboard", function(err, data){
+        assert.ok(!err, err);
+        assert.ok(fs.existsSync(path.join(temp_folder, "dashboards", "newdashboard.json")));
+        assert.equal(path.join(temp_folder, "dashboards"), data.path);
         done();
       });
     });

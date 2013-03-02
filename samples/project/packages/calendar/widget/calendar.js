@@ -6,7 +6,7 @@ Widgets.calendar = {
             $('h2', el).text(data.title);
         }
 
-        if (data.events.length == 0) {
+        if (!data.events || !data.events.length) {
             $('.content', el).append($("<div>").html("No events found."));
         } else {
             data.events.forEach(function (event) {
@@ -16,9 +16,6 @@ Widgets.calendar = {
 
                 $('.content', el).append(eventDiv);
             });
-
         }
-
-
     }
 };

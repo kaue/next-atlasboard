@@ -4,7 +4,7 @@
 
 // nib is a powerful lib for stylus that provides cross-browser css3 mixins.
 // No more vendor prefixes. http://visionmedia.github.com/nib/
-@import 'nib'
+//@import 'nib'
 
 gutter = 36px
 dimmed = #444444
@@ -30,6 +30,18 @@ body
 
 .uppercase
 	text-transform: uppercase
+
+.spinner {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: 50px;
+
+}
+
+#main-container.frozen{
+  background: url('/images/ice.jpg')
+}
 
 #main-container
   width: 1920px
@@ -132,6 +144,10 @@ big
          color: #fff
          font-size: gutter * 2
          font-weight: bold
+
+.error
+  color:red
+  font-size: gutter
 
 .error-display
 	display: none

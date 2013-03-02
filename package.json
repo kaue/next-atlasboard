@@ -35,20 +35,19 @@
     },
     "main":           "./lib/atlasboard.js",
     "dependencies":   {
-        "express":       "3.0.0",
-        "path":          "0.4.9",
-        "temp":          "0.4.0",
-        "underscore":    "1.4.2",
-        "socket.io":     "0.9.13",
-        "stylus":        "0.31.0",
-        "nib":           "0.9.0",
-        "connect-assets":"2.3.3",
-        "ejs":           "0.8.3",
-        "async":         "0.1.22",
-        "optimist":      "~0.3.5",
-        "hardhat":       "~0.0.7",
-        "npm":           "~1.2.3",
-        "css-parse":     "1.0.4"
+        "express":              "3.0.0",
+        "path":                 "0.4.9",
+        "temp":                 "0.4.0",
+        "underscore":           "1.4.2",
+        "socket.io":            "0.9.13",
+        "stylus":               "0.31.0",
+        "nib":                  "0.9.0",
+        "connect-assets":       "2.3.3",
+        "ejs":                  "0.8.3",
+        "async":                "0.1.22",
+        "optimist":             "~0.3.5",
+        "hardhat":              "~0.0.7",
+        "css-parse":            "1.0.4"
     },
     "devDependencies":{
         "mocha":     "0.14.0",
@@ -58,6 +57,6 @@
     "preferGlobal":   true,
     "keywords":       ["server", "dashboard"],
     "scripts":        {
-        "test": "mocha test/*.mocha"
+        "test": "mocha $(find . -name *.mocha)"
     }
 }
