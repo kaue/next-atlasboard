@@ -1,0 +1,39 @@
+var assert = require ('assert');
+var path = require ('path');
+var jobs_manager = require('../lib/atlasboard_job_manager');
+
+describe ('job_manager', function(){
+
+  var dashboardsPath = path.join(process.cwd(), "/test/dashboards");
+  var packagesPath = "";
+  var jobsPath = path.join(process.cwd(), "/test/jobs");
+
+  it('should have right dashboard names', function(done){
+
+    jobs_manager.get_jobs(dashboardsPath, packagesPath, jobsPath, function(err, job_workers){
+      assert.ok(!err);
+      assert.equal(job_workers.length, 5);
+
+      assert.equal(job_workers[0].dashboard_name, "test_dashboard1");
+      assert.equal(job_workers[1].dashboard_name, "test_dashboard1");
+
+      assert.equal(job_workers[2].dashboard_name, "test_dashboard2");
+      assert.equal(job_workers[3].dashboard_name, "test_dashboard2");
+      assert.equal(job_workers[4].dashboard_name, "test_dashboard2");
+      done();
+    });
+  });
+
+
+  it('should be able to get disable widgets', function(done){
+
+    jobs_manager.get_jobs(dashboardsPath, packagesPath, jobsPath, function(err, job_workers){
+      assert.ok(!err);
+
+      var disabled_jobs = job_workers.filter(function(job){ return job.widget_item.enabled;});
+      assert.equal(3, disabled_jobs.length);
+      done();
+    });
+  });
+
+});
