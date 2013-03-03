@@ -1,0 +1,223 @@
+var assert = require ('assert');
+var web_logic = require ('../lib/webapp/logic.js');
+var path = require ('path');
+
+describe ('web_server', function(){
+
+  var packagesPath = path.join(process.cwd(), "/test/packages");
+
+  describe ('dashboards', function(){
+
+    it('get all', function(done){
+      var res = {
+        render: function (template, data){
+          assert.ok(data.dashboards);
+          done();
+        }
+      };
+
+      web_logic.list_all_dashboards(packagesPath, {}, res);
+    });
+
+
+    it('render one', function(done){
+      var res = {
+        render: function (template, data){
+          assert.ok(data.dashboard_name);
+          assert.ok(data.dashboardConfig);
+          done();
+        },
+
+        send: function (data){
+          done("Not expected");
+        }
+      };
+
+      web_logic.render_dashboard(packagesPath, "test_dashboard1", {}, res);
+    });
+
+
+    it('return error if requested invalid dashboard', function(done){
+      var res = {
+        render: function (template, data){
+          done("Invalid dashboard");
+        },
+
+        send: function (status, data){
+          assert.equal(400, status);
+          assert.ok (data.indexOf("couldn't find any dashboard") > -1, data);
+          done();
+        }
+      };
+
+      web_logic.render_dashboard(packagesPath, "tttest_dashboard1", {}, res);
+    });
+  });
+
+
+  describe ('javascript assets', function(){
+
+    it('return javascript assets for a certain dashboard', function(done){
+      var bundle_file = "";
+      var res = {
+        type: function (data){
+          assert.equal("application/javascript", data);
+        },
+
+        write: function (data){
+          bundle_file+=data;
+        },
+
+        end: function (data){
+          assert.ok(!data);
+          assert.ok(bundle_file.indexOf("Widgets.blockers")>-1);
+          done();
+        }
+      };
+      var atlasboard_assets_folder = path.join(process.cwd(), "/assets");
+      var wallboard_assets_folder = path.join(process.cwd(), "/samples/project/assets");
+
+      web_logic.render_script_assets(atlasboard_assets_folder, wallboard_assets_folder, packagesPath, "test_dashboard1", {}, res);
+    });
+
+
+    it('return no content if dashboard does not exist', function(done){
+
+      var res = {
+        type: function (data){
+          done("Error. Invalid call on error");
+        },
+
+        write: function (data){
+          done("Error. Invalid call on error");
+        },
+
+        send: function (status, data){
+          assert.ok(data);
+          assert.equal(400, status);
+          assert.ok(data.indexOf("Error")>-1);
+          done();
+        }
+      };
+      var atlasboard_assets_folder = path.join(process.cwd(), "/assets");
+      var wallboard_assets_folder = path.join(process.cwd(), "/samples/project/assets");
+
+      web_logic.render_script_assets(atlasboard_assets_folder, wallboard_assets_folder, packagesPath, "invalid_test_dashboard1", {}, res);
+    });
+
+  });
+
+
+  describe ('css assets', function(){
+
+    it('return css assets for a certain dashboard', function(done){
+      var bundle_file = "";
+      var res = {
+        type: function (data){
+          assert.equal("text/css", data);
+        },
+
+        write: function (data){
+          bundle_file+=data;
+        },
+
+        end: function (data){
+          assert.ok(!data);
+          assert.equal("li[data-widget-id=\"blockers\"] body {\n\tfont-family: Comics Sans;\n}\n\n\n", bundle_file);
+          done();
+        }
+      };
+
+      web_logic.render_css_assets(packagesPath, "test_dashboard1", {}, res);
+    });
+
+
+    it('return error if dashboard not found', function(done){
+      var res = {
+        type: function (data){
+
+        },
+
+        write: function (data){
+
+        },
+
+        send: function (status, data){
+          assert.equal(400, status);
+          done();
+        }
+      };
+
+      web_logic.render_css_assets(packagesPath, "ttttest_dashboard1", {}, res);
+    });
+
+
+    it('return css general assets', function(done){
+      var bundle_file = "";
+      var res = {
+        type: function (data){
+          assert.equal("text/css", data);
+        },
+
+        write: function (data){
+          bundle_file+=data;
+        },
+
+        end: function (data){
+          assert.ok(!data);
+          assert.ok(bundle_file.indexOf("body") > -1);
+          assert.ok(bundle_file.indexOf("#main-container #widgets-container li") > -1);
+          done();
+        }
+      };
+
+      var atlasboard_assets_folder = path.join(process.cwd(), "/assets");
+      web_logic.render_css_general_assets(atlasboard_assets_folder, {}, res);
+    });
+
+  });
+
+
+  describe ('widget', function(){
+
+    it('return html', function(done){
+      var res = {
+        type: function (data){
+
+        },
+
+        sendfile: function (data){
+          assert.ok(data.indexOf("widgets/blockers/blockers.html") > -1, data);
+          done();
+        },
+
+        end: function (data){
+          done("Error");
+        }
+      };
+
+      web_logic.render_html_widget(packagesPath, "blockers", {}, res);
+    });
+
+
+    it('return error if widget not found', function(done){
+      var res = {
+        type: function (data){
+
+        },
+
+        sendfile: function (data){
+          done("Error. Not expected");
+        },
+
+        send: function (status, data){
+          assert.equal(400, status);
+          done();
+        }
+      };
+
+      web_logic.render_html_widget(packagesPath, "bbblockers", {}, res);
+    });
+
+  });
+});
