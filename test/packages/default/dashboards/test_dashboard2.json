@@ -11,11 +11,6 @@
 
   "config": {
 
-      "job1_conf" : {
-        "interval" : 20000,
-        "jira_server" : "https://jira.atlassian.com"
-      },
-
       "job2_conf": {
           "interval" : 30000,
           "hosts":[],

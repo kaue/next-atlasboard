@@ -5,10 +5,11 @@ var jobs_manager = require('../lib/atlasboard_job_manager');
 describe ('job_manager', function(){
 
   var packagesPath = path.join(process.cwd(), "/test/packages");
+  var configPath = path.join(process.cwd(), "/test/config");
 
   it('should have right dashboard names', function(done){
 
-    jobs_manager.get_jobs(packagesPath, function(err, job_workers){
+    jobs_manager.get_jobs(packagesPath, configPath, function(err, job_workers){
       assert.ok(!err, err);
       assert.equal(job_workers.length, 9);
 
@@ -26,7 +27,7 @@ describe ('job_manager', function(){
 
 
   it('should be able to get disable widgets', function(done){
-    jobs_manager.get_jobs(packagesPath, function(err, job_workers){
+    jobs_manager.get_jobs(packagesPath, configPath, function(err, job_workers){
       assert.ok(!err);
       var disabled_jobs = job_workers.filter(function(job){ return job.widget_item.enabled;});
       assert.equal(7, disabled_jobs.length);
@@ -35,12 +36,25 @@ describe ('job_manager', function(){
   });
 
   it('should have tasks', function(done){
-    jobs_manager.get_jobs(packagesPath, function(err, job_workers){
+    jobs_manager.get_jobs(packagesPath, configPath, function(err, job_workers){
       assert.ok(!err);
       job_workers.forEach(function(job){
         if (job.job_name !== "--invalidjob--"){
           assert.ok(typeof job.task === "function" );
         }
+      });
+      done();
+    });
+  });
+
+
+  it('should have config', function(done){
+    jobs_manager.get_jobs(packagesPath, configPath, function(err, job_workers){
+      assert.ok(!err);
+      // job_conf1 is defined in general config file (shared config)
+      // the rest of them are defined in the related dashboard file.
+      job_workers.forEach(function(job){
+          assert.ok(job.config.interval);
       });
       done();
     });
