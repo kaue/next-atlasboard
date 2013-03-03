@@ -25,8 +25,10 @@ describe ('cli-generator', function(){
         assert.ok(fs.existsSync(path.join(temp_folder, "package.json")));
         assert.ok(fs.existsSync(path.join(temp_folder, "globalAuth.json")));
         assert.ok(fs.existsSync(path.join(temp_folder, "assets")));
-        assert.ok(fs.existsSync(path.join(temp_folder, "dashboards")));
         assert.ok(fs.existsSync(path.join(temp_folder, "packages")));
+        assert.ok(fs.existsSync(path.join(temp_folder, "packages", "default", "dashboards")));
+        assert.ok(fs.existsSync(path.join(temp_folder, "packages", "default", "widgets")));
+        assert.ok(fs.existsSync(path.join(temp_folder, "packages", "default", "jobs")));
         done();
       });
     });
@@ -36,7 +38,7 @@ describe ('cli-generator', function(){
   describe ('generate', function(){
 
     it('should return error if bad resource type provided', function(done){
-      cli_generator.commands.generate("/ba/ddir", "widgettt", "mywidget", function(err){
+      cli_generator.commands.generate("/ba/ddir", "default", "widgettt", "mywidget", function(err){
         assert.ok(err.indexOf("Invalid generator")>-1, err);
         done();
       });
@@ -44,51 +46,52 @@ describe ('cli-generator', function(){
 
 
     it('should return error if no project exists in the provided path', function(done){
-      cli_generator.commands.generate("/b/addir", "widget", "mywidget", function(err){
+      cli_generator.commands.generate("/b/addir", "default", "widget", "mywidget", function(err){
         assert.ok(err.indexOf("no project exists")>0, err);
         done();
       });
     });
 
     it('should return error if no item name is provided', function(done){
-      cli_generator.commands.generate(temp_folder, "widget", "", function(err){
+      cli_generator.commands.generate(temp_folder, "default", "widget", "", function(err){
         assert.ok(err.indexOf("name provided")>0, err);
         done();
       });
     });
 
     it('should return error if item already exists', function(done){
-      cli_generator.commands.generate(temp_folder, "widget", "calendar", function(err){
-        assert.ok(err);
+      cli_generator.commands.generate(temp_folder, "default", "widget", "calendar", function(err){
+        assert.ok(err, err);
         done();
       });
     });
 
     it('should create widget successfully', function(done){
-      cli_generator.commands.generate(temp_folder, "widget", "newcalendar", function(err, data){
-        assert.ok(!err);
-        assert.ok(fs.existsSync(path.join(temp_folder, "packages", "newcalendar")));
-        assert.ok(fs.existsSync(path.join(temp_folder, "packages", "newcalendar", "widget")));
-        assert.equal(path.join(temp_folder, "packages", "newcalendar", "widget"), data.path);
+      cli_generator.commands.generate(temp_folder, "default", "widget", "newcalendar", function(err, data){
+        assert.ok(!err, err);
+        var result_path = path.join(temp_folder, "packages", "default", "widgets", "newcalendar");
+        assert.ok(fs.existsSync(result_path));
+        assert.equal(data.path, result_path);
         done();
       });
     });
 
     it('should create job successfully', function(done){
-      cli_generator.commands.generate(temp_folder, "job", "newcalendar", function(err, data){
+      cli_generator.commands.generate(temp_folder, "default", "job", "newcalendar", function(err, data){
         assert.ok(!err);
-        assert.ok(fs.existsSync(path.join(temp_folder, "packages", "newcalendar")));
-        assert.ok(fs.existsSync(path.join(temp_folder, "packages", "newcalendar", "job")));
-        assert.equal(path.join(temp_folder, "packages", "newcalendar", "job"), data.path);
+        var result_path = path.join(temp_folder, "packages", "default", "jobs", "newcalendar");
+        assert.ok(fs.existsSync(result_path));
+        assert.equal(data.path, result_path);
         done();
       });
     });
 
     it('should create dashboard successfully', function(done){
-      cli_generator.commands.generate(temp_folder, "dashboard", "newdashboard", function(err, data){
+      cli_generator.commands.generate(temp_folder, "default", "dashboard", "newdashboard", function(err, data){
         assert.ok(!err, err);
-        assert.ok(fs.existsSync(path.join(temp_folder, "dashboards", "newdashboard.json")));
-        assert.equal(path.join(temp_folder, "dashboards"), data.path);
+        var result_path = path.join(temp_folder, "packages", "default", "dashboards", "newdashboard");
+        assert.ok(fs.existsSync(result_path));
+        assert.equal(data.path, result_path);
         done();
       });
     });

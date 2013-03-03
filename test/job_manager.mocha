@@ -4,15 +4,13 @@ var jobs_manager = require('../lib/atlasboard_job_manager');
 
 describe ('job_manager', function(){
 
-  var dashboardsPath = path.join(process.cwd(), "/test/dashboards");
-  var packagesPath = "";
-  var jobsPath = path.join(process.cwd(), "/test/jobs");
+  var packagesPath = path.join(process.cwd(), "/test/packages");
 
   it('should have right dashboard names', function(done){
 
-    jobs_manager.get_jobs(dashboardsPath, packagesPath, jobsPath, function(err, job_workers){
-      assert.ok(!err);
-      assert.equal(job_workers.length, 5);
+    jobs_manager.get_jobs(packagesPath, function(err, job_workers){
+      assert.ok(!err, err);
+      assert.equal(job_workers.length, 9);
 
       assert.equal(job_workers[0].dashboard_name, "test_dashboard1");
       assert.equal(job_workers[1].dashboard_name, "test_dashboard1");
@@ -20,18 +18,30 @@ describe ('job_manager', function(){
       assert.equal(job_workers[2].dashboard_name, "test_dashboard2");
       assert.equal(job_workers[3].dashboard_name, "test_dashboard2");
       assert.equal(job_workers[4].dashboard_name, "test_dashboard2");
+
+      assert.equal(job_workers[5].dashboard_name, "other_test_dashboard1");
       done();
     });
   });
 
 
   it('should be able to get disable widgets', function(done){
-
-    jobs_manager.get_jobs(dashboardsPath, packagesPath, jobsPath, function(err, job_workers){
+    jobs_manager.get_jobs(packagesPath, function(err, job_workers){
       assert.ok(!err);
-
       var disabled_jobs = job_workers.filter(function(job){ return job.widget_item.enabled;});
-      assert.equal(3, disabled_jobs.length);
+      assert.equal(7, disabled_jobs.length);
+      done();
+    });
+  });
+
+  it('should have tasks', function(done){
+    jobs_manager.get_jobs(packagesPath, function(err, job_workers){
+      assert.ok(!err);
+      job_workers.forEach(function(job){
+        if (job.job_name !== "--invalidjob--"){
+          assert.ok(typeof job.task === "function" );
+        }
+      });
       done();
     });
   });
