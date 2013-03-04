@@ -53,7 +53,7 @@ describe ('web_server', function(){
     });
 
 
-    it('return error if requested invalid dashboard', function(done){
+    it('return error if invalid input data', function(done){
       var res = {
         render: function (template, data){
           done("Invalid dashboard");
@@ -61,6 +61,23 @@ describe ('web_server', function(){
 
         send: function (status, data){
           assert.equal(400, status);
+          assert.ok (data.indexOf("Error loading dashboards") > -1);
+          done();
+        }
+      };
+
+      web_logic.render_dashboard("../../packagesPath", "tttest_dashboard1", {}, res);
+    });
+
+
+    it('return 404 if dashboard not found', function(done){
+      var res = {
+        render: function (template, data){
+          done("Invalid dashboard");
+        },
+
+        send: function (status, data){
+          assert.equal(404, status);
           assert.ok (data.indexOf("couldn't find any dashboard") > -1, data);
           done();
         }
@@ -68,6 +85,7 @@ describe ('web_server', function(){
 
       web_logic.render_dashboard(packagesPath, "tttest_dashboard1", {}, res);
     });
+
   });
 
 
