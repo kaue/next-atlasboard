@@ -44,7 +44,6 @@ describe ('cli-generator', function(){
       });
     });
 
-
     it('should return error if no project exists in the provided path', function(done){
       cli_generator.commands.generate("/b/addir", "default", "widget", "mywidget", function(err){
         assert.ok(err.indexOf("no project exists")>0, err);

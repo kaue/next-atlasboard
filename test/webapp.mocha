@@ -36,6 +36,22 @@ describe ('web_server', function(){
       web_logic.render_dashboard(packagesPath, "test_dashboard1", {}, res);
     });
 
+    it('render one - ignore path prefix - prevent path traversal issues', function(done){
+      var res = {
+        render: function (template, data){
+          assert.ok(data.dashboard_name);
+          assert.ok(data.dashboardConfig);
+          done();
+        },
+
+        send: function (data){
+          done("Not expected");
+        }
+      };
+
+      web_logic.render_dashboard(packagesPath, "../test_dashboard1", {}, res);
+    });
+
 
     it('return error if requested invalid dashboard', function(done){
       var res = {
@@ -78,6 +94,29 @@ describe ('web_server', function(){
       var wallboard_assets_folder = path.join(process.cwd(), "/samples/project/assets");
 
       web_logic.render_script_assets(atlasboard_assets_folder, wallboard_assets_folder, packagesPath, "test_dashboard1", {}, res);
+    });
+
+    it('ignore path prefix - prevent path traversal issues', function(done){
+      var bundle_file = "";
+      var res = {
+        type: function (data){
+          assert.equal("application/javascript", data);
+        },
+
+        write: function (data){
+          bundle_file+=data;
+        },
+
+        end: function (data){
+          assert.ok(!data);
+          assert.ok(bundle_file.indexOf("Widgets.blockers")>-1);
+          done();
+        }
+      };
+      var atlasboard_assets_folder = path.join(process.cwd(), "/assets");
+      var wallboard_assets_folder = path.join(process.cwd(), "/samples/project/assets");
+
+      web_logic.render_script_assets(atlasboard_assets_folder, wallboard_assets_folder, packagesPath, "../../test_dashboard1", {}, res);
     });
 
 
@@ -151,6 +190,28 @@ describe ('web_server', function(){
       web_logic.render_css_assets(packagesPath, "ttttest_dashboard1", {}, res);
     });
 
+    it('ignore path prefix - prevent path traversal issues', function(done){
+      var bundle_file = "";
+      var res = {
+        type: function (data){
+          assert.equal("text/css", data);
+        },
+
+        write: function (data){
+          bundle_file+=data;
+        },
+
+        end: function (data){
+          assert.ok(!data);
+          assert.equal("li[data-widget-id=\"blockers\"] body {\n\tfont-family: Comics Sans;\n}\n\n\n", bundle_file);
+          done();
+        }
+      };
+
+      web_logic.render_css_assets(packagesPath, "../../test_dashboard1", {}, res);
+    });
+
+
 
     it('return css general assets', function(done){
       var bundle_file = "";
@@ -197,6 +258,25 @@ describe ('web_server', function(){
       };
 
       web_logic.render_html_widget(packagesPath, "blockers", {}, res);
+    });
+
+    it('ignore path prefix - prevent path traversal issues', function(done){
+      var res = {
+        type: function (data){
+
+        },
+
+        sendfile: function (data){
+          assert.ok(data.indexOf("widgets/blockers/blockers.html") > -1, data);
+          done();
+        },
+
+        end: function (data){
+          done("Error");
+        }
+      };
+
+      web_logic.render_html_widget(packagesPath, "../../blockers", {}, res);
     });
 
 
