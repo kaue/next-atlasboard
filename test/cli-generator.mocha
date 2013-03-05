@@ -32,6 +32,14 @@ describe ('cli-generator', function(){
         done();
       });
     });
+
+    it('should have a valid config file', function(done){ //avoid shiping an invalid config file
+      var config_path_contents = fs.readFileSync(path.join(temp_folder, "config", "dashboard_common.json"));
+      var JSONconfig = JSON.parse(config_path_contents);
+      assert.ok(JSONconfig.config);
+      done();
+    });
+
   });
 
 
