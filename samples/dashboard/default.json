@@ -9,7 +9,6 @@
 
 
   "config": {
-
       "quotes" : {
         "interval" : 10000,
         "someotherconfig" :  "here"

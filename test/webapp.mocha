@@ -4,19 +4,21 @@ var path = require ('path');
 
 describe ('web_server', function(){
 
-  var packagesPath = path.join(process.cwd(), "/test/packages");
+  var packagesLocalFolder = path.join(process.cwd(), "/test/packages");
+  var packagesAtlasboardFolder = path.join(process.cwd(), "/packages");
+  var packagesWithInvalidDashboardFile = path.join(process.cwd(), "/packages_invalid_format");
 
   describe ('dashboards', function(){
 
     it('get all', function(done){
       var res = {
         render: function (template, data){
-          assert.ok(data.dashboards);
+          assert.equal(5, data.dashboards.length);
           done();
         }
       };
 
-      web_logic.list_all_dashboards(packagesPath, {}, res);
+      web_logic.list_all_dashboards([packagesLocalFolder, packagesAtlasboardFolder], {}, res);
     });
 
 
@@ -33,8 +35,25 @@ describe ('web_server', function(){
         }
       };
 
-      web_logic.render_dashboard(packagesPath, "test_dashboard1", {}, res);
+      web_logic.render_dashboard([packagesLocalFolder, packagesAtlasboardFolder], "test_dashboard1", {}, res);
     });
+
+
+    it('returns error if there is a dahsboard with an invalid format', function(done){
+      var res = {
+        render: function (template, data){
+          done("Not expected");
+        },
+
+        send: function (status, data){
+          assert.ok(data.indexOf("Error loading dashboard") > -1);
+          done();
+        }
+      };
+
+      web_logic.render_dashboard([packagesLocalFolder, packagesAtlasboardFolder, packagesWithInvalidDashboardFile], "invalid_json_file", {}, res);
+    });
+
 
     it('render one - ignore path prefix - prevent path traversal issues', function(done){
       var res = {
@@ -49,7 +68,7 @@ describe ('web_server', function(){
         }
       };
 
-      web_logic.render_dashboard(packagesPath, "../test_dashboard1", {}, res);
+      web_logic.render_dashboard([packagesLocalFolder, packagesAtlasboardFolder], "../test_dashboard1", {}, res);
     });
 
 
@@ -66,7 +85,7 @@ describe ('web_server', function(){
         }
       };
 
-      web_logic.render_dashboard("../../packagesPath", "tttest_dashboard1", {}, res);
+      web_logic.render_dashboard("../../packagesLocalFolder", "tttest_dashboard1", {}, res);
     });
 
 
@@ -83,7 +102,7 @@ describe ('web_server', function(){
         }
       };
 
-      web_logic.render_dashboard(packagesPath, "tttest_dashboard1", {}, res);
+      web_logic.render_dashboard([packagesLocalFolder, packagesAtlasboardFolder], "tttest_dashboard1", {}, res);
     });
 
   });
@@ -111,7 +130,7 @@ describe ('web_server', function(){
       var atlasboard_assets_folder = path.join(process.cwd(), "/assets");
       var wallboard_assets_folder = path.join(process.cwd(), "/samples/project/assets");
 
-      web_logic.render_script_assets(atlasboard_assets_folder, wallboard_assets_folder, packagesPath, "test_dashboard1", {}, res);
+      web_logic.render_script_assets(atlasboard_assets_folder, wallboard_assets_folder, [packagesLocalFolder, packagesAtlasboardFolder], "test_dashboard1", {}, res);
     });
 
     it('ignore path prefix - prevent path traversal issues', function(done){
@@ -134,7 +153,7 @@ describe ('web_server', function(){
       var atlasboard_assets_folder = path.join(process.cwd(), "/assets");
       var wallboard_assets_folder = path.join(process.cwd(), "/samples/project/assets");
 
-      web_logic.render_script_assets(atlasboard_assets_folder, wallboard_assets_folder, packagesPath, "../../test_dashboard1", {}, res);
+      web_logic.render_script_assets(atlasboard_assets_folder, wallboard_assets_folder, [packagesLocalFolder, packagesAtlasboardFolder], "../../test_dashboard1", {}, res);
     });
 
 
@@ -159,7 +178,7 @@ describe ('web_server', function(){
       var atlasboard_assets_folder = path.join(process.cwd(), "/assets");
       var wallboard_assets_folder = path.join(process.cwd(), "/samples/project/assets");
 
-      web_logic.render_script_assets(atlasboard_assets_folder, wallboard_assets_folder, packagesPath, "invalid_test_dashboard1", {}, res);
+      web_logic.render_script_assets(atlasboard_assets_folder, wallboard_assets_folder, [packagesLocalFolder, packagesAtlasboardFolder], "invalid_test_dashboard1", {}, res);
     });
 
   });
@@ -185,7 +204,7 @@ describe ('web_server', function(){
         }
       };
 
-      web_logic.render_css_assets(packagesPath, "test_dashboard1", {}, res);
+      web_logic.render_css_assets([packagesLocalFolder, packagesAtlasboardFolder], "test_dashboard1", {}, res);
     });
 
 
@@ -205,7 +224,7 @@ describe ('web_server', function(){
         }
       };
 
-      web_logic.render_css_assets(packagesPath, "ttttest_dashboard1", {}, res);
+      web_logic.render_css_assets([packagesLocalFolder, packagesAtlasboardFolder], "ttttest_dashboard1", {}, res);
     });
 
     it('ignore path prefix - prevent path traversal issues', function(done){
@@ -226,7 +245,7 @@ describe ('web_server', function(){
         }
       };
 
-      web_logic.render_css_assets(packagesPath, "../../test_dashboard1", {}, res);
+      web_logic.render_css_assets([packagesLocalFolder, packagesAtlasboardFolder], "../../test_dashboard1", {}, res);
     });
 
 
@@ -275,7 +294,7 @@ describe ('web_server', function(){
         }
       };
 
-      web_logic.render_html_widget(packagesPath, "blockers", {}, res);
+      web_logic.render_html_widget([packagesLocalFolder, packagesAtlasboardFolder], "blockers", {}, res);
     });
 
     it('ignore path prefix - prevent path traversal issues', function(done){
@@ -294,7 +313,7 @@ describe ('web_server', function(){
         }
       };
 
-      web_logic.render_html_widget(packagesPath, "../../blockers", {}, res);
+      web_logic.render_html_widget([packagesLocalFolder, packagesAtlasboardFolder], "../../blockers", {}, res);
     });
 
 
@@ -314,7 +333,7 @@ describe ('web_server', function(){
         }
       };
 
-      web_logic.render_html_widget(packagesPath, "bbblockers", {}, res);
+      web_logic.render_html_widget([packagesLocalFolder, packagesAtlasboardFolder], "bbblockers", {}, res);
     });
 
   });

@@ -7,6 +7,5 @@ module.exports = function(widgets, config, dependencies) {
     for (var i = 0; i < config.limit && i < quotes.length; i++) {
         display.push(quotes[i]);
     }
-
     widgets.sendData({quotes: display, title: config.widgetTitle});
 };

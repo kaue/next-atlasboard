@@ -58,19 +58,19 @@ describe ('cli-generator', function(){
       });
     });
 
-    it('should return error if item already exists', function(done){
-      cli_generator.commands.generate(temp_folder, "default", "widget", "calendar", function(err){
-        assert.ok(err, err);
-        done();
-      });
-    });
-
     it('should create widget successfully', function(done){
       cli_generator.commands.generate(temp_folder, "default", "widget", "newcalendar", function(err, data){
         assert.ok(!err, err);
         var result_path = path.join(temp_folder, "packages", "default", "widgets", "newcalendar");
         assert.ok(fs.existsSync(result_path));
         assert.equal(data.path, result_path);
+        done();
+      });
+    });
+
+    it('should return error if item already exists', function(done){
+      cli_generator.commands.generate(temp_folder, "default", "widget", "newcalendar", function(err){
+        assert.ok(err, err);
         done();
       });
     });

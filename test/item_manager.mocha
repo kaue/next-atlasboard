@@ -4,20 +4,21 @@ var item_manager = require('../lib/atlasboard_item_manager');
 
 describe ('item_manager', function(){
 
-  var packagesPath = path.join(process.cwd(), "/test/packages");
+  var packagesLocalFolder = path.join(process.cwd(), "/test/packages");
+  var packagesAtlasboardFolder = path.join(process.cwd(), "/packages");
 
   describe ('dashboards', function(){
 
     it('should have the right number of dashboards', function(done){
-      item_manager.get(packagesPath, "dashboards", ".json", function(err, dashboards){
+      item_manager.get([packagesLocalFolder, packagesAtlasboardFolder], "dashboards", ".json", function(err, dashboards){
         assert.ok(!err, err);
-        assert.equal(dashboards.length, 4);
+        assert.equal(dashboards.length, 5);
         done();
       });
     });
 
     it('should not read dashboards with invalid extensions', function(done){
-      item_manager.get(packagesPath, "dashboards", ".json", function(err, dashboards){
+      item_manager.get([packagesLocalFolder, packagesAtlasboardFolder], "dashboards", ".json", function(err, dashboards){
         assert.ok(!err, err);
         dashboards.forEach(function(item){
           assert.ok(path.extname(item) === ".json");
@@ -27,10 +28,9 @@ describe ('item_manager', function(){
     });
   });
 
-
   describe ('jobs', function(){
     it('should have the right number of jobs', function(done){
-      item_manager.get(packagesPath, "jobs", ".js", function(err, jobs){
+      item_manager.get([packagesLocalFolder], "jobs", ".js", function(err, jobs){
         assert.ok(!err, err);
         assert.equal(jobs.length, 4);
         done();
@@ -40,7 +40,7 @@ describe ('item_manager', function(){
 
   describe ('widgets', function(){
     it('should have the right number of widgets', function(done){
-      item_manager.get(packagesPath, "widgets", ".js", function(err, widgets){
+      item_manager.get([packagesLocalFolder], "widgets", ".js", function(err, widgets){
         assert.ok(!err, err);
         assert.equal(widgets.length, 1);
         done();

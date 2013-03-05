@@ -14,12 +14,14 @@
   "config" : {
 
     "calendar-holidays" : {
-      "calendarUrl" : "http://www.calendarlabs.com/templates/ical/US-Holidays.ics",
+       "interval" : 60000,
+       "calendarUrl" : "http://www.calendarlabs.com/templates/ical/US-Holidays.ics",
        "maxEntries" : 9,
        "widgetTitle" : "Upcoming US Holidays"
      },
 
      "issue-types" : {
+        "interval" : 60000,
         "widgetTitle" : "Issues Types in the Project",
         "database" : {
             "host": "mydatabase.mycompany.com",
@@ -29,11 +31,13 @@
      },
 
      "picture" : {
-          "widgetTitle" : "Nat Geo Picture of the Day",
-          "url" : "http://photography.nationalgeographic.com/photography/photo-of-the-day"
+        "interval" : 60000,
+        "widgetTitle" : "Nat Geo Picture of the Day",
+        "url" : "http://photography.nationalgeographic.com/photography/photo-of-the-day"
      },
 
      "quotes-famous": {
+        "interval" : 60000,
         "widgetTitle" : "Famous Quotes",
         "quotes" : [
             {"quote" : "It's not that I'm so smart, it's just that I stay with problems longer.", "author" : "Albert Einstein"},
@@ -50,7 +54,8 @@
      },
 
      "sales" : {
-          "widgetTitle" : "Monthly Sales"
+        "interval" : 60000,
+        "widgetTitle" : "Monthly Sales"
       }
   }
 }

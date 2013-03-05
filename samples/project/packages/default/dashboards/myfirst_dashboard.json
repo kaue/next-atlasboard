@@ -1,0 +1,13 @@
+{
+  "layout": {
+      "title": false,
+      "customJS" : [],
+      "widgets" : [
+        {"row" : 1, "col" : 1, "width" : 2, "height" : 3, "widget" : "quotes", "job" : "quotes", "config": "quotes-famous"}
+      ]
+  },
+
+  "config": {
+
+  }
+}

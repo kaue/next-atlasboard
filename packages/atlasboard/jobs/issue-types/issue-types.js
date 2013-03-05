@@ -1,5 +1,3 @@
-var pg = require('pg');
-
 module.exports = function(widgets, config, dependencies) {
     issues = [{"issueType" : "Test failures", "frequency" : 28},
         {"issueType" : "Broken build", "frequency" : 20},
