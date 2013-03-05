@@ -5,6 +5,7 @@ var jobs_manager = require('../lib/atlasboard_job_manager');
 describe ('job_manager', function(){
 
   var packagesLocalFolder = path.join(process.cwd(), "/test/packages");
+  var packagesWithInvalidJob = path.join(process.cwd(), "/test/package_invalid_job");
 
   //we use only wallboard local folder, since we don´t want our tests to depend on atlasboard jobs
   //var packagesAtlasboardFolder = path.join(process.cwd(), "/packages");
@@ -15,7 +16,7 @@ describe ('job_manager', function(){
 
     jobs_manager.get_jobs([packagesLocalFolder], configPath, function(err, job_workers){
       assert.ok(!err, err);
-      assert.equal(job_workers.length, 9);
+      assert.equal(8, job_workers.length);
 
       assert.equal(job_workers[0].dashboard_name, "test_dashboard1");
       assert.equal(job_workers[1].dashboard_name, "test_dashboard1");
@@ -34,18 +35,25 @@ describe ('job_manager', function(){
     jobs_manager.get_jobs([packagesLocalFolder], configPath, function(err, job_workers){
       assert.ok(!err);
       var disabled_jobs = job_workers.filter(function(job){ return job.widget_item.enabled;});
-      assert.equal(7, disabled_jobs.length);
+      assert.equal(6, disabled_jobs.length);
       done();
     });
   });
+
+
+  it('should return error if invalid job is found on dashboard', function(done){
+    jobs_manager.get_jobs([packagesWithInvalidJob], configPath, function(err, job_workers){
+      assert.ok(err);
+      done();
+    });
+  });
+
 
   it('should have tasks', function(done){
     jobs_manager.get_jobs([packagesLocalFolder], configPath, function(err, job_workers){
       assert.ok(!err);
       job_workers.forEach(function(job){
-        if (job.job_name !== "--invalidjob--"){
-          assert.ok(typeof job.task === "function" );
-        }
+        assert.ok(typeof job.task === "function" );
       });
       done();
     });
