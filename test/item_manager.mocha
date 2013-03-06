@@ -12,7 +12,7 @@ describe ('item_manager', function(){
     it('should have the right number of dashboards', function(done){
       item_manager.get([packagesLocalFolder, packagesAtlasboardFolder], "dashboards", ".json", function(err, dashboards){
         assert.ok(!err, err);
-        assert.equal(dashboards.length, 5);
+        assert.equal(5, dashboards.length);
         done();
       });
     });
@@ -32,17 +32,40 @@ describe ('item_manager', function(){
     it('should have the right number of jobs', function(done){
       item_manager.get([packagesLocalFolder], "jobs", ".js", function(err, jobs){
         assert.ok(!err, err);
-        assert.equal(jobs.length, 4);
+        assert.equal(6, jobs.length);
         done();
       });
     });
+
+    it('should be able to pick up the right job with namespacing (1)', function(done){
+      item_manager.get_first([packagesLocalFolder], "otherpackage1#job1", "jobs", ".js", function(err, job_path){
+        assert.ok(!err, err);
+        assert.ok(job_path);
+        var job = require (job_path);
+        var result = job();
+        assert.equal ("otherpackage1#job1", result);
+        done();
+      });
+    });
+
+    it('should be able to pick up the right job with namespacing (2)', function(done){
+      item_manager.get_first([packagesLocalFolder], "default#job1", "jobs", ".js", function(err, job_path){
+        assert.ok(!err, err);
+        assert.ok(job_path);
+        var job = require (job_path);
+        var result = job();
+        assert.equal ("default#job1", result);
+        done();
+      });
+    });
+
   });
 
   describe ('widgets', function(){
     it('should have the right number of widgets', function(done){
       item_manager.get([packagesLocalFolder], "widgets", ".js", function(err, widgets){
         assert.ok(!err, err);
-        assert.equal(widgets.length, 1);
+        assert.equal(1, widgets.length);
         done();
       });
     });
