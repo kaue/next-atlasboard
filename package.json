@@ -52,7 +52,7 @@
         "ical":                 "0.0.6"
     },
     "devDependencies":{
-        "mocha":     "0.14.0",
+        "mocha":     "1.8.1",
         "expect.js": "0.1.2",
         "supervisor":"0.5.0"
     },
