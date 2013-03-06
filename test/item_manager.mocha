@@ -1,6 +1,6 @@
 var assert = require ('assert');
 var path = require ('path');
-var item_manager = require('../lib/atlasboard_item_manager');
+var item_manager = require('../lib/item-manager');
 
 describe ('item_manager', function(){
 

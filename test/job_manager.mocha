@@ -1,6 +1,6 @@
 var assert = require ('assert');
 var path = require ('path');
-var jobs_manager = require('../lib/atlasboard_job_manager');
+var jobs_manager = require('../lib/job-manager');
 
 describe ('job_manager', function(){
 
