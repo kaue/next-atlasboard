@@ -24,62 +24,66 @@ $(function() {
     if (!$("#widgets-container").length)
         return;
 
+    function bind(widgetsSocket){
+        $(".gridster ul").gridster({
+            widget_margins: [gridsterGutter, gridsterGutter],
+            widget_base_dimensions: [(width - 6 * gutter) / 6, (height - 4 * gutter) / 4]
+        })
+        .children("li").each(function(index, li) {
+            var widgetId = $(li).attr("data-widget-id");
+            var eventId = $(li).attr("data-event-id");
+
+            $(li).load("/widgets/" + widgetId, function() {
+
+                if (Widgets[widgetId]){ //make sure this widget is activable
+
+                    // attach init handler and init
+                    if (!Widgets[widgetId].onInit) {
+                        Widgets[widgetId].onInit = default_handlers.init;
+                    }
+                    Widgets[widgetId].onInit(li);
+
+                    // attach err handler
+                    if (!Widgets[widgetId].onError) {
+                        Widgets[widgetId].onError = default_handlers.error;
+                    }
+
+                    // only add the event listener once the widget HTML is loaded
+                    widgetsSocket.on(eventId, function (data) {
+                        var f = data.error ? Widgets[widgetId].onError : Widgets[widgetId].onData;
+
+                        default_handlers.pre_data(li);
+
+                        f($(li), data);
+
+                        default_handlers.post_data(li);
+                    });
+
+                    console.log("Sending resend for " + eventId);
+                    // trigger the server to send the last event for the given event id again
+                    widgetsSocket.emit("resend", eventId);
+                }
+            });
+        });
+    }
+
     var gutter = parseInt($("#main-container").css("paddingTop"), 10) * 2;
     var gridsterGutter = gutter/2;
     var height = 1080 - $("#widgets-container").offset().top - gridsterGutter;
     var width = $("#widgets-container").width();
-
-    var widgetsSocket = io.connect("/widgets");
-
-    $(".gridster ul").gridster({
-        widget_margins: [gridsterGutter, gridsterGutter],
-        widget_base_dimensions: [(width - 6 * gutter) / 6, (height - 4 * gutter) / 4]
-    })
-    .children("li").each(function(index, li) {
-        var widgetId = $(li).attr("data-widget-id");
-        var eventId = $(li).attr("data-event-id");
-
-        $(li).load("/widgets/" + widgetId, function() {
-            if (Widgets[widgetId]){ //make sure this widget is activable
-
-                // attach init handler and init
-                if (!Widgets[widgetId].onInit) {
-                    Widgets[widgetId].onInit = default_handlers.init;
-                }
-                Widgets[widgetId].onInit(li);
-
-                // attach err handler
-                if (!Widgets[widgetId].onError) {
-                    Widgets[widgetId].onError = default_handlers.error;
-                }
-
-                // only add the event listener once the widget HTML is loaded
-                widgetsSocket.on(eventId, function (data) {
-                    var f = data.error ? Widgets[widgetId].onError : Widgets[widgetId].onData;
-
-                    default_handlers.pre_data(li);
-
-                    f($(li), data);
-
-                    default_handlers.post_data(li);
-                });
-
-                console.log("Sending resend for " + eventId);
-                // trigger the server to send the last event for the given event id again
-                widgetsSocket.emit("resend", eventId);
-            }
-        });
-    });
-
-    var socket = io.connect();
-
     var try_reconnect_timer;
     var try_to_reconnect_every = 10000;
+
+
+    var socket = io.connect("/widgets");
+    bind(socket);
+
 
     //-------------------------------------------
     // Handle reconnection
     //-------------------------------------------
     socket.on("connect", function() {
+        $('#disconnected').hide();
         if (try_reconnect_timer){
             console.log('Connection restablished!');
         }
@@ -88,6 +92,7 @@ $(function() {
     });
 
     socket.on("disconnect", function() {
+        $('#disconnected').show();
         try_reconnect_timer = setInterval(function(){
             try{
                 console.log('Trying to reconnect...');
