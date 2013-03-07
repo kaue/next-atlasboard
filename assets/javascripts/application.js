@@ -7,7 +7,6 @@ $(function() {
 
     var default_handlers = {
         error : function (el, data){
-            console.error(JSON.stringify(data));
             $(".spinner", el).hide();
             $('.content', el).html("<div class='error'>" + data.error + "</div>");
         },
