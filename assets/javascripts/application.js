@@ -76,6 +76,33 @@ $(function() {
     });
 
     var socket = io.connect();
+
+    var try_reconnect_timer;
+    var try_to_reconnect_every = 10000;
+
+    //-------------------------------------------
+    // Handle reconnection
+    //-------------------------------------------
+    socket.on("connect", function() {
+        if (try_reconnect_timer){
+            console.log('Connection restablished!');
+        }
+        clearInterval(try_reconnect_timer);
+        try_reconnect_timer = null;
+    });
+
+    socket.on("disconnect", function() {
+        try_reconnect_timer = setInterval(function(){
+            try{
+                console.log('Trying to reconnect...');
+                socket = io.connect();
+            }
+            catch(e){
+                console.log('Error reconnecting to server...');
+            }
+        }, try_to_reconnect_every);
+    });
+
     var serverInfo;
     socket.on("serverinfo", function(newServerInfo) {
         if (!serverInfo) {
