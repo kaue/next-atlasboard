@@ -1,0 +1,22 @@
+var assert = require ('assert');
+var web_routes = require ('../lib/webapp/routes.js');
+var path = require ('path');
+
+function hasRoute(app, route){
+  return app.routes.get.filter(function(item){return item.path === route;}).length;
+}
+
+describe ('routes', function(){
+  it('has the necessary routes', function(done){
+    var app = require('express')();
+    web_routes(app, null);
+    assert.ok(hasRoute(app, "/"));
+    assert.ok(hasRoute(app, "/styles.css"));
+    assert.ok(hasRoute(app, "/:dashboard/styles.css"));
+    assert.ok(hasRoute(app, "/:dashboard"));
+    assert.ok(hasRoute(app, "/:dashboard/scripts.js"));
+    assert.ok(hasRoute(app, "/widgets/:widget"));
+
+    done();
+  });
+});
