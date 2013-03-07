@@ -56,9 +56,6 @@ $(function() {
 
                 // only add the event listener once the widget HTML is loaded
                 widgetsSocket.on(eventId, function (data) {
-                    // console.log("data from: " +  eventId);
-                    // console.log(data);
-                    // console.log(li);
                     var f = data.error ? Widgets[widgetId].onError : Widgets[widgetId].onData;
 
                     default_handlers.pre_data(li);
