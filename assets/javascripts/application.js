@@ -75,37 +75,28 @@ $(function() {
     var try_to_reconnect_every = 10000;
 
 
-    var socket = io.connect("/widgets");
-    bind(socket);
+    var options = {
+        'reconnect': true,
+        'reconnection delay': 500,
+        'max reconnection attempts': 10
+    };
+    var socket_widget_channel = io.connect('/widgets', options);
+
+    // undo delete io.connect
+
+    bind(socket_widget_channel);
 
 
-    //-------------------------------------------
-    // Handle reconnection
-    //-------------------------------------------
-    socket.on("connect", function() {
-        $('#disconnected').hide();
-        if (try_reconnect_timer){
-            console.log('Connection restablished!');
-        }
-        clearInterval(try_reconnect_timer);
-        try_reconnect_timer = null;
+    socket_widget_channel.on("connect", function() {
+      console.log('reconnected');
     });
 
-    socket.on("disconnect", function() {
-        $('#disconnected').show();
-        try_reconnect_timer = setInterval(function(){
-            try{
-                console.log('Trying to reconnect...');
-                socket = io.connect();
-            }
-            catch(e){
-                console.log('Error reconnecting to server...');
-            }
-        }, try_to_reconnect_every);
+    socket_widget_channel.on("disconnect", function() {
+      console.log('disconnected');
     });
 
     var serverInfo;
-    socket.on("serverinfo", function(newServerInfo) {
+    socket_widget_channel.on("serverinfo", function(newServerInfo) {
         if (!serverInfo) {
             serverInfo = newServerInfo;
         } else if (newServerInfo.startTime > serverInfo.startTime) {
