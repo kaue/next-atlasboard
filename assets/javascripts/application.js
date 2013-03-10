@@ -5,102 +5,99 @@
 
 $(function() {
 
-    var default_handlers = {
-        error : function (el, data){
-            $(".spinner", el).hide();
-            $('.content', el).html("<div class='error'>" + data.error + "</div>");
-        },
-        init : function (el, data){
-            $("<img class=\"spinner\" src=\"images/spinner.gif\">").insertBefore($('.content', el));
-        },
-        pre_data : function (el, data){
-            $(".spinner", el).hide();
-        },
-        post_data : function (el, data){
-
-        }
-    };
-
-    if (!$("#widgets-container").length)
-        return;
-
-    function bind(widgetsSocket){
-        $(".gridster ul").gridster({
-            widget_margins: [gridsterGutter, gridsterGutter],
-            widget_base_dimensions: [(width - 6 * gutter) / 6, (height - 4 * gutter) / 4]
-        })
-        .children("li").each(function(index, li) {
-            var widgetId = $(li).attr("data-widget-id");
-            var eventId = $(li).attr("data-event-id");
-
-            $(li).load("/widgets/" + widgetId, function() {
-
-                if (Widgets[widgetId]){ //make sure this widget is activable
-
-                    // attach init handler and init
-                    if (!Widgets[widgetId].onInit) {
-                        Widgets[widgetId].onInit = default_handlers.init;
-                    }
-                    Widgets[widgetId].onInit(li);
-
-                    // attach err handler
-                    if (!Widgets[widgetId].onError) {
-                        Widgets[widgetId].onError = default_handlers.error;
-                    }
-
-                    // only add the event listener once the widget HTML is loaded
-                    widgetsSocket.on(eventId, function (data) {
-                        var f = data.error ? Widgets[widgetId].onError : Widgets[widgetId].onData;
-
-                        default_handlers.pre_data(li);
-
-                        f($(li), data);
-
-                        default_handlers.post_data(li);
-                    });
-
-                    console.log("Sending resend for " + eventId);
-                    // trigger the server to send the last event for the given event id again
-                    widgetsSocket.emit("resend", eventId);
-                }
-            });
-        });
+  var defaultHandlers = {
+    onError : function (el, data){
+      $('.content', el).html("<div class='error'>" + data.error + "</div>");
+    },
+    onInit : function (el, data){
+      $("<img class=\"spinner\" src=\"images/spinner.gif\">").insertBefore($('.content', el));
+    },
+    onPreData : function (el, data){
+      $(".spinner", el).hide();
     }
+  };
 
+  if (!$("#widgets-container").length)
+      return;
+
+  function bind_widget(widgetsSocket, li){
+    var widgetId = encodeURIComponent($(li).attr("data-widget-id"));
+    var eventId = $(li).attr("data-event-id");
+
+    // fetch widget html and css
+    $(li).load("/widgets/" + widgetId, function() {
+
+      // fetch widget js
+      $.get("/widgets/" + widgetId + '/js', function(js) {
+
+        var widget_js = eval(js);
+        $.extend(widget_js, defaultHandlers);
+
+        widget_js.onInit(li);
+
+        widgetsSocket.on(eventId, function (data) { //bind socket.io event listener
+            var f = data.error ? widget_js.onError : widget_js.onData;
+            defaultHandlers.onPreData(li);
+            f($(li), data);
+        });
+
+        widgetsSocket.emit("resend", eventId);
+        console.log("Sending resend for " + eventId);
+      });
+    });
+  }
+
+  function bind_ui(widgetsSocket){
     var gutter = parseInt($("#main-container").css("paddingTop"), 10) * 2;
     var gridsterGutter = gutter/2;
     var height = 1080 - $("#widgets-container").offset().top - gridsterGutter;
     var width = $("#widgets-container").width();
-    var try_reconnect_timer;
-    var try_to_reconnect_every = 10000;
-
-
-    var options = {
-        'reconnect': true,
-        'reconnection delay': 500,
-        'max reconnection attempts': 10
+    var vertical_cells = 4, horizontal_cells = 6;
+    var widgetSize = {
+      w: (width - horizontal_cells * gutter) / horizontal_cells,
+      h: (height - vertical_cells * gutter) / vertical_cells
     };
-    var socket_widget_channel = io.connect('/widgets', options);
 
-    // undo delete io.connect
-
-    bind(socket_widget_channel);
-
-
-    socket_widget_channel.on("connect", function() {
-      console.log('reconnected');
+    $(".gridster ul").gridster({
+      widget_margins: [gridsterGutter, gridsterGutter],
+      widget_base_dimensions: [widgetSize.w, widgetSize.h]
+    })
+    .children("li").each(function(index, li) {
+      bind_widget(widgetsSocket, li);
     });
+  }
 
-    socket_widget_channel.on("disconnect", function() {
-      console.log('disconnected');
-    });
+  var options = {
+    'reconnect': true,
+    'reconnection delay': 500,
+    'max reconnection attempts': 10
+  };
 
-    var serverInfo;
-    socket_widget_channel.on("serverinfo", function(newServerInfo) {
-        if (!serverInfo) {
-            serverInfo = newServerInfo;
-        } else if (newServerInfo.startTime > serverInfo.startTime) {
-            window.location.reload();
-        }
-    });
+  //----------------------
+  // widget socket
+  //----------------------
+  var socket_w = io.connect('/widgets', options);
+
+  bind_ui(socket_w);
+
+  socket_w.on("connect", function() {
+    console.log('reconnected');
+  });
+
+  socket_w.on("disconnect", function() {
+    console.log('disconnected');
+  });
+
+  //----------------------
+  // status socket
+  //----------------------
+  var socket_s = io.connect('/', options);
+  var serverInfo;
+  socket_s.on("serverinfo", function(newServerInfo) {
+    if (!serverInfo) {
+      serverInfo = newServerInfo;
+    } else if (newServerInfo.startTime > serverInfo.startTime) {
+      window.location.reload();
+    }
+  });
 });
