@@ -5,6 +5,41 @@
 
 $(function() {
 
+  //----------------------
+  // Alert for timeouts per widget
+  //----------------------
+  function check_last_server_communication (){
+    $(".gridster ul").children("li").each(function(index, li) {
+      var lastUpdate = $(li).attr('last-update');
+      var elapsedEl = '.widget-title span.widget-elapsed';
+
+      if (lastUpdate){
+        var elapsed = ((+new Date()) - lastUpdate) / 1000;
+        var str_elapsed = '';
+
+        if (elapsed > 60 * 60){
+          str_elapsed = ' <span class="alert alert_high">&gt;1h</span>';
+        }
+        else if (elapsed > 20 * 60){
+          str_elapsed = ' <span class="alert alert_high">&gt;20m</span>';
+        }
+        else if (elapsed > 10 * 60){
+          str_elapsed = ' <span class="alert alert_low">&gt;10m</span>';
+        }
+        else if (elapsed > 5 * 60){
+          str_elapsed = ' <span class="alert alert_normal">&gt;5m</span>';
+        }
+        console.log(str_elapsed);
+
+        if ($(elapsedEl, li).length === 0){
+          $('.widget-title', li).append('<span class="widget-elapsed"></span>');
+        }
+        $('.widget-title span.widget-elapsed', li).html(str_elapsed);
+      }
+
+    });
+  }
+
   var defaultHandlers = {
     onError : function (el, data){
       $('.content', el).html("<div class='error'>" + data.error + "</div>");
@@ -39,6 +74,9 @@ $(function() {
             var f = data.error ? widget_js.onError : widget_js.onData;
             defaultHandlers.onPreData(li);
             f($(li), data);
+
+            // save timestamp
+            $(li).attr("last-update", +new Date());
         });
 
         widgetsSocket.emit("resend", eventId);
@@ -87,6 +125,11 @@ $(function() {
   socket_w.on("disconnect", function() {
     console.log('disconnected');
   });
+
+  //----------------------
+  // Server timeout notifications
+  //----------------------
+  setInterval(check_last_server_communication, 5000);
 
   //----------------------
   // status socket
