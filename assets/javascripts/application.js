@@ -29,7 +29,6 @@ $(function() {
         else if (elapsed > 5 * 60){
           str_elapsed = ' <span class="alert alert_normal">&gt;5m</span>';
         }
-        console.log(str_elapsed);
 
         if ($(elapsedEl, li).length === 0){
           $('.widget-title', li).append('<span class="widget-elapsed"></span>');
