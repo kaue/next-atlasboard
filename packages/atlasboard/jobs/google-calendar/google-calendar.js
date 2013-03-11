@@ -3,6 +3,7 @@ var ical = require('ical'),
 
 module.exports = function(widgets, config, dependencies) {
     var maxEntries = config.maxEntries;
+    var logger = dependencies.logger;
     var formatDate = function(date) {
         var d = date.getDate();
         var m = date.getMonth()+1;
@@ -13,6 +14,7 @@ module.exports = function(widgets, config, dependencies) {
 
         if (err){
             widgets.sendData({error: "error loading calendar"});
+            logger.error(err);
             return;
         }
 
