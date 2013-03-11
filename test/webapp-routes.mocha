@@ -12,11 +12,10 @@ describe ('routes', function(){
     web_routes(app, null);
     assert.ok(hasRoute(app, "/"));
     assert.ok(hasRoute(app, "/styles.css"));
-    assert.ok(hasRoute(app, "/:dashboard/styles.css"));
+    assert.ok(hasRoute(app, "/scripts.js"));
     assert.ok(hasRoute(app, "/:dashboard"));
-    assert.ok(hasRoute(app, "/:dashboard/scripts.js"));
     assert.ok(hasRoute(app, "/widgets/:widget"));
-
+    assert.ok(hasRoute(app, "/widgets/:widget/js"));
     done();
   });
 });
