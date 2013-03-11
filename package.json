@@ -50,7 +50,8 @@
         "css-parse":            "1.0.4",
         "cheerio":              "0.10.7",
         "ical":                 "0.0.6",
-        "tracer":               "0.5.1"
+        "tracer":               "0.5.1",
+        "request":              "2.14.0"
     },
     "devDependencies":{
         "mocha":     "1.8.1",
