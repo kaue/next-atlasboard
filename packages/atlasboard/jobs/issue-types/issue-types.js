@@ -1,4 +1,4 @@
-module.exports = function(widgets, config, dependencies) {
+module.exports = function(widgets, config, dependencies, job_callback) {
     issues = [{"issueType" : "Test failures", "frequency" : 28},
         {"issueType" : "Broken build", "frequency" : 20},
         {"issueType" : "Usability Issue", "frequency" : 16},
@@ -8,4 +8,5 @@ module.exports = function(widgets, config, dependencies) {
         {"issueType" : "XSS Vulnerability", "frequency" : 4}];
 
     widgets.sendData({issues: issues, title: config.widgetTitle});
+    job_callback(null);
 };

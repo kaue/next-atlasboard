@@ -1,6 +1,6 @@
 var _ = require('underscore');
 
-module.exports = function(widgets, config, dependencies) {
+module.exports = function(widgets, config, dependencies, job_callback) {
     var quotes = config.quotes;
     quotes = _.shuffle(quotes);
     var display = [];
@@ -8,4 +8,5 @@ module.exports = function(widgets, config, dependencies) {
         display.push(quotes[i]);
     }
     widgets.sendData({quotes: display, title: config.widgetTitle});
+    job_callback(null);
 };
