@@ -53,6 +53,7 @@ $(function() {
   var defaultHandlers = { //they can be overwritten by widget´s custom implementation
     onError : function (el, data){
       $('.content', el).html("<div class='error'>" + data.error + "</div>");
+      console.log(data);
     },
     onInit : function (el, data){
       $("<img class=\"spinner\" src=\"images/spinner.gif\">").insertBefore($('.content', el));
@@ -61,7 +62,6 @@ $(function() {
 
   var globalHandlers = { //global pre-post event handlers
     onPreError : function (el, data){
-      console.log('err');
       $(el).addClass('onerror');
       $(".spinner", el).hide();
     },
@@ -131,8 +131,9 @@ $(function() {
 
   var options = {
     'reconnect': true,
-    'reconnection delay': 500,
-    'max reconnection attempts': 10
+    'reconnection delay': 5000,
+    'reopen delay': 3000,
+    'max reconnection attempts': 100
   };
 
   //----------------------
@@ -140,15 +141,27 @@ $(function() {
   //----------------------
   var socket_w = io.connect('/widgets', options);
 
-  bind_ui(socket_w);
-
   socket_w.on("connect", function() {
-    console.log('reconnected');
+
+    console.log('connected');
+
+    bind_ui(socket_w);
+
+    socket_w.on("disconnect", function() {
+      console.log('disconnected');
+    });
+
+    // reconnect
+    socket_w.on('reconnecting', function () {
+      console.log('reconnecting...');
+    });
+
+    socket_w.on('reconnect_failed', function () {
+      console.log('reconnected FAILED');
+    });
+
   });
 
-  socket_w.on("disconnect", function() {
-    console.log('disconnected');
-  });
 
   //----------------------
   // Server timeout notifications
