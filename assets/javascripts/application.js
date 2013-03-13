@@ -144,10 +144,12 @@ $(function() {
   socket_w.on("connect", function() {
 
     console.log('connected');
+    $('#main-container').removeClass("disconnected");
 
     bind_ui(socket_w);
 
     socket_w.on("disconnect", function() {
+      $('#main-container').addClass("disconnected");
       console.log('disconnected');
     });
 
