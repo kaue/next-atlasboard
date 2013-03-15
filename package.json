@@ -31,7 +31,7 @@
         "node":"~0.6.10"
     },
     "bin":            {
-        "atlasboard":"lib/cli-generator.js"
+        "atlasboard":"lib/cli/commands.js"
     },
     "main":           "./lib/atlasboard.js",
     "dependencies":   {

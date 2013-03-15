@@ -1,10 +1,10 @@
 var assert = require ('assert');
 var path = require ('path');
-var cli_generator = require ('../lib/cli-generator');
+var cli_generator = require ('../lib/cli/logic');
 var rm = require ("rimraf");
 var fs = require ("fs");
 
-describe ('cli-generator', function(){
+describe ('cli commands', function(){
 
   var temp_folder = "test/tmp";
 
@@ -20,7 +20,7 @@ describe ('cli-generator', function(){
   describe ('new', function(){
 
     it('should create a new project ok', function(done){
-      cli_generator.commands.new_project("samples/project", temp_folder, function(err){
+      cli_generator.new_project("samples/project", temp_folder, function(err){
         assert.ok(!err, err);
         assert.ok(fs.existsSync(path.join(temp_folder, "package.json")));
         assert.ok(fs.existsSync(path.join(temp_folder, "globalAuth.json")));
@@ -46,28 +46,28 @@ describe ('cli-generator', function(){
   describe ('generate', function(){
 
     it('should return error if bad resource type provided', function(done){
-      cli_generator.commands.generate("/ba/ddir", "default", "widgettt", "mywidget", function(err){
+      cli_generator.generate("/ba/ddir", "default", "widgettt", "mywidget", function(err){
         assert.ok(err.indexOf("Invalid generator")>-1, err);
         done();
       });
     });
 
     it('should return error if no project exists in the provided path', function(done){
-      cli_generator.commands.generate("/b/addir", "default", "widget", "mywidget", function(err){
+      cli_generator.generate("/b/addir", "default", "widget", "mywidget", function(err){
         assert.ok(err.indexOf("no project exists")>0, err);
         done();
       });
     });
 
     it('should return error if no item name is provided', function(done){
-      cli_generator.commands.generate(temp_folder, "default", "widget", "", function(err){
+      cli_generator.generate(temp_folder, "default", "widget", "", function(err){
         assert.ok(err.indexOf("name provided")>0, err);
         done();
       });
     });
 
     it('should create widget successfully', function(done){
-      cli_generator.commands.generate(temp_folder, "default", "widget", "newcalendar", function(err, data){
+      cli_generator.generate(temp_folder, "default", "widget", "newcalendar", function(err, data){
         assert.ok(!err, err);
         var result_path = path.join(temp_folder, "packages", "default", "widgets", "newcalendar");
         assert.ok(fs.existsSync(result_path));
@@ -77,14 +77,14 @@ describe ('cli-generator', function(){
     });
 
     it('should return error if item already exists', function(done){
-      cli_generator.commands.generate(temp_folder, "default", "widget", "newcalendar", function(err){
+      cli_generator.generate(temp_folder, "default", "widget", "newcalendar", function(err){
         assert.ok(err, err);
         done();
       });
     });
 
     it('should create job successfully', function(done){
-      cli_generator.commands.generate(temp_folder, "default", "job", "newcalendar", function(err, data){
+      cli_generator.generate(temp_folder, "default", "job", "newcalendar", function(err, data){
         assert.ok(!err);
         var result_path = path.join(temp_folder, "packages", "default", "jobs", "newcalendar");
         assert.ok(fs.existsSync(result_path));
@@ -94,7 +94,7 @@ describe ('cli-generator', function(){
     });
 
     it('should create dashboard successfully', function(done){
-      cli_generator.commands.generate(temp_folder, "default", "dashboard", "newdashboard", function(err, data){
+      cli_generator.generate(temp_folder, "default", "dashboard", "newdashboard", function(err, data){
         assert.ok(!err, err);
         var result_path = path.join(temp_folder, "packages", "default", "dashboards", "newdashboard");
         assert.ok(fs.existsSync(result_path));
