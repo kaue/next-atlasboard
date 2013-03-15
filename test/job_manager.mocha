@@ -72,4 +72,32 @@ describe ('job_manager', function(){
     });
   });
 
+  it('should be able to extend global config file with custom dashboards properties', function(done){
+    jobs_manager.get_jobs([packagesLocalFolder], configPath, function(err, job_workers){
+      assert.ok(!err);
+      // job_conf1 should have some properties from the global config files
+      // and other properties from the dashboard file
+      var jobsWithJob1Config = job_workers.filter(function(job){return job.widget_item.config === "job1_conf";});
+
+      assert.equal(3, jobsWithJob1Config.length);
+
+      // test_dasboard1 has aditional "other_configuration_option_to_extend_test_dashboard1" config key
+      assert.ok(jobsWithJob1Config[0].config.interval);
+      assert.ok(jobsWithJob1Config[0].config.other_configuration_option_to_extend_test_dashboard1);
+      assert.ok(!jobsWithJob1Config[0].config.other_configuration_option_to_extend_test_dashboard2);
+
+      // test_dasboard1 has aditional "other_configuration_option_to_extend_test_dashboard2" config key
+      assert.ok(jobsWithJob1Config[1].config.interval);
+      assert.ok(!jobsWithJob1Config[1].config.other_configuration_option_to_extend_test_dashboard1);
+      assert.ok(jobsWithJob1Config[1].config.other_configuration_option_to_extend_test_dashboard2);
+
+      // other_test_dashboard2 doesn´t have any of those
+      assert.ok(jobsWithJob1Config[2].config.interval);
+      assert.ok(!jobsWithJob1Config[2].config.other_configuration_option_to_extend_test_dashboard1);
+      assert.ok(!jobsWithJob1Config[2].config.other_configuration_option_to_extend_test_dashboard2);
+
+      done();
+    });
+  });
+
 });
