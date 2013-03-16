@@ -11,6 +11,10 @@
 
   "config": {
 
+      "job1_conf": {
+          "other_configuration_option_to_extend_test_dashboard2" : "extended"
+      },
+
       "job2_conf": {
           "interval" : 30000,
           "hosts":[],
