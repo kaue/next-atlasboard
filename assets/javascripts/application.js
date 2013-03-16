@@ -52,7 +52,8 @@ $(function() {
 
   var defaultHandlers = { //they can be overwritten by widget´s custom implementation
     onError : function (el, data){
-      $('.content', el).html("<div class='error'>" + data.error + "</div>");
+      var timestamp = new Date();
+      $('.content', el).html("<div class='error'>" + data.error + " (" + timestamp.toISOString + ")</div>");
       console.log(data);
     },
     onInit : function (el, data){
@@ -93,10 +94,13 @@ $(function() {
 
         widgetsSocket.on(eventId, function (data) { //bind socket.io event listener
             var f = data.error ? widget_js.onError : widget_js.onData;
+
+            globalHandlers.onPreData(li);
+
             if (data.error){
               globalHandlers.onPreError($(li), data);
             }
-            globalHandlers.onPreData(li);
+
             f($(li), data);
 
             // save timestamp
