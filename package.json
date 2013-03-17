@@ -44,7 +44,7 @@
         "nib":                  "0.9.0",
         "connect-assets":       "2.3.3",
         "ejs":                  "0.8.3",
-        "async":                "0.1.22",
+        "async":                "0.2.6",
         "optimist":             "~0.3.5",
         "hardhat":              "~0.0.7",
         "css-parse":            "1.0.4",
