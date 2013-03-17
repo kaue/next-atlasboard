@@ -1,7 +1,7 @@
 var ical = require('ical'),
     _ = require('underscore');
 
-module.exports = function(widgets, config, dependencies, job_callback) {
+module.exports = function(config, dependencies, job_callback) {
     var maxEntries = config.maxEntries;
     var logger = dependencies.logger;
     var formatDate = function(date) {
@@ -13,9 +13,8 @@ module.exports = function(widgets, config, dependencies, job_callback) {
     ical.fromURL(config.calendarUrl, {}, function(err, data){
 
         if (err){
-            widgets.sendData({error: "error loading calendar"});
             logger.error(err);
-            job_callback(err);
+            job_callback("error loading callendar");
             return;
         }
 
@@ -31,7 +30,6 @@ module.exports = function(widgets, config, dependencies, job_callback) {
             }
         });
 
-        widgets.sendData({events: result, title: config.widgetTitle});
-        job_callback(null);
+        job_callback(null, {events: result, title: config.widgetTitle});
     });
 };
