@@ -53,8 +53,8 @@ $(function() {
   var defaultHandlers = { //they can be overwritten by widget´s custom implementation
     onError : function (el, data){
       var timestamp = new Date();
-      $('.content', el).html("<div class='error'>" + data.error + " (" + timestamp.toISOString + ")</div>");
-      console.log(data);
+      $('.content', el).html("<div class='error'>" + data.error + " (" + timestamp.toISOString() + ")</div>");
+      console.error(data);
     },
     onInit : function (el, data){
       $("<img class=\"spinner\" src=\"images/spinner.gif\">").insertBefore($('.content', el));
@@ -88,20 +88,20 @@ $(function() {
 
         var widget_js = eval(js);
 
-        $.extend(widget_js, defaultHandlers);
+        widget_js = $.extend({}, defaultHandlers, widget_js);
 
         widget_js.onInit(li);
 
         widgetsSocket.on(eventId, function (data) { //bind socket.io event listener
             var f = data.error ? widget_js.onError : widget_js.onData;
 
-            globalHandlers.onPreData(li);
+            globalHandlers.onPreData.apply(widget_js, $(li));
 
             if (data.error){
-              globalHandlers.onPreError($(li), data);
+              globalHandlers.onPreError.apply(widget_js, [$(li), data]);
             }
 
-            f($(li), data);
+            f.apply(widget_js, [$(li), data]);
 
             // save timestamp
             $(li).attr("last-update", +new Date());
