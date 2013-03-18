@@ -1,5 +1,6 @@
 {
   "layout": {
+      "customJS" : ["notvalidfile.js"],
       "title": false,
       "widgets" : [
           { "enabled" : true, "row" : 1, "col" : 1, "width" : 2, "height" : 2, "widget" : "blockers", "job" : "", "config": "job1_conf"},

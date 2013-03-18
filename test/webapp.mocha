@@ -2,6 +2,86 @@ var assert = require ('assert');
 var web_logic = require ('../lib/webapp/logic.js');
 var path = require ('path');
 
+function getResponseForSendFile (file, done){
+  var res = {
+    type: function (data){
+      assert.equal("application/javascript", data);
+    },
+
+    sendfile: function (file){
+      assert.ok(file.indexOf(file)>-1);
+      done();
+    },
+
+    write: function (data){
+      done("not expected");
+    },
+
+    end: function (data){
+      done("not expected");
+    }
+  };
+
+  return res;
+}
+
+function getResponseForStatusCode (statusCode, done){
+  var res = {
+    type: function (data){
+      done('not expected');
+    },
+
+    sendfile: function (file){
+      done('not expected');
+    },
+
+    write: function (data){
+      done("not expected");
+    },
+
+    end: function (data){
+      done("not expected");
+    },
+    send: function (status, data){
+      assert.equal(statusCode, status);
+      done();
+    }
+  };
+  return res;
+}
+
+function getResponseWriteEnd (contains, mime, done){
+  var bundle_file = "";
+  var res = {
+    type: function (data){
+      if (mime){
+        assert.equal(mime, data);
+      }
+    },
+
+    sendfile: function (file){
+      done("not expected");
+    },
+
+    write: function (data){
+      bundle_file+=data;
+    },
+
+    end: function (data){
+      if (contains){
+        if (!Array.isArray(contains)){
+          contains = [contains];
+        }
+        contains.forEach(function(match){
+          assert.ok(bundle_file.indexOf(match) > -1);
+        });
+      }
+      done();
+    }
+  };
+  return res;
+}
+
 describe ('web_server', function(){
 
   var packagesLocalFolder = path.join(process.cwd(), "/test/packages");
@@ -109,75 +189,52 @@ describe ('web_server', function(){
   describe ('javascript assets', function(){
 
     it('return general javascript assets', function(done){
-      var res = {
-        type: function (data){
-          assert.equal("application/javascript", data);
-        },
-
-        sendfile: function (file){
-          done("not expected");
-        },
-
-        write: function (data){
-
-        },
-
-        end: function (data){
-          done();
-        }
-      };
-
       var atlasboard_assets_folder = path.join(__dirname, "../assets");
       var wallboard_assets_folder = path.join(process.cwd(), "samples/project/assets");
 
-      web_logic.renderScriptAssets(atlasboard_assets_folder, wallboard_assets_folder, {}, res);
+      web_logic.renderScriptAssets(atlasboard_assets_folder, wallboard_assets_folder,
+          {}, getResponseWriteEnd(null, "application/javascript", done));
     });
 
-    it('return javascript assets for a certain widget', function(done){
-      var res = {
-        type: function (data){
-          assert.equal("application/javascript", data);
-        },
+    describe ('for dashboard', function(){
+      var wallboard_assets_folder = path.join(process.cwd(), "test/assets_folder");
 
-        sendfile: function (file){
-          assert.ok(file.indexOf("widgets/blockers/blockers.js")>-1);
-          done();
-        },
+      it('return javascript assets for a certain dashboard', function(done){
+        web_logic.renderJsDashboard([packagesLocalFolder, packagesAtlasboardFolder], wallboard_assets_folder,
+            "test_dashboard1", {}, getResponseWriteEnd("Peity", "application/javascript", done));
+      });
 
-        write: function (data){
-          done("not expected");
-        },
+      it('returns error when requesting javascript assets for a dashboard that doesn\'t exist', function(done){
+        web_logic.renderJsDashboard([packagesLocalFolder, packagesAtlasboardFolder], wallboard_assets_folder,
+          "tttttest_dashboard1", {}, getResponseForStatusCode(404, done));
+      });
 
-        end: function (data){
-          done("not expected");
-        }
-      };
+      it('returns error when requesting javascript assets for a dashboard with incorrect format', function(done){
+        web_logic.renderJsDashboard([packagesWithInvalidDashboardFile], wallboard_assets_folder,
+            "invalid_json_file", {},  getResponseForStatusCode(400, done));
+      });
 
-      web_logic.renderJsWidget([packagesLocalFolder, packagesAtlasboardFolder], "blockers", {}, res);
-    });
+      it('handles request when requesting javascript assets for a dashboard with no customJS field', function(done){
+        web_logic.renderJsDashboard([packagesLocalFolder, packagesAtlasboardFolder], wallboard_assets_folder,
+            "test_dashboard2", {},  getResponseForStatusCode(200, done));
+      });
+
+      it('handles when requesting javascript assets and file is not found', function(done){
+        web_logic.renderJsDashboard([packagesLocalFolder, packagesAtlasboardFolder], wallboard_assets_folder,
+            "other_test_dashboard1", {}, getResponseWriteEnd(null, "application/javascript", done));
+      });
 
 
-    it('ignore path prefix - prevent path traversal issues', function(done){
-      var res = {
-        type: function (data){
-          assert.equal("application/javascript", data);
-        },
+      it('return javascript assets for a certain widget', function(done){
+        web_logic.renderJsWidget([packagesLocalFolder, packagesAtlasboardFolder], "blockers", {},
+            getResponseForSendFile("widgets/blockers/blockers.js", done));
+      });
 
-        sendfile: function (file){
-          assert.ok(file.indexOf("widgets/blockers/blockers.js")>-1);
-          done();
-        },
 
-        write: function (data){
-          done("not expected");
-        },
-
-        end: function (data){
-          done("not expected");
-        }
-      };
-
-      web_logic.renderJsWidget([packagesLocalFolder, packagesAtlasboardFolder], "../../blockers", {}, res);
+      it('ignore path prefix - prevent path traversal issues', function(done){
+        web_logic.renderJsWidget([packagesLocalFolder, packagesAtlasboardFolder], "../../blockers", {},
+            getResponseForSendFile("widgets/blockers/blockers.js", done));
+      });
     });
   });
 
@@ -185,26 +242,9 @@ describe ('web_server', function(){
   describe ('css assets', function(){
 
     it('return css general assets', function(done){
-      var bundle_file = "";
-      var res = {
-        type: function (data){
-          assert.equal("text/css", data);
-        },
-
-        write: function (data){
-          bundle_file+=data;
-        },
-
-        end: function (data){
-          assert.ok(!data);
-          assert.ok(bundle_file.indexOf("body") > -1);
-          assert.ok(bundle_file.indexOf("#main-container #widgets-container li") > -1);
-          done();
-        }
-      };
-
       var atlasboard_assets_folder = path.join(process.cwd(), "/assets");
-      web_logic.renderCssGeneralAssets(atlasboard_assets_folder, {}, res);
+      web_logic.renderCssGeneralAssets(atlasboard_assets_folder, {},
+          getResponseWriteEnd(["body", "#main-container #widgets-container li"], "text/css", done));
     });
 
   });
@@ -214,55 +254,13 @@ describe ('web_server', function(){
 
     //todo: improve this tests
     it('return html and css', function(done){
-      var bundle_file = "";
-      var res = {
-        type: function (data){
-
-        },
-
-        write: function (data){
-          bundle_file+=data;
-        },
-
-        sendfile: function (data){
-          done("Error");
-        },
-
-        end: function (data){
-          assert.ok(!data);
-          assert.ok(bundle_file.indexOf("body") > -1);
-          assert.ok(bundle_file.indexOf("<style>") > -1);
-          done();
-        }
-      };
-
-      web_logic.renderHtmlWidget([packagesLocalFolder, packagesAtlasboardFolder], "blockers", {}, res);
+      web_logic.renderHtmlWidget([packagesLocalFolder, packagesAtlasboardFolder], "blockers",
+          {}, getResponseWriteEnd(["body", "<style>"], "text/html", done));
     });
 
     it('ignore path prefix - prevent path traversal issues', function(done){
-      var bundle_file = "";
-      var res = {
-        type: function (data){
-
-        },
-
-        write: function (data){
-          bundle_file+=data;
-        },
-
-        sendfile: function (data){
-          done("Error");
-        },
-
-        end: function (data){
-          assert.ok(!data);
-          assert.ok(bundle_file.indexOf("body") > -1);
-          assert.ok(bundle_file.indexOf("<style>") > -1);
-          done();
-        }
-      };
-
-      web_logic.renderHtmlWidget([packagesLocalFolder, packagesAtlasboardFolder], "../../blockers", {}, res);
+      web_logic.renderHtmlWidget([packagesLocalFolder, packagesAtlasboardFolder], "../../blockers",
+          {}, getResponseWriteEnd(["body", "<style>"], "text/html", done));
     });
 
 

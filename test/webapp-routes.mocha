@@ -14,6 +14,7 @@ describe ('routes', function(){
     assert.ok(hasRoute(app, "/styles.css"));
     assert.ok(hasRoute(app, "/scripts.js"));
     assert.ok(hasRoute(app, "/:dashboard"));
+    assert.ok(hasRoute(app, "/:dashboard/js"));
     assert.ok(hasRoute(app, "/widgets/:widget"));
     assert.ok(hasRoute(app, "/widgets/:widget/js"));
     done();
