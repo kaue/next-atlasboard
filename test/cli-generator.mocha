@@ -20,7 +20,7 @@ describe ('cli commands', function(){
   describe ('new', function(){
 
     it('should create a new project ok', function(done){
-      cli_generator.new_project("samples/project", temp_folder, function(err){
+      cli_generator.newProject("samples/project", temp_folder, function(err){
         assert.ok(!err, err);
         assert.ok(fs.existsSync(path.join(temp_folder, "package.json")));
         assert.ok(fs.existsSync(path.join(temp_folder, "globalAuth.json")));
