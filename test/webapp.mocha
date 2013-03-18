@@ -193,7 +193,7 @@ describe ('web_server', function(){
       var wallboard_assets_folder = path.join(process.cwd(), "samples/project/assets");
 
       web_logic.renderScriptAssets(atlasboard_assets_folder, wallboard_assets_folder,
-          {}, getResponseWriteEnd(null, "application/javascript", done));
+          {}, getResponseWriteEnd("var Widgets = {}", "application/javascript", done));
     });
 
     describe ('for dashboard', function(){
