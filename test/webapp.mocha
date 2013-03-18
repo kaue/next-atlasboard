@@ -18,14 +18,14 @@ describe ('web_server', function(){
         }
       };
 
-      web_logic.list_all_dashboards([packagesLocalFolder, packagesAtlasboardFolder], {}, res);
+      web_logic.listAllDashboards([packagesLocalFolder, packagesAtlasboardFolder], {}, res);
     });
 
 
     it('render one', function(done){
       var res = {
         render: function (template, data){
-          assert.ok(data.dashboard_name);
+          assert.ok(data.dashboardName);
           assert.ok(data.dashboardConfig);
           done();
         },
@@ -35,7 +35,7 @@ describe ('web_server', function(){
         }
       };
 
-      web_logic.render_dashboard([packagesLocalFolder, packagesAtlasboardFolder], "test_dashboard1", {}, res);
+      web_logic.renderDashboard([packagesLocalFolder, packagesAtlasboardFolder], "test_dashboard1", {}, res);
     });
 
 
@@ -51,14 +51,14 @@ describe ('web_server', function(){
         }
       };
 
-      web_logic.render_dashboard([packagesLocalFolder, packagesAtlasboardFolder, packagesWithInvalidDashboardFile], "invalid_json_file", {}, res);
+      web_logic.renderDashboard([packagesLocalFolder, packagesAtlasboardFolder, packagesWithInvalidDashboardFile], "invalid_json_file", {}, res);
     });
 
 
     it('render one - ignore path prefix - prevent path traversal issues', function(done){
       var res = {
         render: function (template, data){
-          assert.ok(data.dashboard_name);
+          assert.ok(data.dashboardName);
           assert.ok(data.dashboardConfig);
           done();
         },
@@ -68,7 +68,7 @@ describe ('web_server', function(){
         }
       };
 
-      web_logic.render_dashboard([packagesLocalFolder, packagesAtlasboardFolder], "../test_dashboard1", {}, res);
+      web_logic.renderDashboard([packagesLocalFolder, packagesAtlasboardFolder], "../test_dashboard1", {}, res);
     });
 
 
@@ -84,7 +84,7 @@ describe ('web_server', function(){
         }
       };
 
-      web_logic.render_dashboard("../../packagesLocalFolder", "tttest_dashboard1", {}, res);
+      web_logic.renderDashboard("../../packagesLocalFolder", "tttest_dashboard1", {}, res);
     });
 
 
@@ -100,7 +100,7 @@ describe ('web_server', function(){
         }
       };
 
-      web_logic.render_dashboard([packagesLocalFolder, packagesAtlasboardFolder], "tttest_dashboard1", {}, res);
+      web_logic.renderDashboard([packagesLocalFolder, packagesAtlasboardFolder], "tttest_dashboard1", {}, res);
     });
 
   });
@@ -130,7 +130,7 @@ describe ('web_server', function(){
       var atlasboard_assets_folder = path.join(__dirname, "../assets");
       var wallboard_assets_folder = path.join(process.cwd(), "samples/project/assets");
 
-      web_logic.render_script_assets(atlasboard_assets_folder, wallboard_assets_folder, {}, res);
+      web_logic.renderScriptAssets(atlasboard_assets_folder, wallboard_assets_folder, {}, res);
     });
 
     it('return javascript assets for a certain widget', function(done){
@@ -153,7 +153,7 @@ describe ('web_server', function(){
         }
       };
 
-      web_logic.js_widget([packagesLocalFolder, packagesAtlasboardFolder], "blockers", {}, res);
+      web_logic.renderJsWidget([packagesLocalFolder, packagesAtlasboardFolder], "blockers", {}, res);
     });
 
 
@@ -177,7 +177,7 @@ describe ('web_server', function(){
         }
       };
 
-      web_logic.js_widget([packagesLocalFolder, packagesAtlasboardFolder], "../../blockers", {}, res);
+      web_logic.renderJsWidget([packagesLocalFolder, packagesAtlasboardFolder], "../../blockers", {}, res);
     });
   });
 
@@ -204,7 +204,7 @@ describe ('web_server', function(){
       };
 
       var atlasboard_assets_folder = path.join(process.cwd(), "/assets");
-      web_logic.render_css_general_assets(atlasboard_assets_folder, {}, res);
+      web_logic.renderCssGeneralAssets(atlasboard_assets_folder, {}, res);
     });
 
   });
@@ -236,7 +236,7 @@ describe ('web_server', function(){
         }
       };
 
-      web_logic.render_html_widget([packagesLocalFolder, packagesAtlasboardFolder], "blockers", {}, res);
+      web_logic.renderHtmlWidget([packagesLocalFolder, packagesAtlasboardFolder], "blockers", {}, res);
     });
 
     it('ignore path prefix - prevent path traversal issues', function(done){
@@ -262,7 +262,7 @@ describe ('web_server', function(){
         }
       };
 
-      web_logic.render_html_widget([packagesLocalFolder, packagesAtlasboardFolder], "../../blockers", {}, res);
+      web_logic.renderHtmlWidget([packagesLocalFolder, packagesAtlasboardFolder], "../../blockers", {}, res);
     });
 
 
@@ -282,7 +282,7 @@ describe ('web_server', function(){
         }
       };
 
-      web_logic.render_html_widget([packagesLocalFolder, packagesAtlasboardFolder], "bbblockers", {}, res);
+      web_logic.renderHtmlWidget([packagesLocalFolder, packagesAtlasboardFolder], "bbblockers", {}, res);
     });
 
   });
