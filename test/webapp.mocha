@@ -86,7 +86,8 @@ describe ('web_server', function(){
 
   var packagesLocalFolder = path.join(process.cwd(), "/test/packages");
   var packagesAtlasboardFolder = path.join(process.cwd(), "/packages");
-  var packagesWithInvalidDashboardFile = path.join(process.cwd(), "/packages_invalid_format");
+  var packagesWithInvalidDashboardFile = path.join(process.cwd(), "/test/packages_invalid_format");
+  var packageWithJustOneDashboard = path.join(process.cwd(), "/test/package_with_one_dashboard");
 
   describe ('dashboards', function(){
 
@@ -101,6 +102,19 @@ describe ('web_server', function(){
       web_logic.listAllDashboards([packagesLocalFolder, packagesAtlasboardFolder], {}, res);
     });
 
+    it('redirects to dashboard page if we only have one', function(done){
+      var res = {
+        redirect: function (data){
+          assert.equal(data, "/mydashboard");
+          done();
+        },
+        render: function (template, data){
+          done("Not expected");
+        }
+      };
+
+      web_logic.listAllDashboards([packageWithJustOneDashboard], {}, res);
+    });
 
     it('render one', function(done){
       var res = {
