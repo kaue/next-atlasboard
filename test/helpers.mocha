@@ -1,0 +1,17 @@
+var assert = require ('assert');
+var helpers = require ('../lib/helpers');
+
+describe ('helpers', function(){
+
+  it('should sanitize string input', function(done){
+    assert.ok("wibble", helpers.sanitizePath("wibble"));
+    assert.ok("wibble", helpers.sanitizePath("../wibble"));
+    done();
+  });
+
+  it('should sanitize number input', function(done){
+    assert.ok("wibble", helpers.sanitizePath(4444));
+    done();
+  });
+
+});

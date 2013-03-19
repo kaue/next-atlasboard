@@ -9,7 +9,7 @@ function hasRoute(app, route){
 describe ('routes', function(){
   it('has the necessary routes', function(done){
     var app = require('express')();
-    web_routes(app, null);
+    web_routes(app, null, null);
     assert.ok(hasRoute(app, "/"));
     assert.ok(hasRoute(app, "/styles.css"));
     assert.ok(hasRoute(app, "/scripts.js"));
