@@ -27,8 +27,6 @@ describe ('cli commands', function(){
         assert.ok(fs.existsSync(path.join(temp_folder, "assets")));
         assert.ok(fs.existsSync(path.join(temp_folder, "packages")));
         assert.ok(fs.existsSync(path.join(temp_folder, "packages", "default", "dashboards")));
-        assert.ok(fs.existsSync(path.join(temp_folder, "packages", "default", "widgets")));
-        assert.ok(fs.existsSync(path.join(temp_folder, "packages", "default", "jobs")));
         done();
       });
     });
