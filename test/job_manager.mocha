@@ -6,6 +6,8 @@ describe ('job_manager', function(){
 
   var packagesLocalFolder = path.join(process.cwd(), "/test/packages");
   var packagesWithInvalidJob = path.join(process.cwd(), "/test/package_invalid_job");
+  var packagesWithNoWidgetField = path.join(process.cwd(), "/test/package_dashboard_with_no_widgets");
+  var packagesWithNoLayoutField = path.join(process.cwd(), "/test/package_dashboard_with_no_layout");
 
   //we use only wallboard local folder, since we don´t want our tests to depend on atlasboard jobs
   //var packagesAtlasboardFolder = path.join(process.cwd(), "/packages");
@@ -40,6 +42,19 @@ describe ('job_manager', function(){
     });
   });
 
+  it('should return error if layout field is not found in dashboard file', function(done){
+    jobs_manager.get_jobs([packagesWithNoLayoutField], configPath, function(err, job_workers){
+      assert.ok(err.indexOf('No layout field found')>-1);
+      done();
+    });
+  });
+
+  it('should return error if widgets field is not found in dashboard file', function(done){
+    jobs_manager.get_jobs([packagesWithNoWidgetField], configPath, function(err, job_workers){
+      assert.ok(err.indexOf('No widgets field found')>-1);
+      done();
+    });
+  });
 
   it('should return error if invalid job is found on dashboard', function(done){
     jobs_manager.get_jobs([packagesWithInvalidJob], configPath, function(err, job_workers){
