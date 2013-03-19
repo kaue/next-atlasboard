@@ -40,10 +40,10 @@ $(function() {
         $('.widget-title span.widget-elapsed', li).html(str_elapsed);
 
         if (offline){ // fade widget
-          $(li).addClass('offline');
+          $('.content', li).addClass('offline');
         }
         else{
-          $(li).removeClass('offline');
+          $('.content', li).removeClass('offline');
         }
       }
 
@@ -63,12 +63,12 @@ $(function() {
 
   var globalHandlers = { //global pre-post event handlers
     onPreError : function (el, data){
-      $(el).addClass('onerror');
+      $('.content', el).addClass('onerror');
       $(".spinner", el).hide();
     },
 
     onPreData : function (el, data){
-      $(el).removeClass('onerror');
+      $('.content', el).removeClass('onerror');
       $(".spinner", el).hide();
     }
   };
