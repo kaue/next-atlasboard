@@ -31,6 +31,13 @@ describe ('cli commands', function(){
       });
     });
 
+    it('should not create a new project from a folder where a atlasboard project already exists', function(done){
+      cli_generator.newProject("samples/project", temp_folder, function(err){
+        assert.ok(err);
+        done();
+      });
+    });
+
     it('should have a valid config file', function(done){ //avoid shiping an invalid config file
       var config_path_contents = fs.readFileSync(path.join(temp_folder, "config", "dashboard_common.json"));
       var JSONconfig = JSON.parse(config_path_contents);
