@@ -11,7 +11,6 @@ module.exports = function(config, dependencies, job_callback) {
   };
 
   dependencies.request(options, function(err, response, JSONbody) {
-    console.log(JSONbody);
     if (err || !response || response.statusCode != 200) {
       var err_msg = err || (response ? ("bad statusCode: " + response.statusCode + " from " + options.url) : ("bad response from " + options.url));
       logger.error(err_msg);
