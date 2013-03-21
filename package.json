@@ -21,7 +21,7 @@
     ],
     "name":           "atlasboard",
     "description":    "AtlasBoard is dashboard/wallboard framework written all in JS",
-    "version":        "0.0.3",
+    "version":        "0.1.0",
     "homepage":       "https://bitbucket.org/atlassian/atlasboard",
     "repository":     {
         "type":"git",
