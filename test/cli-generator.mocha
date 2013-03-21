@@ -7,6 +7,7 @@ var fs = require ("fs");
 describe ('cli commands', function(){
 
   var temp_folder = "test/tmp";
+  var packagesLocalFolder = path.join(process.cwd(), "/test/packages");
 
   //make sure temp folder is deleted even if tests fail (before and after)
   before(function(done){
@@ -104,6 +105,59 @@ describe ('cli commands', function(){
         var result_path = path.join(temp_folder, "packages", "default", "dashboards", "newdashboard");
         assert.ok(fs.existsSync(result_path));
         assert.equal(data.path, result_path);
+        done();
+      });
+    });
+
+  });
+
+  describe ('list', function(){
+    it('should list available components', function(done){
+      cli_generator.list(packagesLocalFolder, function(err, lists){
+
+        assert.ok(Array.isArray(lists));
+        assert.equal(lists.length, 1);
+        assert.equal(lists[0].package, packagesLocalFolder);
+
+        assert.equal(lists[0].widgets.length, 2);
+
+        assert.ok(lists[0].widgets[0].dir.indexOf('/test/packages/default')>-1);
+        assert.equal(lists[0].widgets[0].items.length, 0);
+
+        assert.ok(lists[0].widgets[1].dir.indexOf('/test/packages/otherpackage1')>-1);
+        assert.equal(lists[0].widgets[1].items.length, 1);
+        assert.ok(lists[0].widgets[1].items[0].indexOf('test/packages/otherpackage1/widgets/blockers/blockers.js')>-1);
+
+        assert.equal(lists[0].jobs.length, 2);
+
+        console.log(lists[0].jobs[0]);
+        assert.ok(lists[0].jobs[0].dir.indexOf('/test/packages/default')>-1);
+        assert.equal(lists[0].jobs[0].items.length, 3);
+        assert.ok(lists[0].jobs[0].items[0].indexOf('/test/packages/default/jobs/job1/job1.js')>-1);
+
+        assert.ok(lists[0].jobs[1].dir.indexOf('/test/packages/otherpackage1')>-1);
+        assert.equal(lists[0].jobs[1].items.length, 3);
+        assert.ok(lists[0].jobs[1].items[0].indexOf('/test/packages/otherpackage1/jobs/job1/job1.js')>-1);
+
+        done();
+      });
+    });
+
+    it('should handle invalid package folders', function(done){
+      var emptyPackagesFolder = 'test/config';
+      cli_generator.list(emptyPackagesFolder, function(err, lists){
+        assert.ifError(err);
+        console.log(lists[0]);
+        assert.equal(lists.length, 0);
+        done();
+      });
+    });
+
+    it('should not repeat results', function(done){
+      cli_generator.list([packagesLocalFolder, packagesLocalFolder, packagesLocalFolder], function(err, lists){
+        assert.ifError(err);
+        console.log(lists[0]);
+        assert.equal(lists.length, 1);
         done();
       });
     });
