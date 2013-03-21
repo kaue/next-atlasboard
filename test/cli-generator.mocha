@@ -130,7 +130,6 @@ describe ('cli commands', function(){
 
         assert.equal(lists[0].jobs.length, 2);
 
-        console.log(lists[0].jobs[0]);
         assert.ok(lists[0].jobs[0].dir.indexOf('/test/packages/default')>-1);
         assert.equal(lists[0].jobs[0].items.length, 3);
         assert.ok(lists[0].jobs[0].items[0].indexOf('/test/packages/default/jobs/job1/job1.js')>-1);
@@ -147,7 +146,6 @@ describe ('cli commands', function(){
       var emptyPackagesFolder = 'test/config';
       cli_generator.list(emptyPackagesFolder, function(err, lists){
         assert.ifError(err);
-        console.log(lists[0]);
         assert.equal(lists.length, 0);
         done();
       });
@@ -156,7 +154,6 @@ describe ('cli commands', function(){
     it('should not repeat results', function(done){
       cli_generator.list([packagesLocalFolder, packagesLocalFolder, packagesLocalFolder], function(err, lists){
         assert.ifError(err);
-        console.log(lists[0]);
         assert.equal(lists.length, 1);
         done();
       });
