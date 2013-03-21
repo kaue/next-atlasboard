@@ -54,6 +54,15 @@ describe ('item_manager', function(){
       });
     });
 
+    it('should ignore wrong directories', function(done){
+      item_manager.getByPackage([packagesLocalFolder, "wrongdirecto/ry"], "jobs", ".js", function(err, packages){
+        assert.ok(!err, err);
+
+        assert.equal(2, packages.length);
+        done();
+      });
+    });
+
     it('should be able to pick up the right job with namespacing (1)', function(done){
       item_manager.get_first([packagesLocalFolder], "otherpackage1#job1", "jobs", ".js", function(err, job_path){
         assert.ok(!err, err);
