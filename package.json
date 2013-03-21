@@ -21,7 +21,7 @@
     ],
     "name":           "atlasboard",
     "description":    "AtlasBoard is dashboard/wallboard framework written all in JS",
-    "version":        "0.0.3",
+    "version":        "0.1.0",
     "homepage":       "https://bitbucket.org/atlassian/atlasboard",
     "repository":     {
         "type":"git",
@@ -55,9 +55,9 @@
         "xtend":                "2.0.3"
     },
     "devDependencies":{
-        "mocha":     "1.8.1",
-        "expect.js": "0.1.2",
-        "supervisor":"0.5.0"
+        "mocha":                "1.8.1",
+        "expect.js":            "0.1.2",
+        "rimraf":               "2.1.4"
     },
     "preferGlobal":   true,
     "keywords":       ["server", "dashboard"],
