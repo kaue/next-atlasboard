@@ -20,7 +20,8 @@ $(function() {
       var elapsed = ((+new Date()) - lastUpdate);
 
       if (config.interval){ // job has a specific predefined interval
-        var max_time_to_show_offline = config.interval * (config.retryOnErrorTimes || 1);
+        // calculate based on retryOnErrorTimes or use 2xinterval.
+        var max_time_to_show_offline = config.interval * (config.retryOnErrorTimes || 2);
         if (elapsed > max_time_to_show_offline){ // this widget if offline
           var str_elapsed = ' <span class="alert alert_high">&gt;1h</span>';
           $('.widget-title span.widget-elapsed', li).html(str_elapsed);
