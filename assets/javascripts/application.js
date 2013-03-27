@@ -129,6 +129,18 @@ $(function() {
     .children("li").each(function(index, li) {
       bind_widget(widgetsSocket, li);
     });
+
+    // Handle browser resize
+    var container = $("#main-container");
+    var initialWidth = container.outerWidth();
+    var initialHeight = container.outerHeight();
+
+    $(window).resize(function() {
+        var scaleFactorWidth = $(window).width() / initialWidth;
+        var scaleFactorHeight = $(window).height() / initialHeight;
+        container.css("transform", "scale(" + Math.min(scaleFactorWidth, scaleFactorHeight) + ")");
+    }).resize();
+
   }
 
   var options = {
