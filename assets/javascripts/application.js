@@ -63,6 +63,10 @@ $(function() {
   if (!$("#widgets-container").length)
       return;
 
+  function log_error (eventId, err){
+    console.error('ERROR on ' + eventId + ': ' + err);
+  }
+
   function bind_widget(widgetsSocket, li){
     var widgetId = encodeURIComponent($(li).attr("data-widget-id"));
     var eventId = $(li).attr("data-event-id");
@@ -71,13 +75,16 @@ $(function() {
     $(li).load("/widgets/" + widgetId, function() {
 
       // fetch widget js
-      $.get("/widgets/" + widgetId + '/js', function(js) {
+      $.get('/widgets/' + widgetId + '/js', function(js) {
 
-        var widget_js = eval(js);
-
-        widget_js = $.extend({}, defaultHandlers, widget_js);
-
-        widget_js.onInit(li);
+        try{
+          eval('var widget_js = ' + js);
+          widget_js = $.extend({}, defaultHandlers, widget_js);
+          widget_js.onInit(li);
+        }
+        catch (e){
+          log_error(eventId, e);
+        }
 
         widgetsSocket.on(eventId, function (data) { //bind socket.io event listener
             var f = data.error ? widget_js.onError : widget_js.onData;
@@ -88,7 +95,12 @@ $(function() {
               globalHandlers.onPreError.apply(widget_js, [$(li), data]);
             }
 
-            f.apply(widget_js, [$(li), data]);
+            try{
+              f.apply(widget_js, [$(li), data]);
+            }
+            catch (e){
+              log_error(eventId, e);
+            }
 
             // save timestamp
             $(li).attr("last-update", +new Date());
@@ -180,3 +192,5 @@ $(function() {
     }
   });
 });
+
+var Widgets = {}; //support legacy widgets
