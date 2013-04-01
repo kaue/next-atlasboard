@@ -29,10 +29,36 @@ describe ('item_manager', function(){
   });
 
   describe ('jobs', function(){
+
     it('should have the right number of jobs', function(done){
       item_manager.get([packagesLocalFolder], "jobs", ".js", function(err, jobs){
         assert.ok(!err, err);
         assert.equal(6, jobs.length);
+        done();
+      });
+    });
+
+    it('should return jobs by package', function(done){
+      item_manager.getByPackage([packagesLocalFolder], "jobs", ".js", function(err, packages){
+        assert.ok(!err, err);
+
+        assert.equal(2, packages.length);
+
+        assert.equal(packagesLocalFolder + '/default', packages[0].dir);
+        assert.equal(3, packages[0].items.length);
+
+        assert.equal(packagesLocalFolder + '/otherpackage1', packages[1].dir);
+        assert.equal(3, packages[1].items.length);
+
+        done();
+      });
+    });
+
+    it('should ignore wrong directories', function(done){
+      item_manager.getByPackage([packagesLocalFolder, "wrongdirecto/ry"], "jobs", ".js", function(err, packages){
+        assert.ok(!err, err);
+
+        assert.equal(2, packages.length);
         done();
       });
     });

@@ -6,48 +6,35 @@
 $(function() {
 
   //----------------------
-  // Alert for timeouts per widget
+  // Alert for timeouts
   //----------------------
-  function check_last_server_communication (){
-    $(".gridster ul").children("li").each(function(index, li) {
-      var lastUpdate = $(li).attr('last-update');
+  function check_last_server_communication (li, config){
+    var lastUpdate = $(li).attr('last-update');
+
+    if (lastUpdate){
       var elapsedEl = '.widget-title span.widget-elapsed';
+      if ($(elapsedEl, li).length === 0){
+        $('.widget-title', li).append('<span class="widget-elapsed"></span>');
+      }
 
-      if (lastUpdate){
-        var elapsed = ((+new Date()) - lastUpdate) / 1000;
-        var str_elapsed = '';
-        var offline = false;
+      var elapsed = ((+new Date()) - lastUpdate);
 
-        if (elapsed > 60 * 60){
-          str_elapsed = ' <span class="alert alert_high">&gt;1h</span>';
-        }
-        else if (elapsed > 20 * 60){
-          offline = true;
-          str_elapsed = ' <span class="alert alert_high">&gt;20m</span>';
-        }
-        else if (elapsed > 10 * 60){
-          offline = true;
-          str_elapsed = ' <span class="alert alert_low">&gt;10m</span>';
-        }
-        else if (elapsed > 5 * 60){
-          offline = true;
-          str_elapsed = ' <span class="alert alert_normal">&gt;5m</span>';
-        }
-
-        if ($(elapsedEl, li).length === 0){
-          $('.widget-title', li).append('<span class="widget-elapsed"></span>');
-        }
-        $('.widget-title span.widget-elapsed', li).html(str_elapsed);
-
-        if (offline){ // fade widget
+      if (config.interval){ // job has a specific predefined interval
+        // calculate based on retryOnErrorTimes or use 2xinterval.
+        var max_time_to_show_offline = config.interval * (config.retryOnErrorTimes || 2);
+        if (elapsed > max_time_to_show_offline){ // this widget if offline
+          var str_elapsed = ' <span class="alert alert_high">&gt;1h</span>';
+          $('.widget-title span.widget-elapsed', li).html(str_elapsed);
           $('.content', li).addClass('offline');
         }
         else{
+          $('.widget-title span.widget-elapsed', li).html('');
           $('.content', li).removeClass('offline');
         }
-      }
 
-    });
+        $('.widget-title span.widget-elapsed', li).html('');
+      }
+    }
   }
 
   var defaultHandlers = { //they can be overwritten by widget´s custom implementation
@@ -105,10 +92,21 @@ $(function() {
 
             // save timestamp
             $(li).attr("last-update", +new Date());
+
+            //----------------------
+            // Server timeout notifications
+            //----------------------
+            if (!widget_js.config){ // fill config when first data arrives
+              widget_js.config = data.config;
+              setInterval(function(){
+                check_last_server_communication(li, widget_js.config);
+              }, 5000);
+            }
         });
 
         widgetsSocket.emit("resend", eventId);
         console.log("Sending resend for " + eventId);
+
       });
     });
   }
@@ -131,6 +129,18 @@ $(function() {
     .children("li").each(function(index, li) {
       bind_widget(widgetsSocket, li);
     });
+
+    // Handle browser resize
+    var container = $("#main-container");
+    var initialWidth = container.outerWidth();
+    var initialHeight = container.outerHeight();
+
+    $(window).resize(function() {
+        var scaleFactorWidth = $(window).width() / initialWidth;
+        var scaleFactorHeight = $(window).height() / initialHeight;
+        container.css("transform", "scale(" + Math.min(scaleFactorWidth, scaleFactorHeight) + ")");
+    }).resize();
+
   }
 
   var options = {
@@ -168,11 +178,6 @@ $(function() {
 
   });
 
-
-  //----------------------
-  // Server timeout notifications
-  //----------------------
-  setInterval(check_last_server_communication, 5000);
 
   //----------------------
   // status socket

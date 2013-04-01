@@ -1,1 +1,0 @@
-mocha -b  --watch --growl --reporter nyan $(find . -name *.mocha

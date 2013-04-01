@@ -1,0 +1,8 @@
+0.1.1
+	- new atlasboard "list" command.
+	- handle errors on child process when executing "npm install".
+	- use minified versions of javascript libraries.
+
+0.1.0
+	- first release after some important changes in the core architecture.
+
