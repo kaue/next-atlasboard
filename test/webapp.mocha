@@ -185,14 +185,6 @@ describe ('web_server', function(){
 
   describe ('javascript assets', function(){
 
-    it('return general javascript assets', function(done){
-      var atlasboard_assets_folder = path.join(__dirname, "../assets");
-      var wallboard_assets_folder = path.join(process.cwd(), "samples/project/assets");
-
-      web_logic.renderScriptAssets(atlasboard_assets_folder, wallboard_assets_folder,
-          {}, getResponseWriteEnd("var Widgets = {}", "application/javascript", done));
-    });
-
     describe ('for dashboard', function(){
       var wallboard_assets_folder = path.join(process.cwd(), "test/assets_folder");
 

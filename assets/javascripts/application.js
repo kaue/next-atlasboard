@@ -63,7 +63,11 @@ $(function() {
   if (!$("#widgets-container").length)
       return;
 
-  function bind_widget(widgetsSocket, li){
+  function log_error (eventId, err){
+    console.error('ERROR on ' + eventId + ': ' + err);
+  }
+
+  function bind_widget(io, li){
     var widgetId = encodeURIComponent($(li).attr("data-widget-id"));
     var eventId = $(li).attr("data-event-id");
 
@@ -71,15 +75,18 @@ $(function() {
     $(li).load("/widgets/" + widgetId, function() {
 
       // fetch widget js
-      $.get("/widgets/" + widgetId + '/js', function(js) {
+      $.get('/widgets/' + widgetId + '/js', function(js) {
 
-        var widget_js = eval(js);
+        try{
+          eval('var widget_js = ' + js);
+          widget_js = $.extend({}, defaultHandlers, widget_js);
+          widget_js.onInit(li);
+        }
+        catch (e){
+          log_error(eventId, e);
+        }
 
-        widget_js = $.extend({}, defaultHandlers, widget_js);
-
-        widget_js.onInit(li);
-
-        widgetsSocket.on(eventId, function (data) { //bind socket.io event listener
+        io.on(eventId, function (data) { //bind socket.io event listener
             var f = data.error ? widget_js.onError : widget_js.onData;
 
             globalHandlers.onPreData.apply(widget_js, $(li));
@@ -88,7 +95,12 @@ $(function() {
               globalHandlers.onPreError.apply(widget_js, [$(li), data]);
             }
 
-            f.apply(widget_js, [$(li), data]);
+            try{
+              f.apply(widget_js, [$(li), data]);
+            }
+            catch (e){
+              log_error(eventId, e);
+            }
 
             // save timestamp
             $(li).attr("last-update", +new Date());
@@ -104,30 +116,27 @@ $(function() {
             }
         });
 
-        widgetsSocket.emit("resend", eventId);
+        io.emit("resend", eventId);
         console.log("Sending resend for " + eventId);
 
       });
     });
   }
 
-  function bind_ui(widgetsSocket){
-    var gutter = parseInt($("#main-container").css("paddingTop"), 10) * 2;
+  function buildUI(mainContainer, gridsterContainer){
+    var gutter = parseInt(mainContainer.css("paddingTop"), 10) * 2;
     var gridsterGutter = gutter/2;
-    var height = 1080 - $("#widgets-container").offset().top - gridsterGutter;
-    var width = $("#widgets-container").width();
+    var height = 1080 - mainContainer.offset().top - gridsterGutter;
+    var width = mainContainer.width();
     var vertical_cells = 4, horizontal_cells = 6;
     var widgetSize = {
       w: (width - horizontal_cells * gutter) / horizontal_cells,
       h: (height - vertical_cells * gutter) / vertical_cells
     };
 
-    $(".gridster ul").gridster({
+    gridsterContainer.gridster({
       widget_margins: [gridsterGutter, gridsterGutter],
       widget_base_dimensions: [widgetSize.w, widgetSize.h]
-    })
-    .children("li").each(function(index, li) {
-      bind_widget(widgetsSocket, li);
     });
 
     // Handle browser resize
@@ -142,6 +151,21 @@ $(function() {
     }).resize();
 
   }
+
+  function bindSocket (io, gridsterContainer){
+    gridsterContainer.children("li").each(function(index, li) {
+      bind_widget(io, li);
+    });
+  }
+
+  //----------------------
+  // Main
+  //----------------------
+
+  var mainContainer = $("#main-container");
+  var gridsterContainer = $(".gridster ul");
+
+  buildUI(mainContainer, gridsterContainer);
 
   var options = {
     'reconnect': true,
@@ -160,7 +184,7 @@ $(function() {
     console.log('connected');
     $('#main-container').removeClass("disconnected");
 
-    bind_ui(socket_w);
+    bindSocket(socket_w, gridsterContainer);
 
     socket_w.on("disconnect", function() {
       $('#main-container').addClass("disconnected");
@@ -192,3 +216,5 @@ $(function() {
     }
   });
 });
+
+var Widgets = {}; //support legacy widgets
