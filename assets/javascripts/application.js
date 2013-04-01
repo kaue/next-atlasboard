@@ -37,7 +37,7 @@ $(function() {
     }
   }
 
-  var defaultHandlers = { //they can be overwritten by widget´s custom implementation
+  var defaultHandlers = { // they can be overwritten by widget´s custom implementation
     onError : function (el, data){
       var timestamp = new Date();
       $('.content', el).html("<div class='error'>" + data.error + " (" + timestamp.toISOString() + ")</div>");
@@ -48,7 +48,13 @@ $(function() {
     }
   };
 
-  var globalHandlers = { //global pre-post event handlers
+  var widgetMethods = { // common methods that all widgets implement
+    log : function (data){
+      socket_log.emit('log', {widgetId : this.eventId, data : data}); // emit to logger
+    }
+  };
+
+  var globalHandlers = { // global pre-post event handlers
     onPreError : function (el, data){
       $('.content', el).addClass('onerror');
       $(".spinner", el).hide();
@@ -63,8 +69,10 @@ $(function() {
   if (!$("#widgets-container").length)
       return;
 
-  function log_error (eventId, err){
-    console.error('ERROR on ' + eventId + ': ' + err);
+  function log_error (widget, err){
+    var errMsg = 'ERROR on ' + widget.eventId + ': ' + err;
+    console.error(errMsg);
+    socket_log.emit('log', {widgetId : widget.eventId, error : errMsg}); // emit to logger
   }
 
   function bind_widget(io, li){
@@ -77,13 +85,16 @@ $(function() {
       // fetch widget js
       $.get('/widgets/' + widgetId + '/js', function(js) {
 
+        var widget_js;
         try{
-          eval('var widget_js = ' + js);
+          eval('widget_js = ' + js);
+          widget_js.eventId = eventId;
           widget_js = $.extend({}, defaultHandlers, widget_js);
+          widget_js = $.extend({}, widgetMethods, widget_js);
           widget_js.onInit(li);
         }
         catch (e){
-          log_error(eventId, e);
+          log_error(widget_js, e);
         }
 
         io.on(eventId, function (data) { //bind socket.io event listener
@@ -99,7 +110,7 @@ $(function() {
               f.apply(widget_js, [$(li), data]);
             }
             catch (e){
-              log_error(eventId, e);
+              log_error(widget_js, e);
             }
 
             // save timestamp
@@ -201,6 +212,13 @@ $(function() {
 
   });
 
+  //----------------------
+  // log socket
+  //----------------------
+  var socket_log = io.connect('/log', options);
+  socket_log.on("connect", function() {
+    console.log('log socket connected');
+  });
 
   //----------------------
   // status socket
