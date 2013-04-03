@@ -94,7 +94,7 @@ describe ('web_server', function(){
     it('get all', function(done){
       var res = {
         render: function (template, data){
-          assert.equal(5, data.dashboards.length);
+          assert.equal(4, data.dashboards.length);
           done();
         }
       };

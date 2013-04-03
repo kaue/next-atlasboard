@@ -13,7 +13,7 @@ describe ('item_manager', function(){
     it('should have the right number of dashboards', function(done){
       item_manager.get([packagesLocalFolder, packagesAtlasboardFolder], "dashboards", ".json", function(err, dashboards){
         assert.ok(!err, err);
-        assert.equal(5, dashboards.length);
+        assert.equal(4, dashboards.length);
         done();
       });
     });
