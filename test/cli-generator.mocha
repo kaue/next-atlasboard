@@ -82,7 +82,7 @@ describe ('cli commands', function(){
       });
     });
 
-    it('should return error if item already exists', function(done){
+    it('should return error if widget already exists', function(done){
       cli_generator.generate(temp_folder, "default", "widget", "newcalendar", function(err){
         assert.ok(err, err);
         done();
@@ -99,12 +99,29 @@ describe ('cli commands', function(){
       });
     });
 
+    it('should return error if job already exists', function(done){
+      cli_generator.generate(temp_folder, "default", "job", "newcalendar", function(err){
+        assert.ok(err, err);
+        done();
+      });
+    });
+
     it('should create dashboard successfully', function(done){
       cli_generator.generate(temp_folder, "default", "dashboard", "newdashboard", function(err, data){
         assert.ok(!err, err);
-        var result_path = path.join(temp_folder, "packages", "default", "dashboards", "newdashboard");
-        assert.ok(fs.existsSync(result_path));
-        assert.equal(data.path, result_path);
+        var dashboard_folder = path.join(temp_folder, "packages", "default", "dashboards");
+        var dashbboard_file = path.join(dashboard_folder, "newdashboard.json");
+        assert.ok(fs.existsSync(dashbboard_file));
+        assert.equal(data.path, dashboard_folder);
+        assert.equal(data.outputFiles.length, 1);
+        assert.equal(data.outputFiles[0], dashbboard_file);
+        done();
+      });
+    });
+
+    it('should return error if dashboard already exists', function(done){
+      cli_generator.generate(temp_folder, "default", "dashboard", "newdashboard", function(err){
+        assert.ok(err, err);
         done();
       });
     });
