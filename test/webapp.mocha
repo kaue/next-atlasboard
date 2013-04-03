@@ -133,14 +133,14 @@ describe ('web_server', function(){
     });
 
 
-    it('returns error if there is a dahsboard with an invalid format', function(done){
+    it('returns 404 if there is a dashboard with an invalid format', function(done){
       var res = {
         render: function (template, data){
           done("Not expected");
         },
 
         send: function (status, data){
-          assert.equal(status, 400);
+          assert.equal(status, 404);
           done();
         }
       };
@@ -200,7 +200,7 @@ describe ('web_server', function(){
 
       it('returns error when requesting javascript assets for a dashboard with incorrect format', function(done){
         web_logic.renderJsDashboard([packagesWithInvalidDashboardFile], wallboard_assets_folder,
-            "invalid_json_file", {},  getResponseForStatusCode(400, done));
+            "invalid_json_file", {},  getResponseForStatusCode(404, done));
       });
 
       it('handles request when requesting javascript assets for a dashboard with no customJS field', function(done){

@@ -6,6 +6,7 @@ describe ('item_manager', function(){
 
   var packagesLocalFolder = path.join(process.cwd(), "/test/packages");
   var packagesAtlasboardFolder = path.join(process.cwd(), "/packages");
+  var packageWithDisabledDashboards = path.join(process.cwd(), "/test/package_with_disabled_dashboards");
 
   describe ('dashboards', function(){
 
@@ -26,6 +27,15 @@ describe ('item_manager', function(){
         done();
       });
     });
+
+    it('should not read disabled dashboards', function(done){
+      item_manager.get([packageWithDisabledDashboards], "dashboards", ".json", function(err, dashboards){
+        assert.ok(!err, err);
+        assert.equal(1, dashboards.length)
+        done();
+      });
+    });
+
   });
 
   describe ('jobs', function(){
