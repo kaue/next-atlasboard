@@ -1,1 +1,1 @@
-module.exports = function(widgets, config, dependencies) {};
+module.exports = function(config, dependencies, job_callback) {};

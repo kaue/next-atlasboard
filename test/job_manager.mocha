@@ -8,6 +8,7 @@ describe ('job_manager', function(){
   var packagesWithInvalidJob = path.join(process.cwd(), "/test/package_invalid_job");
   var packagesWithNoWidgetField = path.join(process.cwd(), "/test/package_dashboard_with_no_widgets");
   var packagesWithNoLayoutField = path.join(process.cwd(), "/test/package_dashboard_with_no_layout");
+  var packagesNoSharedStateForJobs = path.join(process.cwd(), "/test/package_job_sharing_state");
 
   //we use only wallboard local folder, since we don´t want our tests to depend on atlasboard jobs
   //var packagesAtlasboardFolder = path.join(process.cwd(), "/packages");
@@ -112,6 +113,20 @@ describe ('job_manager', function(){
       assert.ok(!jobsWithJob1Config[2].config.other_configuration_option_to_extend_test_dashboard2);
 
       done();
+    });
+  });
+
+  it('should have independent states for each job', function(done){
+    jobs_manager.get_jobs([packagesNoSharedStateForJobs], configPath, function(err, job_workers){
+      assert.ok(!err, err);
+      assert.equal(2, job_workers.length);
+      job_workers[0].task(null, null, function(err, data){
+        assert.ok(!data);
+        job_workers[1].task(null, null, function(err, data){
+          assert.ok(!data);
+          done();
+        });
+      });
     });
   });
 
