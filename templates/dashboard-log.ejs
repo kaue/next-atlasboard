@@ -67,10 +67,10 @@
       }
 
       //msg_type: log, warn, error
-      function log (container, msg_type, text){
+      function log (container, msg_type, content){
         var filter = $('div.filter input', '#' + container).val();
         if (filter){
-          if (text.indexOf(filter)==-1)
+          if (content.indexOf(filter)==-1)
             return;
         }
 
@@ -78,13 +78,29 @@
           return;
         }
 
-        var html_content = '<span class="log_text logtype_' + msg_type + '"">' + text + '</span>';
-        $('.content', '#' +container).prepend('<div class="entry">' + timestamp() + ' ' + html_content + '</div>');
+        content = '<span class="log_text logtype_' + msg_type + '"">' + escapeHtml(content) + '</span>';
+        $('.content', '#' +container).prepend('<div class="entry">' + timestamp() + ' ' + content + '</div>');
 
         // maintain a limit number of entries in the screen (delete old ones)
         if ($('.content .entry', '#' + container).length == (maxLogsPerContainer + 1)){
           $('.content .entry', '#' + container)[maxLogsPerContainer].remove();
         }
+      }
+
+      // escape html - https://github.com/janl/mustache.js/blob/master/mustache.js#L82
+      var entityMap = {
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': '&quot;',
+        "'": '&#39;',
+        "/": '&#x2F;'
+      };
+
+      function escapeHtml(string) {
+        return String(string).replace(/[&<>"'\/]/g, function (s) {
+          return entityMap[s];
+        });
       }
 
       $(function(){
