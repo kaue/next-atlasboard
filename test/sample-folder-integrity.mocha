@@ -7,6 +7,20 @@ describe ('sample folder integrity', function(){
 
   describe ('scaffold folder', function(){
 
+    describe ('config file', function(){
+      var dashboardFile = path.join(sampleFolder, 'project', 'config', 'atlasboard.json');
+      it('should be valid json', function(done){
+        JSON.parse(fs.readFileSync(dashboardFile));
+        done();
+      });
+
+      it('should have live logging disabled by default', function(done){
+        assert.equal(false, JSON.parse(fs.readFileSync(dashboardFile))["live-logging"].enabled);
+        done();
+      });
+
+    });
+
     describe ('dashboard file', function(){
       var dashboardFile = path.join(sampleFolder, 'dashboard', 'default.json');
       it('should be valid json', function(done){
