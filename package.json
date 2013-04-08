@@ -53,13 +53,13 @@
         "tracer":               "0.5.1",
         "request":              "2.14.0",
         "xtend":                "2.0.3",
-        "colors":               "~0.6",
-        "sinon":                "1.6.0"
+        "colors":               "~0.6"
     },
     "devDependencies":{
         "mocha":                "1.8.1",
         "expect.js":            "0.1.2",
-        "rimraf":               "2.1.4"
+        "rimraf":               "2.1.4",
+        "sinon":                "1.6.0"
     },
     "preferGlobal":   true,
     "keywords":       ["server", "dashboard"],
