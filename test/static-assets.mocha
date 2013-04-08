@@ -46,5 +46,16 @@ describe ('static assets', function(){
       });
     });
 
+    it('should return wallboard images over atlasboard ones if the name is the same', function(done){
+      request('http://localhost:' + port + '/images/red-up.png', function(err, response, body){
+        assert.ok(!err);
+        assert.equal(200, response.statusCode);
+        // this file is not a valid image. It contains just one character to be able to assert
+        // that we are fetching the one in the wallboard folder and not the one in atlasboard.
+        assert.equal(1, body.length); 
+        done();
+      });
+    });
+
   });
 });
