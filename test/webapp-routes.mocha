@@ -14,7 +14,6 @@ describe ('routes', function(){
     var config = require('../lib/config-manager')(configPath);
     web_routes(app, null, null, config);
     assert.ok(hasRoute(app, "/"));
-    assert.ok(hasRoute(app, "/styles.css"));
     assert.ok(hasRoute(app, "/:dashboard"));
     assert.ok(hasRoute(app, "/:dashboard/js"));
     assert.ok(hasRoute(app, "/widgets/:widget"));

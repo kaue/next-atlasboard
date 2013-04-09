@@ -56,6 +56,28 @@ describe ('static assets', function(){
         done();
       });
     });
+  });
+
+  describe ('css and stylus', function(){
+    it('should render and return stylus', function(done){
+      this.timeout(1000);
+      request('http://localhost:' + port + '/stylesheets/application.css', function(err, response, body){
+        assert.ok(!err);
+        assert.equal(200, response.statusCode);
+        assert.ok(body);
+        done();
+      });
+    });
+
+    it('should cache stylus output so the second request should be blazing fast', function(done){
+      this.timeout(50);
+      request('http://localhost:' + port + '/stylesheets/application.css', function(err, response, body){
+        assert.ok(!err);
+        assert.equal(200, response.statusCode);
+        assert.ok(body);
+        done();
+      });
+    });
 
   });
 });

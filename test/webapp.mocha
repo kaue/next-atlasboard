@@ -228,18 +228,6 @@ describe ('web_server', function(){
   });
 
 
-  describe ('css assets', function(){
-
-    it('return css general assets', function(done){
-      var atlasboard_assets_folder = path.join(process.cwd(), "/assets");
-      // make sure the parser is rendering some css we know it should be there.
-      web_logic.renderCssGeneralAssets(atlasboard_assets_folder, {},
-          getResponseWriteEnd(["body", "#main-container #widgets-container h2"], "text/css", done));
-    });
-
-  });
-
-
   describe ('widget', function(){
 
     //todo: improve this tests
