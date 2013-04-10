@@ -28,7 +28,7 @@
         "url": "git@bitbucket.org:atlassian/atlasboard.git"
     },
     "engines":        {
-        "node":"~0.8"
+        "node":">=0.8"
     },
     "bin":            {
         "atlasboard":"lib/cli/commands.js"
