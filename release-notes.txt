@@ -1,3 +1,17 @@
+0.3.0
+	- Real-time logging visualization!.
+	- Issue #13: "generate dashboard" generates files in a sub-folder.
+	- Removed sample dashboard from atlasboard.
+	- Ability to disable dashboards by setting enabled:false in dashboard config file.
+	- Job task is executed in the context of the job object, so we can manage state across executions.
+	- Error handling and logging on jobs
+	- Prevent XSS in log viewer.
+	- Extra test coverage
+	- Issue #20 - Disable logging by default through the config file
+	- Issue #22 - Use connect-assets to serve css (and parse stylus)
+	- Issue #23 - Enable serving of custom images from dashboards
+	- ISsue #24 - Improve startup banner
+
 0.2.0
 	- can now resize browser and scale AtlasBoard.
 	- use connect-asset for common assets, since we are fetching now widget assets on demand.
