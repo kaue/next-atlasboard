@@ -1,3 +1,6 @@
+0.3.1
+	-	FIX: Require node 0.8 or higher in package.json
+
 0.3.0
 	- Real-time logging visualization!.
 	- Issue #13: "generate dashboard" generates files in a sub-folder.
