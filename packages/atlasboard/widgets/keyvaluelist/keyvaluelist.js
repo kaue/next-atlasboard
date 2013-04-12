@@ -1,4 +1,4 @@
-Widgets.keyvaluelist = {
+widget = {
     onData: function(el, data) {
         $('.content', el).empty();
 

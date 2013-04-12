@@ -1,4 +1,4 @@
-Widgets.twitter = {
+widget = {
 
   onData: function(el,data) {
     if (data.title) {

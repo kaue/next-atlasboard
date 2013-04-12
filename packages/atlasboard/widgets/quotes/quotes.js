@@ -1,4 +1,4 @@
-Widgets.quotes = {
+widget = {
     onData: function(el, data) {
         $('.content', el).empty();
 

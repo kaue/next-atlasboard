@@ -1,4 +1,4 @@
-Widgets.linegraph = {
+widget = {
     onData: function(el, data) {
 
         if (data.title) {
