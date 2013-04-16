@@ -14,6 +14,8 @@ describe ('job_manager', function(){
   //var packagesAtlasboardFolder = path.join(process.cwd(), "/packages");
 
   var configPath = path.join(process.cwd(), "/test/fixtures/config");
+  var invalidConfigPath = path.join(process.cwd(), "/test/fixtures/invalid-config");
+  var noExistentConfigPath = path.join(process.cwd(), "/test/fixtures/THIS-PATH-DOES-NOT-EXISTS");
 
   it('should have right dashboard names', function(done){
 
@@ -32,7 +34,6 @@ describe ('job_manager', function(){
       done();
     });
   });
-
 
   it('should be able to get disable widgets', function(done){
     jobs_manager.get_jobs([packagesLocalFolder], configPath, function(err, job_workers){
@@ -64,7 +65,6 @@ describe ('job_manager', function(){
     });
   });
 
-
   it('should have tasks', function(done){
     jobs_manager.get_jobs([packagesLocalFolder], configPath, function(err, job_workers){
       assert.ok(!err);
@@ -74,7 +74,6 @@ describe ('job_manager', function(){
       done();
     });
   });
-
 
   it('should have config', function(done){
     jobs_manager.get_jobs([packagesLocalFolder], configPath, function(err, job_workers){
@@ -129,5 +128,20 @@ describe ('job_manager', function(){
       });
     });
   });
+
+  it('should not work with an invalid global config file', function(done){
+    jobs_manager.get_jobs([packagesNoSharedStateForJobs], invalidConfigPath, function(err, job_workers){
+      assert.ok(err);
+      done();
+    });
+  });
+
+  it('should work with no global config file', function(done){
+    jobs_manager.get_jobs([packagesNoSharedStateForJobs], noExistentConfigPath, function(err, job_workers){
+      assert.ok(!err, err);
+      done();
+    });
+  });
+
 
 });
