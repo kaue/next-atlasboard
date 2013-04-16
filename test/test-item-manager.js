@@ -31,7 +31,7 @@ describe ('item_manager', function(){
     it('should not read disabled dashboards', function(done){
       item_manager.get([packageWithDisabledDashboards], "dashboards", ".json", function(err, dashboards){
         assert.ok(!err, err);
-        assert.equal(1, dashboards.length)
+        assert.equal(1, dashboards.length);
         done();
       });
     });
