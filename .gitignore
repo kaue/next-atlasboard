@@ -27,3 +27,4 @@ tmp/
 public/
 .idea/
 *.iml
+assets/stylesheets/application.css
