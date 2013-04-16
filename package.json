@@ -64,6 +64,6 @@
     "preferGlobal":   true,
     "keywords":       ["server", "dashboard"],
     "scripts":        {
-        "test": "mocha -b $(find . -name *.mocha) --reporter list"
+        "test": "mocha -b test --reporter list"
     }
 }

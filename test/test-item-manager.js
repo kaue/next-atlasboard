@@ -4,9 +4,9 @@ var item_manager = require('../lib/item-manager');
 
 describe ('item_manager', function(){
 
-  var packagesLocalFolder = path.join(process.cwd(), "/test/packages");
+  var packagesLocalFolder = path.join(process.cwd(), "/test/fixtures/packages");
   var packagesAtlasboardFolder = path.join(process.cwd(), "/packages");
-  var packageWithDisabledDashboards = path.join(process.cwd(), "/test/package_with_disabled_dashboards");
+  var packageWithDisabledDashboards = path.join(process.cwd(), "/test/fixtures/package_with_disabled_dashboards");
 
   describe ('dashboards', function(){
 

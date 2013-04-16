@@ -28,14 +28,14 @@ describe ('helpers', function(){
 
     it('should return default value if file is not valid JSON', function(done){
       var defaultValue = {};
-      var filePath = path.join(process.cwd(), 'test','config', 'invalid_config.json');
+      var filePath = path.join(process.cwd(), 'test', 'fixtures', 'config', 'invalid_config.json');
       assert.equal(defaultValue, helpers.getJSONFromFile(filePath, defaultValue));
       assert.equal("test", helpers.getJSONFromFile(filePath, "test"));
       done();
     });
 
     it('should return default value if file is not valid JSON', function(done){
-      var filePath = path.join(process.cwd(), 'test','config', 'valid_config.json');
+      var filePath = path.join(process.cwd(), 'test', 'fixtures', 'config', 'valid_config.json');
       var content = helpers.getJSONFromFile(filePath, {});
       assert.equal("val1", content.key1);
       done();

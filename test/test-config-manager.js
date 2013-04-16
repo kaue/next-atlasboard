@@ -11,14 +11,14 @@ describe ('config manager', function(){
   });
 
   it('should handle invalid config file', function(done){
-    var configFilePath = path.join(process.cwd(), 'test','config', 'invalid_config.json');
+    var configFilePath = path.join(process.cwd(), 'test', 'fixtures', 'config', 'invalid_config.json');
     var config = require ('../lib/config-manager')(configFilePath);
     assert.equal(null, config.get('test'))
     done();
   });
 
   it('should handle valid config file', function(done){
-    var configFilePath = path.join(process.cwd(), 'test','config', 'valid_config.json');
+    var configFilePath = path.join(process.cwd(), 'test', 'fixtures', 'config', 'valid_config.json');
     var config = require ('../lib/config-manager')(configFilePath);
     assert.equal('val1', config.get('key1'));
     done();
@@ -26,8 +26,8 @@ describe ('config manager', function(){
 
   describe ('wallboard specific config', function(){
     it('should extend from atlasboard config', function(done){
-      var atlasboardConfigFilePath = path.join(process.cwd(), 'test','config', 'valid_config.json');
-      var wallboardConfigFilePath = path.join(process.cwd(), 'test','config', 'log-enabled.json');
+      var atlasboardConfigFilePath = path.join(process.cwd(), 'test','fixtures', 'config', 'valid_config.json');
+      var wallboardConfigFilePath = path.join(process.cwd(), 'test','fixtures', 'config', 'log-enabled.json');
       var config = require ('../lib/config-manager')(wallboardConfigFilePath, atlasboardConfigFilePath);
       assert.equal('val1', config.get('key1'));
       assert.equal(true, config.get('live-logging').enabled);
@@ -35,8 +35,8 @@ describe ('config manager', function(){
     });
 
     it('should shadow atlasboard default config', function(done){
-      var atlasboardConfigFilePath = path.join(process.cwd(), 'test','config', 'valid_config.json');
-      var wallboardConfigFilePath = path.join(process.cwd(), 'test','config', 'valid_config_shadowing.json');
+      var atlasboardConfigFilePath = path.join(process.cwd(), 'test', 'fixtures', 'config', 'valid_config.json');
+      var wallboardConfigFilePath = path.join(process.cwd(), 'test', 'fixtures', 'config', 'valid_config_shadowing.json');
       var config = require ('../lib/config-manager')(wallboardConfigFilePath, atlasboardConfigFilePath);
       assert.equal('val2', config.get('key1'));
       done();

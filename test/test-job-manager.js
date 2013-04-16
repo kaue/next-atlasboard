@@ -4,16 +4,16 @@ var jobs_manager = require('../lib/job-manager');
 
 describe ('job_manager', function(){
 
-  var packagesLocalFolder = path.join(process.cwd(), "/test/packages");
-  var packagesWithInvalidJob = path.join(process.cwd(), "/test/package_invalid_job");
-  var packagesWithNoWidgetField = path.join(process.cwd(), "/test/package_dashboard_with_no_widgets");
-  var packagesWithNoLayoutField = path.join(process.cwd(), "/test/package_dashboard_with_no_layout");
-  var packagesNoSharedStateForJobs = path.join(process.cwd(), "/test/package_job_sharing_state");
+  var packagesLocalFolder = path.join(process.cwd(), "/test/fixtures/packages");
+  var packagesWithInvalidJob = path.join(process.cwd(), "/test/fixtures/package_invalid_job");
+  var packagesWithNoWidgetField = path.join(process.cwd(), "/test/fixtures/package_dashboard_with_no_widgets");
+  var packagesWithNoLayoutField = path.join(process.cwd(), "/test/fixtures/package_dashboard_with_no_layout");
+  var packagesNoSharedStateForJobs = path.join(process.cwd(), "/test/fixtures/package_job_sharing_state");
 
   //we use only wallboard local folder, since we don´t want our tests to depend on atlasboard jobs
   //var packagesAtlasboardFolder = path.join(process.cwd(), "/packages");
 
-  var configPath = path.join(process.cwd(), "/test/config");
+  var configPath = path.join(process.cwd(), "/test/fixtures/config");
 
   it('should have right dashboard names', function(done){
 

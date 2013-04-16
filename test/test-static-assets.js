@@ -8,9 +8,9 @@ describe ('static assets', function(){
   var port = 4444;
   before(function(){
     app = require('express')();
-    var configPath = path.join(process.cwd(), 'test', 'config','log-disabled.json');    
+    var configPath = path.join(process.cwd(), 'test', 'fixtures', 'config','log-disabled.json');
     var config = require('../lib/config-manager')(configPath);
-    config.wallboardAssetFolder = path.join(process.cwd(), 'test', 'assets');    
+    config.wallboardAssetFolder = path.join(process.cwd(), 'test', 'fixtures', 'assets');
     web_routes(app, null, null, config);
     app.listen(port);
   });
@@ -18,7 +18,7 @@ describe ('static assets', function(){
   after(function(){
     //app.close(); //close method in express.js 3.x?
   });
-  
+
   describe ('images', function(){
     it('should return atlasboard images', function(done){
       request('http://localhost:' + port + '/images/red-up.png', function(err, response, body){

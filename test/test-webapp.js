@@ -84,10 +84,11 @@ function getResponseWriteEnd (contains, mime, done){
 
 describe ('web_server', function(){
 
-  var packagesLocalFolder = path.join(process.cwd(), "/test/packages");
+  var wallboard_assets_folder = path.join(process.cwd(), "/test/fixtures/assets_folder");
+  var packagesLocalFolder = path.join(process.cwd(), "/test/fixtures/packages");
   var packagesAtlasboardFolder = path.join(process.cwd(), "/packages");
-  var packagesWithInvalidDashboardFile = path.join(process.cwd(), "/test/package_invalid_format");
-  var packageWithJustOneDashboard = path.join(process.cwd(), "/test/package_with_one_dashboard");
+  var packagesWithInvalidDashboardFile = path.join(process.cwd(), "/test/fixtures/package_invalid_format");
+  var packageWithJustOneDashboard = path.join(process.cwd(), "/test/fixtures/package_with_one_dashboard");
 
   describe ('dashboards', function(){
 
@@ -186,7 +187,6 @@ describe ('web_server', function(){
   describe ('javascript assets', function(){
 
     describe ('for dashboard', function(){
-      var wallboard_assets_folder = path.join(process.cwd(), "test/assets_folder");
 
       it('return javascript assets for a certain dashboard', function(done){
         web_logic.renderJsDashboard([packagesLocalFolder, packagesAtlasboardFolder], wallboard_assets_folder,

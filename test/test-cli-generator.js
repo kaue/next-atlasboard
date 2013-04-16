@@ -7,7 +7,7 @@ var fs = require ("fs");
 describe ('cli commands', function(){
 
   var temp_folder = "test/tmp";
-  var packagesLocalFolder = path.join(process.cwd(), "/test/packages");
+  var packagesLocalFolder = path.join(process.cwd(), "/test/fixtures/packages");
 
   //make sure temp folder is deleted even if tests fail (before and after)
   before(function(done){
@@ -138,22 +138,22 @@ describe ('cli commands', function(){
 
         assert.equal(lists[0].widgets.length, 2);
 
-        assert.ok(lists[0].widgets[0].dir.indexOf('/test/packages/default')>-1);
+        assert.ok(lists[0].widgets[0].dir.indexOf('/test/fixtures/packages/default')>-1);
         assert.equal(lists[0].widgets[0].items.length, 0);
 
-        assert.ok(lists[0].widgets[1].dir.indexOf('/test/packages/otherpackage1')>-1);
+        assert.ok(lists[0].widgets[1].dir.indexOf('/test/fixtures/packages/otherpackage1')>-1);
         assert.equal(lists[0].widgets[1].items.length, 1);
-        assert.ok(lists[0].widgets[1].items[0].indexOf('test/packages/otherpackage1/widgets/blockers/blockers.js')>-1);
+        assert.ok(lists[0].widgets[1].items[0].indexOf('test/fixtures/packages/otherpackage1/widgets/blockers/blockers.js')>-1);
 
         assert.equal(lists[0].jobs.length, 2);
 
-        assert.ok(lists[0].jobs[0].dir.indexOf('/test/packages/default')>-1);
+        assert.ok(lists[0].jobs[0].dir.indexOf('/test/fixtures/packages/default')>-1);
         assert.equal(lists[0].jobs[0].items.length, 3);
-        assert.ok(lists[0].jobs[0].items[0].indexOf('/test/packages/default/jobs/job1/job1.js')>-1);
+        assert.ok(lists[0].jobs[0].items[0].indexOf('/test/fixtures/packages/default/jobs/job1/job1.js')>-1);
 
-        assert.ok(lists[0].jobs[1].dir.indexOf('/test/packages/otherpackage1')>-1);
+        assert.ok(lists[0].jobs[1].dir.indexOf('/test/fixtures/packages/otherpackage1')>-1);
         assert.equal(lists[0].jobs[1].items.length, 3);
-        assert.ok(lists[0].jobs[1].items[0].indexOf('/test/packages/otherpackage1/jobs/job1/job1.js')>-1);
+        assert.ok(lists[0].jobs[1].items[0].indexOf('/test/fixtures/packages/otherpackage1/jobs/job1/job1.js')>-1);
 
         done();
       });

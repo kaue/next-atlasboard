@@ -10,7 +10,7 @@ describe ('routes', function(){
 
   it('has the necessary routes', function(done){
     var app = require('express')();
-    var configPath = path.join(process.cwd(), 'test', 'config','valid-config.json');    
+    var configPath = path.join(process.cwd(), 'test', 'fixtures', 'config','valid-config.json');
     var config = require('../lib/config-manager')(configPath);
     web_routes(app, null, null, config);
     assert.ok(hasRoute(app, "/"));
@@ -26,12 +26,12 @@ describe ('routes', function(){
 
     it('should return error if live logging is not enabled', function(done){
       var app = require('express')();
-      var configPath = path.join(process.cwd(), 'test', 'config','log-disabled.json');
+      var configPath = path.join(process.cwd(), 'test', 'fixtures', 'config','log-disabled.json');
       var config = require('../lib/config-manager')(configPath);
       web_routes(app, null, null, config);
 
       var logRoute = app.routes.get.filter(function(item){return item.path === '/log';})[0];
-      var res = { end: function (msg){ 
+      var res = { end: function (msg){
         assert.ok(msg.indexOf('live logging it disabled')>-1);
         done();
       }};
@@ -40,13 +40,13 @@ describe ('routes', function(){
 
     it('should render view if live logging is enabled', function(done){
       var app = require('express')();
-      var configPath = path.join(process.cwd(), 'test', 'config','log-enabled.json');
+      var configPath = path.join(process.cwd(), 'test', 'fixtures', 'config','log-enabled.json');
       var config = require('../lib/config-manager')(configPath);
       web_routes(app, null, null, config);
 
       var logRoute = app.routes.get.filter(function(item){return item.path === '/log';})[0];
-      var viewPath = path.join(__dirname, "../", "templates", "dashboard-log.ejs")
-      var res = { render: function (view){ 
+      var viewPath = path.join(__dirname, "../", "templates", "dashboard-log.ejs");
+      var res = { render: function (view){
         assert.equal(viewPath, view);
         done();
       }};
