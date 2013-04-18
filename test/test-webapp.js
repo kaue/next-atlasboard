@@ -2,14 +2,14 @@ var assert = require ('assert');
 var web_logic = require ('../lib/webapp/logic.js');
 var path = require ('path');
 
-function getResponseForSendFile (file, done){
+function getResponseForSendFile (expectedFileContains, done){
   var res = {
     type: function (data){
       assert.equal("application/javascript", data);
     },
 
     sendfile: function (file){
-      assert.ok(file.indexOf(file)>-1);
+      assert.ok(file.indexOf(expectedFileContains)>-1);
       done();
     },
 
@@ -25,10 +25,10 @@ function getResponseForSendFile (file, done){
   return res;
 }
 
-function getResponseForStatusCode (statusCode, done){
+function getResponseForSendStatusCode (statusCode, done){
   var res = {
     type: function (data){
-      done('not expected');
+
     },
 
     sendfile: function (file){
@@ -135,18 +135,8 @@ describe ('web_server', function(){
 
 
     it('returns 404 if there is a dashboard with an invalid format', function(done){
-      var res = {
-        render: function (template, data){
-          done("Not expected");
-        },
-
-        send: function (status, data){
-          assert.equal(status, 404);
-          done();
-        }
-      };
-
-      web_logic.renderDashboard([packagesLocalFolder, packagesAtlasboardFolder, packagesWithInvalidDashboardFile], "invalid_json_file", {}, res);
+      web_logic.renderDashboard([packagesLocalFolder, packagesAtlasboardFolder, packagesWithInvalidDashboardFile], "invalid_json_file",
+          {}, getResponseForSendStatusCode(404, done));
     });
 
 
@@ -167,18 +157,8 @@ describe ('web_server', function(){
     });
 
     it('return 404 if dashboard not found', function(done){
-      var res = {
-        render: function (template, data){
-          done("Invalid dashboard");
-        },
-
-        send: function (status, data){
-          assert.equal(404, status);
-          done();
-        }
-      };
-
-      web_logic.renderDashboard([packagesLocalFolder, packagesAtlasboardFolder], "tttest_dashboard1", {}, res);
+      web_logic.renderDashboard([packagesLocalFolder, packagesAtlasboardFolder], "tttest_dashboard1",
+          {}, getResponseForSendStatusCode(404, done));
     });
 
   });
@@ -195,17 +175,17 @@ describe ('web_server', function(){
 
       it('returns error when requesting javascript assets for a dashboard that doesn\'t exist', function(done){
         web_logic.renderJsDashboard([packagesLocalFolder, packagesAtlasboardFolder], wallboard_assets_folder,
-          "tttttest_dashboard1", {}, getResponseForStatusCode(404, done));
+          "tttttest_dashboard1", {}, getResponseForSendStatusCode(404, done));
       });
 
       it('returns error when requesting javascript assets for a dashboard with incorrect format', function(done){
         web_logic.renderJsDashboard([packagesWithInvalidDashboardFile], wallboard_assets_folder,
-            "invalid_json_file", {},  getResponseForStatusCode(404, done));
+            "invalid_json_file", {},  getResponseForSendStatusCode(404, done));
       });
 
       it('handles request when requesting javascript assets for a dashboard with no customJS field', function(done){
         web_logic.renderJsDashboard([packagesLocalFolder, packagesAtlasboardFolder], wallboard_assets_folder,
-            "test_dashboard2", {},  getResponseForStatusCode(200, done));
+            "test_dashboard2", {},  getResponseForSendStatusCode(200, done));
       });
 
       it('handles when requesting javascript assets and file is not found', function(done){
@@ -243,23 +223,36 @@ describe ('web_server', function(){
 
 
     it('return error 404 if widget not found', function(done){
-      var res = {
-        type: function (data){
-
-        },
-
-        sendfile: function (data){
-          done("Error. Not expected");
-        },
-
-        send: function (status, data){
-          assert.equal(404, status);
-          done();
-        }
-      };
-
-      web_logic.renderHtmlWidget([packagesLocalFolder, packagesAtlasboardFolder], "bbblockers", {}, res);
+      web_logic.renderHtmlWidget([packagesLocalFolder, packagesAtlasboardFolder], "bbblockers",
+          {}, getResponseForSendStatusCode(404, done));
     });
 
   });
+
+  describe ('widget resources', function(){
+
+    var localPackagesPath = path.join(process.cwd(),'test', 'fixtures', 'packages');
+
+    it('should return 400 if resource input is empty', function(done){
+      web_logic.renderWidgetResource(localPackagesPath, '/',
+          {}, getResponseForSendStatusCode(400, done));
+    });
+
+    it('should return 400 if resource contains more than 3 separators', function(done){
+      web_logic.renderWidgetResource(localPackagesPath, 'package/widget/other/resource',
+          {}, getResponseForSendStatusCode(400, done));
+    });
+
+    it('should return 400 if resource contains less than 3 separators', function(done){
+      web_logic.renderWidgetResource(localPackagesPath, 'package/resource',
+          {}, getResponseForSendStatusCode(400, done));
+    });
+
+    it('should return resource if path is correct', function(done){
+      web_logic.renderWidgetResource(localPackagesPath, 'otherpackage1/blockers/resource.txt',
+          {}, getResponseForSendFile('resource.txt', done));
+    });
+
+  });
+
 });
