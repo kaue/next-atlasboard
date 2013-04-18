@@ -6,6 +6,7 @@ describe ('job_manager', function(){
 
   var packagesLocalFolder = path.join(process.cwd(), "/test/fixtures/packages");
   var packagesWithInvalidJob = path.join(process.cwd(), "/test/fixtures/package_invalid_job");
+  var packagesWithInvalidDashboard = path.join(process.cwd(), "/test/fixtures/package_invalid_format");
   var packagesWithNoWidgetField = path.join(process.cwd(), "/test/fixtures/package_dashboard_with_no_widgets");
   var packagesWithNoLayoutField = path.join(process.cwd(), "/test/fixtures/package_dashboard_with_no_layout");
   var packagesNoSharedStateForJobs = path.join(process.cwd(), "/test/fixtures/package_job_sharing_state");
@@ -40,6 +41,14 @@ describe ('job_manager', function(){
       assert.ok(!err);
       var disabled_jobs = job_workers.filter(function(job){ return job.widget_item.enabled;});
       assert.equal(6, disabled_jobs.length);
+      done();
+    });
+  });
+
+  it('should not return error if invalid dashboard is found since it has been filtered by item manager before', function(done){
+    jobs_manager.get_jobs([packagesWithInvalidDashboard], configPath, function(err, job_workers){
+      assert.ok(!err);
+      assert.equal(0, job_workers.length);
       done();
     });
   });
