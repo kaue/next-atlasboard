@@ -32,6 +32,13 @@ describe ('cli commands', function(){
       });
     });
 
+    it('should return error if invalid path', function(done){
+      cli_generator.newProject("samples/project", '/etc/', function(err){
+        assert.ok(err);
+        done();
+      });
+    });
+
     it('should not create a new project from a folder where a atlasboard project already exists', function(done){
       cli_generator.newProject("samples/project", temp_folder, function(err){
         assert.ok(err);
@@ -60,14 +67,21 @@ describe ('cli commands', function(){
 
     it('should return error if no project exists in the provided path', function(done){
       cli_generator.generate("/b/addir", "default", "widget", "mywidget", function(err){
-        assert.ok(err.indexOf("no project exists")>0, err);
+        assert.ok(err.indexOf("no project exists")>-1, err);
+        done();
+      });
+    });
+
+    it('should return error if unsafe item name is provided', function(done){
+      cli_generator.generate(temp_folder, "default", "widget", "../mywidget", function(err){
+        assert.ok(err.indexOf("invalid")>-1, err);
         done();
       });
     });
 
     it('should return error if no item name is provided', function(done){
       cli_generator.generate(temp_folder, "default", "widget", "", function(err){
-        assert.ok(err.indexOf("name provided")>0, err);
+        assert.ok(err.indexOf("invalid")>-1, err);
         done();
       });
     });

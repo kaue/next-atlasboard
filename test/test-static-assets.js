@@ -52,7 +52,7 @@ describe ('static assets', function(){
         assert.equal(200, response.statusCode);
         // this file is not a valid image. It contains just one character to be able to assert
         // that we are fetching the one in the wallboard folder and not the one in atlasboard.
-        assert.equal(1, body.length); 
+        assert.equal(1, body.length);
         done();
       });
     });
@@ -60,7 +60,6 @@ describe ('static assets', function(){
 
   describe ('css and stylus', function(){
     it('should render and return stylus', function(done){
-      this.timeout(1000);
       request('http://localhost:' + port + '/stylesheets/application.css', function(err, response, body){
         assert.ok(!err);
         assert.equal(200, response.statusCode);

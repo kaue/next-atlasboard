@@ -4,17 +4,51 @@ var assert = require ('assert'),
 
 describe ('helpers', function(){
 
-  describe('sanitizePath', function(){
+  describe('isPathContainedInRoot', function(){
+    it('should contain root', function(done){
+      assert.ok(helpers.isPathContainedInRoot("/test/wibble", "/test"));
+      assert.ok(!helpers.isPathContainedInRoot("/root/test/wibble", "/test"));
+      done();
+    });
+
+    it('should accept relative paths to the process', function(done){
+      assert.ok(helpers.isPathContainedInRoot("wibble", process.cwd()));
+      assert.ok(!helpers.isPathContainedInRoot("/wibble", process.cwd()));
+      done();
+    });
+
+  });
+
+  describe('areValidPathElements', function(){
     it('should sanitize string input', function(done){
-      assert.ok("wibble", helpers.sanitizePath("wibble"));
-      assert.ok("wibble", helpers.sanitizePath("../wibble"));
+      assert.ok(helpers.areValidPathElements("wibble"));
+      assert.ok(!helpers.areValidPathElements("../wibble"));
+      done();
+    });
+
+    it('should sanitize arrays of string input', function(done){
+      assert.ok(helpers.areValidPathElements(["wibble", "other valid"]));
+      assert.ok(!helpers.areValidPathElements(["../wibble", "valid"]));
+      assert.ok(!helpers.areValidPathElements(["../wibble", "../invalid"]));
       done();
     });
 
     it('should sanitize number input', function(done){
-      assert.ok("wibble", helpers.sanitizePath(4444));
+      assert.ok(helpers.areValidPathElements(4444));
       done();
     });
+
+    //http://docs.nodejitsu.com/articles/file-system/security/introduction
+    it('should return invalid path if poison null bytes found', function(done){
+      assert.ok(!helpers.areValidPathElements("input\0file"));
+      done();
+    });
+
+    it('should return invalid path if .. found', function(done){
+      assert.ok(!helpers.areValidPathElements("input..file"));
+      done();
+    });
+
   });
 
   describe('getJSONFromFile', function(){
