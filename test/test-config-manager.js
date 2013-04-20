@@ -10,11 +10,14 @@ describe ('config manager', function(){
     done();
   });
 
-  it('should handle invalid config file', function(done){
+  it('should throw if invalid config file', function(done){
     var configFilePath = path.join(process.cwd(), 'test', 'fixtures', 'config', 'invalid_config.json');
-    var config = require ('../lib/config-manager')(configFilePath);
-    assert.equal(null, config.get('test'))
-    done();
+    try {
+      var config = require ('../lib/config-manager')(configFilePath);
+    }
+    catch(e){
+      done();
+    }
   });
 
   it('should handle valid config file', function(done){
@@ -25,6 +28,7 @@ describe ('config manager', function(){
   });
 
   describe ('wallboard specific config', function(){
+
     it('should extend from atlasboard config', function(done){
       var atlasboardConfigFilePath = path.join(process.cwd(), 'test','fixtures', 'config', 'valid_config.json');
       var wallboardConfigFilePath = path.join(process.cwd(), 'test','fixtures', 'config', 'log-enabled.json');
