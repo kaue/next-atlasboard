@@ -60,12 +60,28 @@ describe ('helpers', function(){
       done();
     });
 
+    it('should call callback if file not found', function(done){
+      var filePath = path.join(process.cwd(), 'test', 'fixtures', 'config', 'DOES-NOT-EXISTS-valid_config.json');
+      var content = helpers.getJSONFromFile(filePath, {}, function(path){
+        assert.equal(filePath, path);
+        done();
+      });
+    });
+
     it('should return default value if file is not valid JSON', function(done){
       var defaultValue = {};
       var filePath = path.join(process.cwd(), 'test', 'fixtures', 'config', 'invalid_config.json');
       assert.equal(defaultValue, helpers.getJSONFromFile(filePath, defaultValue));
       assert.equal("test", helpers.getJSONFromFile(filePath, "test"));
       done();
+    });
+
+    it('should call callback if file is not valid JSON', function(done){
+      var filePath = path.join(process.cwd(), 'test', 'fixtures', 'config', 'invalid_config.json');
+      var content = helpers.getJSONFromFile(filePath, {}, null, function(path, err){
+        assert.equal(filePath, path);
+        done();
+      });
     });
 
     it('should return default value if file is not valid JSON', function(done){
