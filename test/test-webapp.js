@@ -233,6 +233,11 @@ describe ('web_server', function(){
 
     var localPackagesPath = path.join(process.cwd(),'test', 'fixtures', 'packages');
 
+    it('should return 400 if resource input is undefined', function(done){
+      web_logic.renderWidgetResource(localPackagesPath, undefined,
+          {}, getResponseForSendStatusCode(400, done));
+    });
+
     it('should return 400 if resource input is empty', function(done){
       web_logic.renderWidgetResource(localPackagesPath, '/',
           {}, getResponseForSendStatusCode(400, done));
