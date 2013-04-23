@@ -1,9 +1,5 @@
 {
   "live-logging" : {
     "enabled": true
-  } ,
-  "hipchat" : {
-    "token": null
   }
-
 }
