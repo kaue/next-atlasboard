@@ -16,6 +16,7 @@ describe ('job_manager', function(){
 
   var configPath = path.join(process.cwd(), "/test/fixtures/config");
   var invalidConfigPath = path.join(process.cwd(), "/test/fixtures/invalid-config");
+  var validJsonWithInvalidFormatConfigPath = path.join(process.cwd(), "/test/fixtures/valid-json-invalid-structure-config");
   var noExistentConfigPath = path.join(process.cwd(), "/test/fixtures/THIS-PATH-DOES-NOT-EXISTS");
 
   it('should have right dashboard names', function(done){
@@ -140,6 +141,13 @@ describe ('job_manager', function(){
 
   it('should not work with an invalid global config file', function(done){
     jobs_manager.get_jobs([packagesNoSharedStateForJobs], invalidConfigPath, function(err, job_workers){
+      assert.ok(err);
+      done();
+    });
+  });
+
+  it('should not work with an global config file with wrong structure', function(done){
+    jobs_manager.get_jobs([packagesNoSharedStateForJobs], validJsonWithInvalidFormatConfigPath, function(err, job_workers){
       assert.ok(err);
       done();
     });
