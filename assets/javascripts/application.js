@@ -119,7 +119,7 @@ $(function() {
             //----------------------
             // Server timeout notifications
             //----------------------
-            if (!widget_js.config){ // fill config when first data arrives
+            if (!data.error && !widget_js.config){ // fill config when first data arrives
               widget_js.config = data.config;
               setInterval(function(){
                 check_last_server_communication(li, widget_js.config);
