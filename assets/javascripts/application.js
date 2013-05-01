@@ -40,7 +40,11 @@ $(function() {
   var defaultHandlers = { // they can be overwritten by widget´s custom implementation
     onError : function (el, data){
       var timestamp = new Date();
-      $('.content', el).html("<div class='error'>" + data.error + " (" + timestamp.toISOString() + ")</div>");
+      var errorElement = $('#error', el);
+      if (!errorElement.length){
+        errorElement = $('.content', el).prepend('<div class="error"></div>');
+      }
+      errorElement.html("<div class='error'>" + data.error + " (" + timestamp.toISOString() + ")</div>");
       console.error(data);
     },
     onInit : function (el, data){
@@ -62,6 +66,7 @@ $(function() {
 
     onPreData : function (el, data){
       $('.content', el).removeClass('onerror');
+      $('#error', el).remove();
       $(".spinner", el).hide();
     }
   };
@@ -119,7 +124,7 @@ $(function() {
             //----------------------
             // Server timeout notifications
             //----------------------
-            if (!widget_js.config){ // fill config when first data arrives
+            if (!data.error && !widget_js.config){ // fill config when first data arrives
               widget_js.config = data.config;
               setInterval(function(){
                 check_last_server_communication(li, widget_js.config);
