@@ -17,6 +17,11 @@ describe ('helpers', function(){
       done();
     });
 
+    it('should handle non string types gracefully', function(done){
+      assert.ok(!helpers.isPathContainedInRoot("/test/wibble", 333));
+      done();
+    });
+
   });
 
   describe('areValidPathElements', function(){
