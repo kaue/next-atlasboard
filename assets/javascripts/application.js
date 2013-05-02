@@ -40,11 +40,11 @@ $(function() {
   var defaultHandlers = { // they can be overwritten by widget´s custom implementation
     onError : function (el, data){
       var timestamp = new Date();
-      var errorElement = $('#error', el);
+      var errorElement = $('.errorContainer', el);
       if (!errorElement.length){
-        errorElement = $('.content', el).prepend('<div class="error"></div>');
+        errorElement = $('.content', el).prepend('<div class="errorContainer"></div>');
       }
-      errorElement.html("<div class='error'>" + data.error + " (" + timestamp.toISOString() + ")</div>");
+      errorElement.html("<p>" + data.error + " (" + timestamp.toISOString() + ")</p>");
       console.error(data);
     },
     onInit : function (el, data){
@@ -66,7 +66,7 @@ $(function() {
 
     onPreData : function (el, data){
       $('.content', el).removeClass('onerror');
-      $('#error', el).remove();
+      $('.errorContainer', el).remove();
       $(".spinner", el).hide();
     }
   };
