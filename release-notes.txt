@@ -1,3 +1,17 @@
+0.4.0
+	- Issue #15 - Change widget naming to not include widget id anymore
+	- Added default config file so the custom one gets extended from this one.
+	- Fix default dashboard so it has the necessary widgets to fill the whole screen.
+	- Reorganize tests.
+	- Use logger to wrap the error when a dashboard has the wrong format.
+	- Make job manager error proof in case config file doesn't exists. If config file exists and it is invalid it should throw error.
+	- Added hipchat integration. New hipchat dependency.
+	- Allow fetching resources from widget folder.
+	- Issue #33 - Display error and exit if http server port is in use
+	- Fix problem when displaying error with prevent the widget from displaying data again.
+	- A dashboard name must match /^[a-zA-Z0-9_-]*$/ to be valid.
+	- Other minor fixes.
+
 0.3.1
 	-	FIX: Require node 0.8 or higher in package.json
 
