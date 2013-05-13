@@ -3,12 +3,6 @@ var assert = require ('assert'),
 
 describe ('scheduler', function(){
   var scheduler = require('../lib/scheduler')();
-  var dependencies = {
-    logger : {
-      warn: function (){},
-      error: function (){}
-    }
-  };
   var widgets = {sendData: function(){}};
 
   var stub;
@@ -19,7 +13,13 @@ describe ('scheduler', function(){
     clock = sinon.useFakeTimers();
     mockJobWorker = {
       config:{interval: 3000},
-      task : function(){}
+      task : function(){},
+      dependencies : {
+        logger : {
+          warn: function (){},
+          error: function (){}
+        }
+      }
     };
 
     stub = sinon.stub(mockJobWorker, "task");
@@ -37,11 +37,11 @@ describe ('scheduler', function(){
     mockJobWorker.task = function (config, dependencies, cb){
       done();
     }
-    scheduler.schedule(mockJobWorker, widgets, dependencies);
+    scheduler.schedule(mockJobWorker, widgets);
   });
 
   it('should schedule a job to be executed in the future in intervals of time', function(done){
-    scheduler.schedule(mockJobWorker, widgets, dependencies);
+    scheduler.schedule(mockJobWorker, widgets);
     clock.tick(3000);
     clock.tick(3000);
     assert.ok(stub.calledThrice);
@@ -50,7 +50,7 @@ describe ('scheduler', function(){
 
   it('should set 1 sec as the minimum interval period', function(done){
     mockJobWorker.config.interval = 10; //really low interval
-    scheduler.schedule(mockJobWorker, widgets, dependencies);
+    scheduler.schedule(mockJobWorker, widgets);
     clock.tick(1000);
     clock.tick(1000);
     assert.ok(stub.calledThrice);
@@ -61,7 +61,7 @@ describe ('scheduler', function(){
     mockJobWorker.task = function (config, dependencies, cb){
       this.counter = (this.counter || 0) + 1;
     }
-    scheduler.schedule(mockJobWorker, widgets, dependencies);
+    scheduler.schedule(mockJobWorker, widgets);
     clock.tick(3000);
     clock.tick(3000);
     assert.equal(3, mockJobWorker.counter);
@@ -75,7 +75,7 @@ describe ('scheduler', function(){
       numberCalls++;
       cb('err');
     }
-    scheduler.schedule(mockJobWorker, widgets, dependencies);
+    scheduler.schedule(mockJobWorker, widgets);
     clock.tick(3000/3);
     clock.tick(3000/3);
     assert.equal(3, numberCalls);
@@ -86,7 +86,7 @@ describe ('scheduler', function(){
     mockJobWorker.task = function (config, dependencies, cb){
       throw 'err'
     }
-    scheduler.schedule(mockJobWorker, widgets, dependencies);
+    scheduler.schedule(mockJobWorker, widgets);
     done();
   });
 
