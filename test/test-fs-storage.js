@@ -17,9 +17,9 @@ describe ('fs-storage', function(){
   });
 
   it('should set value to storage', function(done){
-    var jobMock = {id: 'jobkey1'};
+    var key = 'jobkey1';
     var fsStorageClass = require ('../lib/job-dependencies/storage/implementations/fs-storage');
-    var fsStorage = new fsStorageClass(jobMock, {storagePath : storagePath});
+    var fsStorage = new fsStorageClass(key, {storagePath : storagePath});
     fs.mkdir(temp_folder, function (err, data){
       fsStorage.set('key1', { foo: 'bar'}, function(error, data){
         assert.ifError(error);
@@ -33,12 +33,12 @@ describe ('fs-storage', function(){
   });
 
   it('should not interfere with other jobs (isolated storage)', function(done){
-    var jobMock1 = {id: 'jobkey1'};
-    var jobMock2 = {id: 'jobkey2'};
+    var key1 = 'jobkey1';
+    var key2 = 'jobkey2';
     var fsStorageClass = require ('../lib/job-dependencies/storage/implementations/fs-storage');
 
-    var fsStorage1 = new fsStorageClass(jobMock1, {storagePath : storagePath});
-    var fsStorage2 = new fsStorageClass(jobMock2, {storagePath : storagePath});
+    var fsStorage1 = new fsStorageClass(key1, {storagePath : storagePath});
+    var fsStorage2 = new fsStorageClass(key2, {storagePath : storagePath});
 
     fs.mkdir(temp_folder, function (err, data){
       fsStorage1.set('key1', { foo: 'bar'}, function(error, data){
