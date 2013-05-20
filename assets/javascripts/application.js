@@ -42,7 +42,7 @@ $(function() {
       var timestamp = new Date();
       var errorElement = $('.errorContainer', el);
       if (!errorElement.length){
-        errorElement = $('<div class="errorContainer"></div>').appendTo('.content', el);
+        errorElement = $('<div class="errorContainer"></div>').appendTo($('.content', el));
       }
       errorElement.html("<p>" + data.error + " (" + timestamp.toISOString() + ")</p>");
       console.error(data);
