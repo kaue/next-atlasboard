@@ -5,6 +5,9 @@
 
 $(function() {
 
+  var loadingClass = 'loading';
+  var errorClass = 'onerror';
+
   //----------------------
   // Alert for timeouts
   //----------------------
@@ -48,6 +51,7 @@ $(function() {
       console.error(data);
     },
     onInit : function (el, data){
+      $('.content', el).addClass(loadingClass);
       $("<img class=\"spinner\" src=\"images/spinner.gif\">").insertBefore($('.content', el));
     }
   };
@@ -60,12 +64,12 @@ $(function() {
 
   var globalHandlers = { // global pre-post event handlers
     onPreError : function (el, data){
-      $('.content', el).addClass('onerror');
+      $('.content', el).addClass(errorClass).removeClass(loadingClass);
       $(".spinner", el).hide();
     },
 
     onPreData : function (el, data){
-      $('.content', el).removeClass('onerror');
+      $('.content', el).removeClass([loadingClass, errorClass].join(' '));
       $('.errorContainer', el).remove();
       $(".spinner", el).hide();
     }
