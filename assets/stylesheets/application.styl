@@ -27,11 +27,20 @@ body
 .uppercase
     text-transform uppercase
 
-.spinner {
-    display block
-    margin 0 auto
-    padding-top 50px
-}
+.icon-message
+    display table
+    height 100%
+    width 100%
+    .container
+        display table-cell
+        vertical-align middle
+        img
+            margin 0 auto
+            display block
+            width 60px
+
+.error.icon-message > .container > img
+    opacity .4
 
 #disconnected
   display none
