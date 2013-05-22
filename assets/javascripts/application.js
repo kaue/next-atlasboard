@@ -95,16 +95,16 @@ $(function() {
       $.get('/widgets/' + widgetId + '/js', function(js) {
 
         var widget_js;
-        try{
+        // try{
           eval('widget_js = ' + js);
           widget_js.eventId = eventId;
           widget_js = $.extend({}, defaultHandlers, widget_js);
           widget_js = $.extend({}, widgetMethods, widget_js);
           widget_js.onInit(li);
-        }
-        catch (e){
-          log_error(widget_js, e);
-        }
+        // }
+        // catch (e){
+          // log_error(widget_js, e);
+        // }
 
         io.on(eventId, function (data) { //bind socket.io event listener
             var f = data.error ? widget_js.onError : widget_js.onData;
@@ -115,12 +115,12 @@ $(function() {
               globalHandlers.onPreError.apply(widget_js, [$(li), data]);
             }
 
-            try{
+            // try{
               f.apply(widget_js, [$(li), data]);
-            }
-            catch (e){
-              log_error(widget_js, e);
-            }
+            // }
+            // catch (e){
+              // log_error(widget_js, e);
+            // }
 
             // save timestamp
             $(li).attr("last-update", +new Date());
