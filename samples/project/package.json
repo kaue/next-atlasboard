@@ -1,25 +1,28 @@
 {
-    "private":true,
-    "license":"Apache License, Version 2.0",
-    "author":"AtlasBoard",
-    "name":"dashboard",
-    "description":"A dashboard built for AtlasBoard",
-    "version":"0.0.1",
-    "homepage":"",
-    "repository":{
-        "type":"git",
-        "url":""
-    },
-    "engines":{
-        "node":"~0.6.10"
-    },
-    "dependencies":{
-        "underscore": "1.4.2",
-        "socket.io": "0.9.13",
-        "cheerio": "0.10.5",
-        "request": "2.12.0",
-        "async": "0.2.6",
-        "dateformat": "~1.0.0",
-        "ical": "~0.0.3"
-    }
+  "private":true,
+  "license":"Apache License, Version 2.0",
+  "author":"AtlasBoard",
+  "name":"dashboard",
+  "description":"A dashboard built for AtlasBoard",
+  "version":"0.0.1",
+  "homepage":"",
+  "repository":{
+    "type":"git",
+    "url":""
+  },
+  "engines":{
+    "node":">=0.8"
+  },
+  "scripts":        {
+    "start":"atlasboard start"
+  },
+  "dependencies":{
+    "underscore": "1.4.2",
+    "socket.io": "0.9.13",
+    "cheerio": "0.10.5",
+    "request": "2.12.0",
+    "async": "0.2.6",
+    "dateformat": "~1.0.0",
+    "ical": "~0.0.3"
+  }
 }
