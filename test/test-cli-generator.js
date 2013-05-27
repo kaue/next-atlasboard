@@ -33,7 +33,7 @@ describe ('cli commands', function(){
         assert.ok(fs.existsSync(path.join(projectPath, "globalAuth.json")));
         assert.ok(fs.existsSync(path.join(projectPath, "assets")));
         assert.ok(fs.existsSync(path.join(projectPath, "packages")));
-        assert.ok(fs.existsSync(path.join(projectPath, "packages", "default", "dashboards")));
+        assert.ok(fs.existsSync(path.join(projectPath, "packages", "demo", "dashboards")));
         done();
       });
     });
