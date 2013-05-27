@@ -1,7 +1,8 @@
 var path = require('path'),
     web_routes = require ('../lib/webapp/routes.js'),
     request = require('request'),
-    assert = require('assert');
+    assert = require('assert'),
+    fs = require('fs');
 
 describe ('static assets', function(){
   var app;
@@ -75,6 +76,17 @@ describe ('static assets', function(){
         assert.equal(200, response.statusCode);
         assert.ok(body);
         done();
+      });
+    });
+
+    it('should render the output in compiled folder', function(done){
+      var compiledCSSPath = path.join(process.cwd(), '/test/fixtures/assets/compiled/stylesheets/application.css');
+      fs.exists(compiledCSSPath, function(exist){
+        assert.ok(exist);
+        fs.unlink(compiledCSSPath, function(err){
+          assert.ifError(err);
+          done();
+        })
       });
     });
 
