@@ -5,9 +5,6 @@
 
 $(function() {
 
-  var loadingClass = 'loading';
-  var errorClass = 'onerror';
-
   //----------------------
   // Alert for timeouts
   //----------------------
