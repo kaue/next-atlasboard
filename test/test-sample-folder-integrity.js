@@ -44,7 +44,7 @@ describe ('sample folder integrity', function(){
     var projectFolder = path.join(sampleFolder, 'project');
 
     describe ('dashboard file', function(){
-      var dashboardFile = path.join(projectFolder, 'packages', 'default', 'dashboards', 'myfirst_dashboard.json');
+      var dashboardFile = path.join(projectFolder, 'packages', 'demo', 'dashboards', 'myfirst_dashboard.json');
       it('should be valid json', function(done){
         JSON.parse(fs.readFileSync(dashboardFile));
         done();

@@ -1,3 +1,15 @@
+0.5.0
+	- Issue #47 - Move packages from packages to samples/project/packages to avoid users build the dashboard in an atlasboard clone.
+	- Issue #40 - Clearer error message when job not found
+	- Issue #41 - Add {"start": "atlasboard start"} to project scaffold package.json
+	- Issue #43 - Error 500 rendering stylesheets/application.css
+	- Issue #42: Nicer handling of error messages in the UI
+	- Add rickshaw library to atlasboard core
+	- Add postreSQL job dependency
+	- Move third party assets to a separate third-party folder
+	- Add storage dependency. Refactor dependency injection.
+	- Issue #28 Add support for credentials file path
+
 0.4.0
 	- Issue #15 - Change widget naming to not include widget id anymore
 	- Added default config file so the custom one gets extended from this one.

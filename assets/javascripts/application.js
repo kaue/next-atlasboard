@@ -28,11 +28,11 @@ $(function() {
         if (elapsed > max_time_to_show_offline){ // this widget if offline
           var str_elapsed = ' <span class="alert alert_high">&gt;1h</span>';
           $('.widget-title span.widget-elapsed', li).html(str_elapsed);
-          $('.content', li).addClass('offline');
+          $(li).addClass('offline');
         }
         else{
           $('.widget-title span.widget-elapsed', li).html('');
-          $('.content', li).removeClass('offline');
+          $(li).removeClass('offline');
         }
 
         $('.widget-title span.widget-elapsed', li).html('');
@@ -42,17 +42,11 @@ $(function() {
 
   var defaultHandlers = { // they can be overwritten by widget´s custom implementation
     onError : function (el, data){
-      var timestamp = new Date();
-      var errorElement = $('.errorContainer', el);
-      if (!errorElement.length){
-        errorElement = $('<div class="errorContainer"></div>').appendTo($('.content', el));
-      }
-      errorElement.html("<p>" + data.error + " (" + timestamp.toISOString() + ")</p>");
       console.error(data);
     },
     onInit : function (el, data){
-      $('.content', el).addClass(loadingClass);
-      $("<img class=\"spinner\" src=\"images/spinner.gif\">").insertBefore($('.content', el));
+      $(el).parent().children().hide();
+      $(el).parent().children(".spinner").show();
     }
   };
 
@@ -64,14 +58,13 @@ $(function() {
 
   var globalHandlers = { // global pre-post event handlers
     onPreError : function (el, data){
-      $('.content', el).addClass(errorClass).removeClass(loadingClass);
-      $(".spinner", el).hide();
+      $(el).children().hide();
+      $(el).children(".error").show();
     },
 
     onPreData : function (el, data){
-      $('.content', el).removeClass([loadingClass, errorClass].join(' '));
-      $('.errorContainer', el).remove();
-      $(".spinner", el).hide();
+      $(el).children().hide();
+      $(el).children(".widget-container").show();
     }
   };
 
@@ -88,52 +81,60 @@ $(function() {
     var widgetId = encodeURIComponent($(li).attr("data-widget-id"));
     var eventId = $(li).attr("data-event-id");
 
+    var $errorContainer = $("<div>").addClass("error").addClass("icon-message").appendTo($(li)).hide();
+    $errorContainer.append($("<div>").addClass("container").append($("<img src=\"images/warning.png\">")));
+
+    var $spinnerContainer = $("<div>").addClass("spinner").addClass("icon-message").appendTo($(li)).hide();
+    $spinnerContainer.append($("<div>").addClass("container").append($("<img src=\"images/spinner.gif\">")));
+
+    var $widgetContainer = $("<div>").addClass("widget-container").appendTo($(li)).hide();
+
     // fetch widget html and css
-    $(li).load("/widgets/" + widgetId, function() {
+    $widgetContainer.load("/widgets/" + widgetId, function() {
 
       // fetch widget js
       $.get('/widgets/' + widgetId + '/js', function(js) {
 
         var widget_js;
-        // try{
+        try{
           eval('widget_js = ' + js);
           widget_js.eventId = eventId;
           widget_js = $.extend({}, defaultHandlers, widget_js);
           widget_js = $.extend({}, widgetMethods, widget_js);
-          widget_js.onInit(li);
-        // }
-        // catch (e){
-          // log_error(widget_js, e);
-        // }
+          widget_js.onInit($widgetContainer[0]);
+        }
+        catch (e){
+          log_error(widget_js, e);
+        }
 
         io.on(eventId, function (data) { //bind socket.io event listener
-            var f = data.error ? widget_js.onError : widget_js.onData;
-
+          if (data.error){
+            globalHandlers.onPreError.apply(widget_js, [$(li), data]);
+          } else {
             globalHandlers.onPreData.apply(widget_js, $(li));
+          }
 
-            if (data.error){
-              globalHandlers.onPreError.apply(widget_js, [$(li), data]);
-            }
+          var f = data.error ? widget_js.onError : widget_js.onData;
+          var $container = data.error ? $errorContainer : $widgetContainer;
+          try{
+            f.apply(widget_js, [$container, data]);
+          }
+          catch (e){
+            log_error(widget_js, e);
+          }
 
-            // try{
-              f.apply(widget_js, [$(li), data]);
-            // }
-            // catch (e){
-              // log_error(widget_js, e);
-            // }
+          // save timestamp
+          $(li).attr("last-update", +new Date());
 
-            // save timestamp
-            $(li).attr("last-update", +new Date());
-
-            //----------------------
-            // Server timeout notifications
-            //----------------------
-            if (!data.error && !widget_js.config){ // fill config when first data arrives
-              widget_js.config = data.config;
-              setInterval(function(){
-                check_last_server_communication(li, widget_js.config);
-              }, 5000);
-            }
+          //----------------------
+          // Server timeout notifications
+          //----------------------
+          if (!data.error && !widget_js.config){ // fill config when first data arrives
+            widget_js.config = data.config;
+            setInterval(function(){
+              check_last_server_communication(li, widget_js.config);
+            }, 5000);
+          }
         });
 
         io.emit("resend", eventId);

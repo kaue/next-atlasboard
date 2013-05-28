@@ -4,8 +4,11 @@ var atlasboard = require ('../lib/atlasboard');
 describe ('atlasboard', function(){
   describe ('start', function(){
     it('should start without errors', function(done){
-      atlasboard(4000);
-      done();
+      atlasboard(4000, function(err){
+        assert.ifError(err);
+        done();
+      });
+      
     });
 
     it('should throw error if port is not specified', function(done){
@@ -17,9 +20,11 @@ describe ('atlasboard', function(){
         for (var i = list.length - 1; i >= 0; i--) {
           process.on('uncaughtException', list[i]);
         }
+      });
+      atlasboard(null, function(err){
+        assert.ok(err);
         done();
       });
-      atlasboard();
     });
 
   });
