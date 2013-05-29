@@ -1,3 +1,6 @@
+0.5.1
+  - Issue #42: fixed small regression for reconnects
+
 0.5.0
 	- Issue #47 - Move packages from packages to samples/project/packages to avoid users build the dashboard in an atlasboard clone.
 	- Issue #40 - Clearer error message when job not found
