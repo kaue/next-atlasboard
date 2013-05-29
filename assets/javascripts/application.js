@@ -171,6 +171,7 @@ $(function() {
 
   function bindSocket (io, gridsterContainer){
     gridsterContainer.children("li").each(function(index, li) {
+      $(li).empty();
       bind_widget(io, li);
     });
   }
