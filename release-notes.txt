@@ -1,3 +1,10 @@
+0.5.2
+	- Add moment as job dependency
+	- Add underscore job dependency
+	- Add async dependency for jobs
+	- Use non-minified versions for easy browser debugging
+	- Add/remove widget-level loading class for better styling context
+
 0.5.1
   - Issue #42: fixed small regression for reconnects
 
