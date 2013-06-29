@@ -1,5 +1,8 @@
 ![Atlasboard](https://bitbucket.org/atlassian/atlasboard/raw/81f89ba6f63020cef294a55bf8b833c79e68b98f/atlasboard.jpg)
 
+##Build status##
+
+[![Build Status](https://drone.io/bitbucket.org/atlassian/atlasboard/status.png)](https://drone.io/bitbucket.org/atlassian/atlasboard/latest)
 
 ##Installation##
 
