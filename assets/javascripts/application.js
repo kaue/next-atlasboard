@@ -108,7 +108,7 @@ $(function() {
           if (data.error){
             globalHandlers.onPreError.apply(widget_js, [$(li), data]);
           } else {
-            globalHandlers.onPreData.apply(widget_js, $(li));
+            globalHandlers.onPreData.apply(widget_js, [$(li)]);
           }
 
           var f = data.error ? widget_js.onError : widget_js.onData;
