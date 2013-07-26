@@ -1,71 +1,75 @@
 {
-    "author":         "Atlassian",
-    "license":        "Apache License, Version 2.0",
-    "contributors":   [
-        {
-            "name": "William Archinal",
-            "email":"william.archinal@gmail.com"
-        },
-        {
-            "name": "Christoph Kiehl",
-            "email":"ckiehl@atlassian.com"
-        },
-        {
-            "name": "Alexander Dickson",
-            "email":"alex@alexanderdickson.com"
-        },
-        {
-            "name": "Ivan Loire",
-            "email":"iloire@atlassian.com"
-        }
-    ],
-    "name":           "atlasboard",
-    "description":    "AtlasBoard is dashboard/wallboard framework written all in JS",
-    "version":        "0.5.3",
-    "homepage":       "http://atlasboard.bitbucket.org",
-    "repository":     {
-        "type":"git",
-        "url": "git@bitbucket.org:atlassian/atlasboard.git"
+  "author": "Atlassian",
+  "license": "Apache License, Version 2.0",
+  "contributors": [
+    {
+      "name": "William Archinal",
+      "email": "william.archinal@gmail.com"
     },
-    "engines":        {
-        "node":">=0.8"
+    {
+      "name": "Christoph Kiehl",
+      "email": "ckiehl@atlassian.com"
     },
-    "bin":            {
-        "atlasboard":"lib/cli/commands.js"
+    {
+      "name": "Alexander Dickson",
+      "email": "alex@alexanderdickson.com"
     },
-    "main":           "./lib/atlasboard.js",
-    "dependencies":   {
-        "express":              "3.0.0",
-        "path":                 "0.4.9",
-        "temp":                 "0.4.0",
-        "underscore":           "1.4.2",
-        "socket.io":            "0.9.13",
-        "stylus":               "0.31.0",
-        "nib":                  "0.9.0",
-        "connect-assets":       "2.3.3",
-        "ejs":                  "0.8.3",
-        "async":                "0.2.6",
-        "optimist":             "~0.3.5",
-        "hardhat":              "~0.0.7",
-        "css-parse":            "1.0.4",
-        "cheerio":              "0.10.7",
-        "tracer":               "0.5.1",
-        "request":              "2.14.0",
-        "xtend":                "2.0.3",
-        "pg":                   "1.1.0",
-        "async":                "0.2.6",
-        "moment":               "~2.0.0"
-    },
-    "devDependencies":{
-        "mocha":                "1.8.1",
-        "expect.js":            "0.1.2",
-        "rimraf":               "2.1.4",
-        "sinon":                "1.6.0",
-        "proxyquire":           "0.4.1"
-    },
-    "preferGlobal":   true,
-    "keywords":       ["server", "dashboard"],
-    "scripts":        {
-        "test": "mocha -b test --reporter list"
+    {
+      "name": "Ivan Loire",
+      "email": "iloire@atlassian.com"
     }
+  ],
+  "name": "atlasboard",
+  "description": "AtlasBoard is dashboard/wallboard framework written all in JS",
+  "version": "0.5.3",
+  "homepage": "http://atlasboard.bitbucket.org",
+  "repository": {
+    "type": "git",
+    "url": "git@bitbucket.org:atlassian/atlasboard.git"
+  },
+  "engines": {
+    "node": ">=0.8"
+  },
+  "bin": {
+    "atlasboard": "lib/cli/commands.js"
+  },
+  "main": "./lib/atlasboard.js",
+  "dependencies": {
+    "express": "3.0.0",
+    "path": "0.4.9",
+    "temp": "0.4.0",
+    "underscore": "1.4.2",
+    "socket.io": "0.9.13",
+    "stylus": "0.31.0",
+    "nib": "0.9.0",
+    "connect-assets": "2.3.3",
+    "ejs": "0.8.3",
+    "async": "0.2.6",
+    "optimist": "~0.3.5",
+    "hardhat": "~0.0.7",
+    "css-parse": "1.0.4",
+    "cheerio": "0.10.7",
+    "tracer": "0.5.1",
+    "request": "2.14.0",
+    "xtend": "2.0.3",
+    "pg": "1.1.0",
+    "moment": "~2.0.0",
+    "read-package-json": "~1.1.1",
+    "semver": "~2.0.11"
+  },
+  "devDependencies": {
+    "mocha": "1.8.1",
+    "expect.js": "0.1.2",
+    "rimraf": "2.1.4",
+    "sinon": "1.6.0",
+    "proxyquire": "0.4.1"
+  },
+  "preferGlobal": true,
+  "keywords": [
+    "server",
+    "dashboard"
+  ],
+  "scripts": {
+    "test": "mocha -b test --reporter list"
+  }
 }
