@@ -1,3 +1,10 @@
+0.5.3
+	- FIX: Issue #53 Two versions of colors on disk throw.
+	- Some refactoring and some of the pending code style changes.
+	- Add build status using drone.io
+	- Fix issue #55 - package order resolution in widgets
+	- FIX: Function.prototype.apply expect array in second arguments
+
 0.5.2
 	- Add moment as job dependency
 	- Add underscore job dependency
