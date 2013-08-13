@@ -180,6 +180,9 @@ $(function() {
   // Main
   //----------------------
 
+  // disable caching for now as chrome somehow screws things up sometimes
+  $.ajaxSetup({cache: false});
+
   var mainContainer = $("#main-container");
   var gridsterContainer = $(".gridster ul");
 
