@@ -1,3 +1,6 @@
+0.5.4
+	- FIX: Black wallboard of death (Chrome latest weirdly caching assets - workaround was clearing the cache)
+
 0.5.3
 	- FIX: Issue #53 Two versions of colors on disk throw.
 	- Some refactoring and some of the pending code style changes.
