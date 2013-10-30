@@ -1,3 +1,6 @@
+0.5.5
+	- Upping rickshaw graphics
+
 0.5.4
 	- FIX: Black wallboard of death (Chrome latest weirdly caching assets - workaround was clearing the cache)
 
