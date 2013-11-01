@@ -1,3 +1,6 @@
+0.5.6
+	- Added easyRequest for easier querying HTTP resources.
+
 0.5.5
 	- Upping rickshaw graphics
 
