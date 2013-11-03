@@ -19,6 +19,17 @@ After installing Atlasboard as a global module, you may want to do this:
 to generate your wallboard.
 
 
+##Importing your first package##
+
+You probably want to reuse the dashboards, widgets and jobs that people have already created.
+
+The [Atlassian package](https://bitbucket.org/atlassian/atlasboard-atlassian-package) is a good start. Atlasboard packages are installed as submodules. You need to initialise a git repository first. Just type:
+
+    git init
+    git submodule add https://bitbucket.org/atlassian/atlasboard-atlassian-package packages/atlassian
+
+Don't forget to setup your credentials (globalAuth.json file)!
+
 For more information check out the [Atlasboard website](http://atlasboard.bitbucket.org).
 =
 
