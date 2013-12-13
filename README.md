@@ -1,4 +1,5 @@
-![Atlasboard](https://bitbucket.org/atlassian/atlasboard/raw/81f89ba6f63020cef294a55bf8b833c79e68b98f/atlasboard.jpg)
+![Atlasboard](https://bitbucket.org/atlassian/atlasboard/raw/master/screenshots/wallboard01.png)
+![Atlasboard](https://bitbucket.org/atlassian/atlasboard/raw/master/screenshots/wallboard02.png)
 
 ##Build status##
 
