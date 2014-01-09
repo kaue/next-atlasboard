@@ -71,6 +71,6 @@
     "dashboard"
   ],
   "scripts": {
-    "test": "mocha -b test --reporter list"
+    "test": "mocha -b test --reporter list --ignore-leaks"
   }
 }
