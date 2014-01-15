@@ -1,3 +1,11 @@
+/**
+ * Job: <%=name%>
+ *
+ * Expected configuration:
+ * 
+ * { }
+ */
+
 module.exports = function(config, dependencies, job_callback) {
     var text = "Hello World!";
 
