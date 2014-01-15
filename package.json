@@ -31,7 +31,7 @@
     "node": ">=0.8"
   },
   "bin": {
-    "atlasboard": "lib/cli/commands.js"
+    "atlasboard": "lib/cli/cli.js"
   },
   "main": "./lib/atlasboard.js",
   "dependencies": {
