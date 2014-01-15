@@ -34,7 +34,7 @@ describe ('cli commands', function(){
 
     it('should exit with errors if bad arguments are passed', function(done){
       var args = ['generate'];
-      commands.new.run(args, function(err) {
+      commands.generate.run(args, function(err) {
         assert.ok(err);
         done();
       });
