@@ -4,16 +4,8 @@ var rm = require ('rimraf');
 var fs = require ('fs');
 var async = require('async');
 var proxyquire =  require('proxyquire');
-var commands = proxyquire('../lib/cli/commands', {
-    './commands-logic': {
-        'generate' : function(projectDir, defaultPackage, itemType, itemName, callback){
-          callback(null);
-        },
-        'newProject' : function(srcDir, destDir, callback){
-          callback(null);
-        }
-    }
-});
+
+var commands;
 
 describe ('cli commands', function(){
 
@@ -24,6 +16,14 @@ describe ('cli commands', function(){
 
   //make sure temp folder is deleted even if tests fail (before and after)
   beforeEach(function(done){
+    commands = proxyquire('../lib/cli/commands', {
+      './commands-logic': {
+          'generate' : function(projectDir, defaultPackage, itemType, itemName, callback){
+            callback(null);
+          }
+      }
+    });
+
     rm(temp_folder, function(){
       fs.mkdir(temp_folder, done);
     });
@@ -59,6 +59,44 @@ describe ('cli commands', function(){
       });
     });
 
+    it('should pass the right parameters to the logic module', function(done){
+      var args = ['job', 'test'];
+      commands = proxyquire('../lib/cli/commands', {
+        './commands-logic': {
+            'generate' : function(projectDir, defaultPackage, itemType, itemName, callback){
+              assert.equal(defaultPackage, 'default');
+              assert.equal(itemType, 'job');
+              assert.equal(itemName, 'test');
+              callback(null);
+            }
+        }
+      });
+
+      commands.generate.run(args, function(err) {
+        assert.ok(!err, err);
+        done();
+      });
+    });
+
+    it('should pass the right parameters to the logic module when item includes package', function(done){
+      var args = ['job', 'mypackage#test'];
+      commands = proxyquire('../lib/cli/commands', {
+        './commands-logic': {
+            'generate' : function(projectDir, defaultPackage, itemType, itemName, callback){
+              assert.equal(defaultPackage, 'mypackage');
+              assert.equal(itemType, 'job');
+              assert.equal(itemName, 'test');
+              callback(null);
+            }
+        }
+      });
+
+      commands.generate.run(args, function(err) {
+        assert.ok(!err, err);
+        done();
+      });
+    });
+
   });
 
   describe ('new', function(){
@@ -67,6 +105,23 @@ describe ('cli commands', function(){
       var args = [];
       commands.new.run(args, function(err) {
         assert.ok(err);
+        done();
+      });
+    });
+
+    it('should pass the right parameters to the logic module when item includes package', function(done){
+      var args = ['mywallboard'];
+      commands = proxyquire('../lib/cli/commands', {
+        './commands-logic': {
+            'newProject' : function(srcDir, destDir, callback){
+              assert.equal(destDir.length - destDir.lastIndexOf('mywallboard'), 11);
+              callback('error so we can interrupt execution and assert just for valid parameters');
+            }
+        }
+      });
+
+      commands.new.run(args, function(err) {
+        assert.ok(err, err);
         done();
       });
     });
