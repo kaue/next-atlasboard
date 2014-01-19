@@ -5,9 +5,12 @@ var fs = require ('fs');
 var async = require('async');
 var proxyquire =  require('proxyquire');
 var commands = proxyquire('../lib/cli/commands', {
-    './logic': {
-        'generate' : function(){
-          console.log('hola caracola');
+    './commands-logic': {
+        'generate' : function(projectDir, defaultPackage, itemType, itemName, callback){
+          callback(null);
+        },
+        'newProject' : function(srcDir, destDir, callback){
+          callback(null);
         }
     }
 });
@@ -32,10 +35,26 @@ describe ('cli commands', function(){
 
   describe ('generate', function(){
 
-    it('should exit with errors if bad arguments are passed', function(done){
-      var args = ['generate'];
+    it('should exit with errors if no args are passed', function(done){
+      var args = [];
       commands.generate.run(args, function(err) {
         assert.ok(err);
+        done();
+      });
+    });
+
+    it('should exit with errors if only element type is passed', function(done){
+      var args = ['job'];
+      commands.generate.run(args, function(err) {
+        assert.ok(err);
+        done();
+      });
+    });
+
+    it('should not exit with errors if correct arguments are passed', function(done){
+      var args = ['job', 'test'];
+      commands.generate.run(args, function(err) {
+        assert.ok(!err, err);
         done();
       });
     });
@@ -45,7 +64,7 @@ describe ('cli commands', function(){
   describe ('new', function(){
 
     it('should exit with errors if bad arguments are passed', function(done){
-      var args = ['new'];
+      var args = [];
       commands.new.run(args, function(err) {
         assert.ok(err);
         done();
