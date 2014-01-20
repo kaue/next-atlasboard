@@ -2,7 +2,6 @@ var assert = require ('assert');
 var path = require ('path');
 var rm = require ('rimraf');
 var fs = require ('fs');
-var async = require('async');
 var proxyquire =  require('proxyquire');
 
 var commands;
