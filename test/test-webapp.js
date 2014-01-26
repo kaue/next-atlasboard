@@ -1,6 +1,7 @@
 var assert = require ('assert');
 var web_logic = require ('../lib/webapp/logic.js');
 var path = require ('path');
+var fs = require('fs');
 
 function getResponseForSendFile (expectedFileContains, done){
   var res = {
@@ -77,6 +78,16 @@ function getResponseWriteEnd (contains, mime, done){
         });
       }
       done();
+    }
+  };
+  return res;
+}
+
+function getResponseWriteBasic() {
+  var res = {
+    written: '',
+    write: function (data) {
+      res.written += data;
     }
   };
   return res;
@@ -256,6 +267,82 @@ describe ('web_server', function(){
     it('should return resource if path is correct', function(done){
       web_logic.renderWidgetResource(localPackagesPath, 'otherpackage1/blockers/resource.txt',
           {}, getResponseForSendFile('resource.txt', done));
+    });
+
+  });
+
+  describe ('css namespacing', function(){
+
+    var localCssPath = path.join(process.cwd(), 'test', 'fixtures', 'css');
+
+    function getCss(filename) {
+      return fs.readFileSync(path.join(localCssPath, filename));
+    }
+
+    function assertContains(source, match, msg) {
+      return assert.ok(source.indexOf(match) > -1, msg);
+    }
+
+    function assertNotContains(source, match, msg) {
+      return assert.ok(source.indexOf(match) === -1, msg);
+    }
+
+    it('should namespace CSS selectors', function(){
+      var res = getResponseWriteBasic();
+      var css = getCss('basic.css');
+      web_logic._addNamespace(css, res, 'test-namespace');
+      assertContains(res.written, 'li[data-widget-id="test-namespace"] #id {', '#id');
+      assertContains(res.written, 'li[data-widget-id="test-namespace"] tag {', 'tag');
+      assertContains(res.written, 'li[data-widget-id="test-namespace"] #multiple .things {', 'multiple identifiers');
+      assertContains(res.written, 'li[data-widget-id="test-namespace"] .comma {', 'comma-separated rules (1)');
+      assertContains(res.written, 'li[data-widget-id="test-namespace"] .separated {', 'comma-separated rules (2)');
+    });
+
+    it('should handle basic media queries', function(){
+      var res = getResponseWriteBasic();
+      var css = getCss('media.css');
+      web_logic._addNamespace(css, res, 'test-namespace');
+      assertContains(res.written, 'li[data-widget-id="test-namespace"] .normal {', 'outside the media query');
+      assertContains(res.written, '@media print {', 'media query definition is unchanged');
+      assertNotContains(res.written, 'li[data-widget-id="test-namespace"] @media print {', 'media query definition is not namespaced');
+      assertContains(res.written, 'li[data-widget-id="test-namespace"] .simple {', 'inside the media query');
+    });
+
+    it('should handle complex media queries', function(){
+      var res = getResponseWriteBasic();
+      var css = getCss('media.css');
+      web_logic._addNamespace(css, res, 'test-namespace');
+      assertContains(res.written, '@media (-webkit-max-device-pixel-ratio: 1.5), (max-device-pixel-ratio: 1.5) {', 'media query definition is unchanged');
+      assertNotContains(res.written, 'li[data-widget-id="test-namespace"] @media (-webkit-max-device-pixel-ratio: 1.5), (max-device-pixel-ratio: 1.5) {', 'media query definition is not namespaced');
+      assertContains(res.written, 'li[data-widget-id="test-namespace"] .complex {', 'inside the media query');
+    });
+
+    it('should handle comments', function(){
+      var res = getResponseWriteBasic();
+      var css = getCss('comments.css');
+      web_logic._addNamespace(css, res, 'test-namespace');
+      assertContains(res.written, 'li[data-widget-id="test-namespace"] .before {', 'before a comment');
+      assertContains(res.written, 'li[data-widget-id="test-namespace"] .after {', 'after a comment');
+      assertContains(res.written, 'li[data-widget-id="test-namespace"] .contains {', 'containing a comment');
+    });
+
+    it('should handle keyframes', function(){
+      var res = getResponseWriteBasic();
+      var css = getCss('keyframes.css');
+      web_logic._addNamespace(css, res, 'test-namespace');
+      assertContains(res.written, '@keyframes standard {', 'standard syntax is valid');
+      assertNotContains(res.written, 'li[data-widget-id="test-namespace"] @keyframes vendor-prefixed {', 'standard syntax is not namespaced');
+      assertContains(res.written, '@-webkit-keyframes vendor-prefixed {', 'vendor-prefixed syntax is valid');
+      assertNotContains(res.written, 'li[data-widget-id="test-namespace"] @-webkit-keyframes vendor-prefixed {', 'vendor-prefixed syntax is not namespaced');
+      assertContains(res.written, '0% { width: 1px; }', 'keep frames untouched');
+    });
+
+    it('should handle font declarations', function(){
+      var res = getResponseWriteBasic();
+      var css = getCss('font-face.css');
+      web_logic._addNamespace(css, res, 'test-namespace');
+      assertContains(res.written, '@font-face {', 'is valid');
+      assertNotContains(res.written, 'li[data-widget-id="test-namespace"] @font-face {', 'not namespaced');
     });
 
   });
