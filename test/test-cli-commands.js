@@ -126,4 +126,43 @@ describe ('cli commands', function(){
     });
 
   });
+
+  describe ('start', function(){
+
+    it('should pass job filter parameters forward', function(done){
+      var args = ['3000', '--job', 'myJobFilter'];
+      commands = proxyquire('../lib/cli/commands', {
+        './commands-logic': {
+            'start' : function(options, callback){
+              assert.equal(options.filters.jobFilter, 'myJobFilter');
+              callback();
+            }
+        }
+      });
+
+      commands.start.run(args, function(err) {
+        assert.ok(!err, err);
+        done();
+      });
+    });
+
+    it('should pass dashboard filter parameters forward', function(done){
+      var args = ['3000', '--dashboard', 'myDashboardFilter'];
+      commands = proxyquire('../lib/cli/commands', {
+        './commands-logic': {
+            'start' : function(options, callback){
+              assert.equal(options.filters.dashboardFilter, 'myDashboardFilter');
+              callback();
+            }
+        }
+      });
+
+      commands.start.run(args, function(err) {
+        assert.ok(!err, err);
+        done();
+      });
+    });
+
+  });
+
 });
