@@ -294,7 +294,7 @@ describe ('web_server', function(){
       assertContains(res.written, 'li[data-widget-id="test-namespace"] #id {', '#id');
       assertContains(res.written, 'li[data-widget-id="test-namespace"] tag {', 'tag');
       assertContains(res.written, 'li[data-widget-id="test-namespace"] #multiple .things {', 'multiple identifiers');
-      assertContains(res.written, 'li[data-widget-id="test-namespace"] .comma {', 'comma-separated rules (1)');
+      assertContains(res.written, 'li[data-widget-id="test-namespace"] .comma,', 'comma-separated rules (1)');
       assertContains(res.written, 'li[data-widget-id="test-namespace"] .separated {', 'comma-separated rules (2)');
     });
 
@@ -330,11 +330,11 @@ describe ('web_server', function(){
       var res = getResponseWriteBasic();
       var css = getCss('keyframes.css');
       web_logic._addNamespace(css, res, 'test-namespace');
-      assertContains(res.written, '@keyframes standard {', 'standard syntax is valid');
+      assertContains(res.written, '@keyframes standards {', 'standard syntax is valid');
       assertNotContains(res.written, 'li[data-widget-id="test-namespace"] @keyframes vendor-prefixed {', 'standard syntax is not namespaced');
-      assertContains(res.written, '@-webkit-keyframes vendor-prefixed {', 'vendor-prefixed syntax is valid');
-      assertNotContains(res.written, 'li[data-widget-id="test-namespace"] @-webkit-keyframes vendor-prefixed {', 'vendor-prefixed syntax is not namespaced');
-      assertContains(res.written, '0% { width: 1px; }', 'keep frames untouched');
+      assertContains(res.written, '@-webkit-keyframes vendor-prefix {', 'vendor-prefixed syntax is valid');
+      assertNotContains(res.written, 'li[data-widget-id="test-namespace"] @-webkit-keyframes vendor-prefix {', 'vendor-prefixed syntax is not namespaced');
+      assertContains(res.written, '0% {\n    width: 1px;\n  }', 'keep frames untouched');
     });
 
     it('should handle font declarations', function(){
