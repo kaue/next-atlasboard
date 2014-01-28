@@ -19,9 +19,14 @@ describe ('job_manager', function(){
   var validJsonWithInvalidFormatConfigPath = path.join(process.cwd(), "/test/fixtures/valid-json-invalid-structure-config");
   var noExistentConfigPath = path.join(process.cwd(), "/test/fixtures/THIS-PATH-DOES-NOT-EXISTS");
 
-  it('should have right dashboard names', function(done){
+  it('should load dashboard', function(done){
 
-    jobs_manager.get_jobs([packagesLocalFolder], configPath, function(err, job_workers){
+    var options = {
+      packagesPath: [packagesLocalFolder],
+      configPath: configPath
+    };
+
+    jobs_manager.get_jobs(options, function(err, job_workers){
       assert.ok(!err, err);
       assert.equal(8, job_workers.length);
 
@@ -37,8 +42,55 @@ describe ('job_manager', function(){
     });
   });
 
+  it('should not load filtered dashboards', function(done){
+
+    var options = {
+      packagesPath: [packagesLocalFolder],
+      configPath: configPath,
+      filters: {
+        dashboardFilter: "other_"
+      }
+    };
+
+    jobs_manager.get_jobs(options, function(err, job_workers){
+      assert.ok(!err, err);
+      assert.equal(3, job_workers.length); // 4 job items, 3 valid jobs
+
+      assert.equal(job_workers[0].dashboard_name, "other_test_dashboard1");
+      assert.equal(job_workers[1].dashboard_name, "other_test_dashboards2");
+      assert.equal(job_workers[2].dashboard_name, "other_test_dashboards2");
+      done();
+    });
+  });
+
+  it('should not load filtered jobs', function(done){
+
+    var options = {
+      packagesPath: [packagesLocalFolder],
+      configPath: configPath,
+      filters: {
+        jobFilter: "job1"
+      }
+    };
+
+    jobs_manager.get_jobs(options, function(err, job_workers){
+      assert.ok(!err, err);
+      assert.equal(3, job_workers.length);
+
+      assert.equal(job_workers[0].dashboard_name, "test_dashboard1");
+      assert.equal(job_workers[1].dashboard_name, "test_dashboard2");
+      assert.equal(job_workers[2].dashboard_name, "other_test_dashboards2");
+      done();
+    });
+  });
+
   it('should be able to get disable widgets', function(done){
-    jobs_manager.get_jobs([packagesLocalFolder], configPath, function(err, job_workers){
+    var options = {
+      packagesPath: [packagesLocalFolder],
+      configPath: configPath
+    };
+
+    jobs_manager.get_jobs(options, function(err, job_workers){
       assert.ok(!err);
       var disabled_jobs = job_workers.filter(function(job){ return job.widget_item.enabled;});
       assert.equal(6, disabled_jobs.length);
@@ -47,7 +99,12 @@ describe ('job_manager', function(){
   });
 
   it('should not return error if invalid dashboard is found since it has been filtered by item manager before', function(done){
-    jobs_manager.get_jobs([packagesWithInvalidDashboard], configPath, function(err, job_workers){
+    var options = {
+      packagesPath: [packagesWithInvalidDashboard],
+      configPath: configPath
+    };
+
+    jobs_manager.get_jobs(options, function(err, job_workers){
       assert.ok(!err);
       assert.equal(0, job_workers.length);
       done();
@@ -55,28 +112,48 @@ describe ('job_manager', function(){
   });
 
   it('should return error if layout field is not found in dashboard file', function(done){
-    jobs_manager.get_jobs([packagesWithNoLayoutField], configPath, function(err, job_workers){
+    var options = {
+      packagesPath: [packagesWithNoLayoutField],
+      configPath: configPath
+    };
+
+    jobs_manager.get_jobs(options, function(err, job_workers){
       assert.ok(err.indexOf('No layout field found')>-1);
       done();
     });
   });
 
   it('should return error if widgets field is not found in dashboard file', function(done){
-    jobs_manager.get_jobs([packagesWithNoWidgetField], configPath, function(err, job_workers){
+    var options = {
+      packagesPath: [packagesWithNoWidgetField],
+      configPath: configPath
+    };
+
+    jobs_manager.get_jobs(options, function(err, job_workers){
       assert.ok(err.indexOf('No widgets field found')>-1);
       done();
     });
   });
 
   it('should return error if invalid job is found on dashboard', function(done){
-    jobs_manager.get_jobs([packagesWithInvalidJob], configPath, function(err, job_workers){
+    var options = {
+      packagesPath: [packagesWithInvalidJob],
+      configPath: configPath
+    };
+
+    jobs_manager.get_jobs(options, function(err, job_workers){
       assert.ok(err);
       done();
     });
   });
 
   it('should have tasks', function(done){
-    jobs_manager.get_jobs([packagesLocalFolder], configPath, function(err, job_workers){
+    var options = {
+      packagesPath: [packagesLocalFolder],
+      configPath: configPath
+    };
+
+    jobs_manager.get_jobs(options, function(err, job_workers){
       assert.ok(!err);
       job_workers.forEach(function(job){
         assert.ok(typeof job.task === "function" );
@@ -86,7 +163,12 @@ describe ('job_manager', function(){
   });
 
   it('should have config', function(done){
-    jobs_manager.get_jobs([packagesLocalFolder], configPath, function(err, job_workers){
+    var options = {
+      packagesPath: [packagesLocalFolder],
+      configPath: configPath
+    };
+
+    jobs_manager.get_jobs(options, function(err, job_workers){
       assert.ok(!err);
       // job_conf1 is defined in general config file (shared config)
       // the rest of them are defined in the related dashboard file.
@@ -98,7 +180,12 @@ describe ('job_manager', function(){
   });
 
   it('should be able to extend global config file with custom dashboards properties', function(done){
-    jobs_manager.get_jobs([packagesLocalFolder], configPath, function(err, job_workers){
+    var options = {
+      packagesPath: [packagesLocalFolder],
+      configPath: configPath
+    };
+
+    jobs_manager.get_jobs(options, function(err, job_workers){
       assert.ok(!err);
       // job_conf1 should have some properties from the global config files
       // and other properties from the dashboard file
@@ -126,7 +213,12 @@ describe ('job_manager', function(){
   });
 
   it('should have independent states for each job', function(done){
-    jobs_manager.get_jobs([packagesNoSharedStateForJobs], configPath, function(err, job_workers){
+    var options = {
+      packagesPath: [packagesNoSharedStateForJobs],
+      configPath: configPath
+    };
+
+    jobs_manager.get_jobs(options, function(err, job_workers){
       assert.ok(!err, err);
       assert.equal(2, job_workers.length);
       job_workers[0].task(null, null, function(err, data){
@@ -140,21 +232,36 @@ describe ('job_manager', function(){
   });
 
   it('should not work with an invalid global config file', function(done){
-    jobs_manager.get_jobs([packagesNoSharedStateForJobs], invalidConfigPath, function(err, job_workers){
+    var options = {
+      packagesPath: [packagesNoSharedStateForJobs],
+      configPath: invalidConfigPath
+    };
+
+    jobs_manager.get_jobs(options, function(err, job_workers){
       assert.ok(err);
       done();
     });
   });
 
   it('should not work with an global config file with wrong structure', function(done){
-    jobs_manager.get_jobs([packagesNoSharedStateForJobs], validJsonWithInvalidFormatConfigPath, function(err, job_workers){
+    var options = {
+      packagesPath: [packagesNoSharedStateForJobs],
+      configPath: validJsonWithInvalidFormatConfigPath
+    };
+
+    jobs_manager.get_jobs(options, function(err, job_workers){
       assert.ok(err);
       done();
     });
   });
 
   it('should work with no global config file', function(done){
-    jobs_manager.get_jobs([packagesNoSharedStateForJobs], noExistentConfigPath, function(err, job_workers){
+    var options = {
+      packagesPath: [packagesNoSharedStateForJobs],
+      configPath: noExistentConfigPath
+    };
+
+    jobs_manager.get_jobs(options, function(err, job_workers){
       assert.ok(!err, err);
       done();
     });
