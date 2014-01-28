@@ -1,3 +1,12 @@
+0.6.0
+	- FIX: Issue #62. Properly namespace widget CSS by working with AST rules
+	- Issue #50 and #60. Make easier developing new jobs by adding filters to atlasboard start
+	- Refactor commands
+	- Added more unit tests
+	- Install only production dependencies on atlasboard start
+	- Ensure that we return pg clients to the connection pool
+	- Other minor fixes
+
 0.5.6
 	- Added easyRequest for easier querying HTTP resources.
 
