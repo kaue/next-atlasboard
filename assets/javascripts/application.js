@@ -146,7 +146,7 @@ $(function() {
     var gridsterGutter = gutter/2;
     var height = 1080 - mainContainer.offset().top - gridsterGutter;
     var width = mainContainer.width();
-    var vertical_cells = 4, horizontal_cells = 6;
+    var vertical_cells = grid_rows, horizontal_cells = grid_columns;
     var widgetSize = {
       w: (width - horizontal_cells * gutter) / horizontal_cells,
       h: (height - vertical_cells * gutter) / vertical_cells
