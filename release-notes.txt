@@ -1,3 +1,11 @@
+0.7.0
+	- Allow configurable (per dashboard) grid size (issue #64)
+	- Bump up cheerio to 0.13.1
+	- Bump up grister to 0.5.1
+	- Fix issue #68 - Avoid widget title wrapping
+	- Resize fonts according to widget width (resolves issue #67 - related to issue #64)
+	- Fix package.json "bin" attribute relative path.
+
 0.6.0
 	- FIX: Issue #62. Properly namespace widget CSS by working with AST rules
 	- Issue #50 and #60. Make easier developing new jobs by adding filters to atlasboard start
