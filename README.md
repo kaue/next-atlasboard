@@ -1,3 +1,4 @@
+![Atlasboard](https://bitbucket.org/atlassian/atlasboard/raw/master/screenshots/wallboard8x6.png)
 ![Atlasboard](https://bitbucket.org/atlassian/atlasboard/raw/master/screenshots/wallboard01.png)
 ![Atlasboard](https://bitbucket.org/atlassian/atlasboard/raw/master/screenshots/wallboard02.png)
 
