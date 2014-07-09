@@ -198,9 +198,10 @@ $(function() {
 
   var options = {
     'reconnect': true,
-    'reconnection delay': 5000,
+    'reconnection delay': 1000,
     'reopen delay': 3000,
-    'max reconnection attempts': 100
+    'max reconnection attempts': Infinity,
+    'reconnection limit': 60000
   };
 
   //----------------------
