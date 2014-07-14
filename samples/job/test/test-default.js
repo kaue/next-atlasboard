@@ -1,5 +1,5 @@
 /**
- * Test file for Job: newcalendar
+ * Test file for Job: <%=name%>
  */
 
 var assert = require ('assert');
