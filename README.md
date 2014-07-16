@@ -1,6 +1,4 @@
 ![Atlasboard](https://bitbucket.org/atlassian/atlasboard/raw/master/screenshots/wallboard8x6.png)
-![Atlasboard](https://bitbucket.org/atlassian/atlasboard/raw/master/screenshots/wallboard01.png)
-![Atlasboard](https://bitbucket.org/atlassian/atlasboard/raw/master/screenshots/wallboard02.png)
 
 ##Build status##
 
@@ -34,4 +32,3 @@ Don't forget to setup your credentials (globalAuth.json file)!
 
 For more information check out the [Atlasboard website](http://atlasboard.bitbucket.org).
 =
-
