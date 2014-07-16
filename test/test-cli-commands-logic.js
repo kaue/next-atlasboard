@@ -5,6 +5,14 @@ var rm = require ('rimraf');
 var fs = require ('fs');
 var async = require('async');
 
+function assertFileContains(path, text, cb){
+  fs.readFile(path, 'UTF-8', function read(err, data) {
+    assert.ifError(err);
+    assert.ok(data.indexOf(text)> -1, 'expected file to contain ' + text + '. Actual content: ' + data);
+    cb();
+  });
+}
+
 describe ('cli commands logic', function(){
 
   require('./includes/startup');
@@ -12,20 +20,22 @@ describe ('cli commands logic', function(){
   var temp_folder = "test/tmp";
   var packagesLocalFolder = path.join(process.cwd(), "/test/fixtures/packages");
 
+  function cleanup (cb){
+    rm(temp_folder, function(){
+      fs.mkdir(temp_folder, cb);
+    });
+  }
+
   //make sure temp folder is deleted even if tests fail (before and after)
   beforeEach(function(done){
-    rm(temp_folder, done);
+    cleanup(done);
   });
 
   afterEach(function(done){
-    rm(temp_folder, done);
+    cleanup(done);
   });
 
   describe ('new', function(){
-
-    beforeEach(function(done){
-      fs.mkdir(temp_folder, done);
-    });
 
     it('should create a new project ok', function(done){
       var projectPath = path.join(temp_folder, 'test');
@@ -36,7 +46,7 @@ describe ('cli commands logic', function(){
         assert.ok(fs.existsSync(path.join(projectPath, "assets")));
         assert.ok(fs.existsSync(path.join(projectPath, "packages")));
         assert.ok(fs.existsSync(path.join(projectPath, "packages", "demo", "dashboards")));
-        done();
+        assertFileContains(path.join(projectPath, "README.md"), "# test, my awesome", done); // templating works
       });
     });
 
@@ -131,61 +141,69 @@ describe ('cli commands logic', function(){
       });
     });
 
-    it('should create widget successfully', function(done){
-      commandLogic.generate(projectPath, "default", "widget", "newcalendar", function(err, data){
-        assert.ok(!err, err);
-        var result_path = path.join(projectPath, "packages", "default", "widgets", "newcalendar");
-        assert.ok(fs.existsSync(result_path));
-        assert.equal(data.path, result_path);
-        done();
+    describe ('widget', function(){
+      it('should create widget successfully', function(done){
+        commandLogic.generate(projectPath, "default", "widget", "newcalendar", function(err, data){
+          assert.ok(!err, err);
+          var htmlFileWidget = path.join(projectPath, "packages", "default", "widgets", "newcalendar", 'newcalendar.html');
+          assertFileContains(htmlFileWidget, '<h2>newcalendar</h2>', done);
+        });
       });
-    });
 
-    it('should return error if widget already exists', function(done){
-      commandLogic.generate(projectPath, "default", "widget", "newcalendar", function(err, data){
-        commandLogic.generate(projectPath, "default", "widget", "newcalendar", function(err){
-          assert.ok(err, err);
-          done();
+      it('should return error if widget already exists', function(done){
+        commandLogic.generate(projectPath, "default", "widget", "newcalendar", function(err, data){
+          commandLogic.generate(projectPath, "default", "widget", "newcalendar", function(err){
+            assert.ok(err, err);
+            done();
+          });
         });
       });
     });
 
-    it('should create job successfully', function(done){
-      commandLogic.generate(projectPath, "default", "job", "newcalendar", function(err, data){
-        assert.ok(!err);
-        var result_path = path.join(projectPath, "packages", "default", "jobs", "newcalendar");
-        assert.ok(fs.existsSync(result_path));
-        assert.equal(data.path, result_path);
-        done();
+
+    describe ('job', function(){
+      it('should create job successfully', function(done){
+        commandLogic.generate(projectPath, "default", "job", "newcalendar", function(err, data){
+          assert.ok(!err);
+          var jobPath = path.join(projectPath, "packages", "default", "jobs", "newcalendar", "newcalendar.js");
+          assertFileContains(jobPath, '* Job: newcalendar', done);
+        });
       });
+
+      it('should return error if job already exists', function(done){
+        commandLogic.generate(projectPath, "default", "job", "newcalendar", function(err, data){
+          commandLogic.generate(projectPath, "default", "job", "newcalendar", function(err){
+            assert.ok(err, err);
+            done();
+          });
+        });
+      });
+
+      it('should create a unit test template', function(done){
+        commandLogic.generate(projectPath, "default", "job", "newcalendar", function(err, data){
+          assert.ok(!err);
+          var jobTestPath = path.join(projectPath, "packages", "default", "jobs", "newcalendar", "test", "test-newcalendar.js");
+          assertFileContains(jobTestPath, '* Test file for Job: newcalendar', done);
+        });
+      });
+
     });
 
-    it('should return error if job already exists', function(done){
-      commandLogic.generate(projectPath, "default", "job", "newcalendar", function(err, data){
-        commandLogic.generate(projectPath, "default", "job", "newcalendar", function(err){
+    describe ('dashboard', function(){
+      it('should create dashboard successfully', function(done){
+        commandLogic.generate(projectPath, "default", "dashboard", "newdashboard", function(err, data){
+          assert.ok(!err, 'error generating dashboard: ' + err);
+          var dashboard_folder = path.join(projectPath, "packages", "default", "dashboards");
+          var dashboard_file = path.join(dashboard_folder, "newdashboard.json");
+          assertFileContains(dashboard_file, '"layout": {', done);
+        });
+      });
+
+      it('should return error if dashboard already exists', function(done){
+        commandLogic.generate(temp_folder, "default", "dashboard", "newdashboard", function(err){
           assert.ok(err, err);
           done();
         });
-      });
-    });
-
-    it('should create dashboard successfully', function(done){
-      commandLogic.generate(projectPath, "default", "dashboard", "newdashboard", function(err, data){
-        assert.ok(!err, err);
-        var dashboard_folder = path.join(projectPath, "packages", "default", "dashboards");
-        var dashbboard_file = path.join(dashboard_folder, "newdashboard.json");
-        assert.ok(fs.existsSync(dashbboard_file));
-        assert.equal(data.path, dashboard_folder);
-        assert.equal(data.outputFiles.length, 1);
-        assert.equal(data.outputFiles[0], dashbboard_file);
-        done();
-      });
-    });
-
-    it('should return error if dashboard already exists', function(done){
-      commandLogic.generate(temp_folder, "default", "dashboard", "newdashboard", function(err){
-        assert.ok(err, err);
-        done();
       });
     });
 

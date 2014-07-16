@@ -33,7 +33,18 @@ describe ('sample folder integrity', function(){
       var jobFile = path.join(sampleFolder, 'job', 'default.js');
       it('should be valid executable', function(done){
         var job = require(jobFile);
-        job({},{}, function(err, data){
+
+        // the default job uses easyRequest as example, so let's mock it
+        var mockedDependencies = {
+          easyRequest : {
+            HTML : function (options, cb) {
+              cb(null, 'hi!');
+            }
+          }
+        };
+
+        job({}, mockedDependencies, function(err, data){
+          assert.equal('hi!', data.html);
           done();
         });
       });

@@ -17,6 +17,7 @@
 
   },
   "scripts":{
-    "start":"atlasboard start"
+    "start":"atlasboard start",
+    "test": "find ./ -name '*.js' | grep test/ | xargs mocha"
   }
 }
