@@ -30,5 +30,10 @@ The [Atlassian package](https://bitbucket.org/atlassian/atlasboard-atlassian-pac
 
 Don't forget to setup your credentials (globalAuth.json file)!
 
-For more information check out the [Atlasboard website](http://atlasboard.bitbucket.org).
-=
+## Documentation
+
+[Check out the wiki](https://bitbucket.org/atlassian/atlasboard/wiki/Home)
+
+## More information 
+
+Check out the [Atlasboard website](http://atlasboard.bitbucket.org).
