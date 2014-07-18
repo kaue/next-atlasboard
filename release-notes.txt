@@ -1,3 +1,10 @@
+0.8.0
+ - Improve project and job scaffolding
+ - Add unit test to new job template
+ - Bump up a bunch of dependencies (it was about time!)
+ - Improve socket.io reconnect
+ - Add new shinny 8x6 grid size screenshot
+
 0.7.0
 	- Allow configurable (per dashboard) grid size (issue #64)
 	- Bump up cheerio to 0.13.1
