@@ -103,7 +103,7 @@ describe ('scheduler', function(){
     done();
   });
 
-  it('should log error and stop sheduling when exception was thrown in code handling task result/error', function (done) {
+  it('should log error and stop scheduling when exception was thrown in code handling task result/error', function (done) {
     var logErrorStub = sinon.stub();
     mockJobWorker.dependencies.logger.error = logErrorStub;
 
@@ -113,6 +113,20 @@ describe ('scheduler', function(){
     assert.equal(logErrorStub.getCall(0).args[0], 'Uncaught exception after executing job. '
       + 'This should not happen - something went really wrong! Exception: that was really unexpected!');
     assert.ok(mockJobWorker.task.calledOnce);
+    done();
+  });
+
+  it('should not schedule more than one job when job execution takes long time', function(done) {
+    mockJobWorker.task = function() {};
+    var stub = sinon.stub(mockJobWorker, "task", function (config, dependencies, cb) {
+      setTimeout(function() {
+        cb(null, {});
+      }, 10000);
+    });
+    scheduler.schedule(mockJobWorker, widgets);
+    clock.tick(13000);
+    clock.tick(13000);
+    assert.ok(stub.calledThrice);
     done();
   });
 
