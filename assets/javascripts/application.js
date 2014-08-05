@@ -16,6 +16,9 @@ $(function() {
   // Alert for timeouts
   //----------------------
   function check_last_server_communication (li, config){
+    
+    config = $.extend({}, config);
+    
     var lastUpdate = $(li).attr('last-update');
 
     if (lastUpdate){
