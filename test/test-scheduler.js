@@ -17,12 +17,15 @@ describe ('scheduler', function(){
       dependencies : {
         logger : {
           warn: function (){},
-          error: function (){}
+          error: function (){},
+          log: function (){}
         }
       }
     };
 
-    stub = sinon.stub(mockJobWorker, "task");
+    stub = sinon.stub(mockJobWorker, "task", function(config, dependencies, cb) {
+	    cb(null, {});
+    });
     done();
   });
 
@@ -36,7 +39,7 @@ describe ('scheduler', function(){
     this.timeout(50);
     mockJobWorker.task = function (config, dependencies, cb){
       done();
-    }
+    };
     scheduler.schedule(mockJobWorker, widgets);
   });
 
@@ -60,7 +63,8 @@ describe ('scheduler', function(){
   it('should allow job workers to maintain state across calls', function(done){
     mockJobWorker.task = function (config, dependencies, cb){
       this.counter = (this.counter || 0) + 1;
-    }
+      cb(null, {});
+    };
     scheduler.schedule(mockJobWorker, widgets);
     clock.tick(3000);
     clock.tick(3000);
@@ -74,7 +78,7 @@ describe ('scheduler', function(){
     mockJobWorker.task = function (config, dependencies, cb){
       numberCalls++;
       cb('err');
-    }
+    };
     scheduler.schedule(mockJobWorker, widgets);
     clock.tick(3000/3);
     clock.tick(3000/3);
@@ -83,10 +87,46 @@ describe ('scheduler', function(){
   });
 
   it('should handle synchronous errors in job execution', function(done){
-    mockJobWorker.task = function (config, dependencies, cb){
-      throw 'err'
-    }
+    mockJobWorker.task = sinon.stub().throws('err');
     scheduler.schedule(mockJobWorker, widgets);
+    assert.ok(mockJobWorker.task.calledOnce);
+    done();
+  });
+
+  it('should schedule task even if there was synchronous error', function (done) {
+    mockJobWorker.task = sinon.stub().throws('err');
+
+    scheduler.schedule(mockJobWorker, widgets);
+    clock.tick(3000);
+    clock.tick(3000);
+    assert.ok(mockJobWorker.task.calledThrice);
+    done();
+  });
+
+  it('should log error and stop scheduling when exception was thrown in code handling task result/error', function (done) {
+    var logErrorStub = sinon.stub();
+    mockJobWorker.dependencies.logger.error = logErrorStub;
+
+    scheduler.schedule(mockJobWorker, {sendData: sinon.stub().throws('that was really unexpected!')});
+    clock.tick(3000);
+    clock.tick(3000);
+    assert.equal(logErrorStub.getCall(0).args[0], 'Uncaught exception after executing job. '
+      + 'This should not happen - something went really wrong! Exception: that was really unexpected!');
+    assert.ok(mockJobWorker.task.calledOnce);
+    done();
+  });
+
+  it('should not schedule more than one job when job execution takes long time', function(done) {
+    mockJobWorker.task = function() {};
+    var stub = sinon.stub(mockJobWorker, "task", function (config, dependencies, cb) {
+      setTimeout(function() {
+        cb(null, {});
+      }, 10000);
+    });
+    scheduler.schedule(mockJobWorker, widgets);
+    clock.tick(13000);
+    clock.tick(13000);
+    assert.ok(stub.calledThrice);
     done();
   });
 
