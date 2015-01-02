@@ -3,7 +3,7 @@ var assert = require ('assert'),
 
 describe ('scheduler', function(){
   var scheduler = require('../lib/scheduler')();
-  var widgets = {sendData: function(){}};
+  var widgets;
 
   var stub;
   var clock;
@@ -11,6 +11,7 @@ describe ('scheduler', function(){
 
   beforeEach(function(done){
     clock = sinon.useFakeTimers();
+    widgets = {sendData: function(){}};
     mockJobWorker = {
       config:{interval: 3000},
       task : function(){},
@@ -83,6 +84,17 @@ describe ('scheduler', function(){
     scheduler.schedule(mockJobWorker, widgets);
   });
 
+  it('should notify client on asynchronous errors', function(done){
+    mockJobWorker.task = function (config, dependencies, cb){
+      cb('error', {});
+    };
+    widgets.sendData = function(data){
+      assert.ok(data.error);
+      done();
+    };
+    scheduler.schedule(mockJobWorker, widgets);
+  });
+
   it('should allow a grace period to raise errors if retryOnErrorTimes is defined', function(done){
     mockJobWorker.config.retryOnErrorTimes = 3;
     var numberCalls = 0;
@@ -102,6 +114,27 @@ describe ('scheduler', function(){
     scheduler.schedule(mockJobWorker, widgets);
     assert.ok(mockJobWorker.task.calledOnce);
     done();
+  });
+
+  it('should notify client when synchronous error occurred during job execution', function(done){
+    mockJobWorker.task = sinon.stub().throws('err');
+    widgets.sendData = function(data){
+      assert.ok(data.error);
+      done();
+    };
+    scheduler.schedule(mockJobWorker, widgets);
+    assert.ok(mockJobWorker.task.calledOnce);
+  });
+
+  it('should notify client on first synchronous error during job execution even when retryAttempts are configured', function(done){
+    mockJobWorker.task = sinon.stub().throws('err');
+    mockJobWorker.config.retryOnErrorTimes = 3;
+    widgets.sendData = function(data){
+      assert.ok(data.error);
+      done();
+    };
+    scheduler.schedule(mockJobWorker, widgets);
+    assert.ok(mockJobWorker.task.calledOnce);
   });
 
   it('should schedule task even if there was a synchronous error', function (done) {
