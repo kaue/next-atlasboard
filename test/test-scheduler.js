@@ -24,7 +24,7 @@ describe ('scheduler', function(){
     };
 
     stub = sinon.stub(mockJobWorker, "task", function(config, dependencies, cb) {
-	    cb(null, {});
+      cb(null, {});
     });
     done();
   });
@@ -72,12 +72,23 @@ describe ('scheduler', function(){
     done();
   });
 
+  it('should handle and log asynchronous errors', function(done){
+    mockJobWorker.task = function (config, dependencies, cb){
+      cb('error', {});
+    };
+    mockJobWorker.dependencies.logger.error = function(error){
+      assert.ok(error);
+      done();
+    };
+    scheduler.schedule(mockJobWorker, widgets);
+  });
+
   it('should allow a grace period to raise errors if retryOnErrorTimes is defined', function(done){
     mockJobWorker.config.retryOnErrorTimes = 3;
     var numberCalls = 0;
     mockJobWorker.task = function (config, dependencies, cb){
       numberCalls++;
-      cb('err');
+      cb('err', {});
     };
     scheduler.schedule(mockJobWorker, widgets);
     clock.tick(3000/3);
@@ -93,26 +104,13 @@ describe ('scheduler', function(){
     done();
   });
 
-  it('should schedule task even if there was synchronous error', function (done) {
+  it('should schedule task even if there was a synchronous error', function (done) {
     mockJobWorker.task = sinon.stub().throws('err');
 
     scheduler.schedule(mockJobWorker, widgets);
     clock.tick(3000);
-    clock.tick(3000);
-    assert.ok(mockJobWorker.task.calledThrice);
-    done();
-  });
-
-  it('should log error and stop scheduling when exception was thrown in code handling task result/error', function (done) {
-    var logErrorStub = sinon.stub();
-    mockJobWorker.dependencies.logger.error = logErrorStub;
-
-    scheduler.schedule(mockJobWorker, {sendData: sinon.stub().throws('that was really unexpected!')});
-    clock.tick(3000);
-    clock.tick(3000);
-    assert.equal(logErrorStub.getCall(0).args[0], 'Uncaught exception after executing job. '
-      + 'This should not happen - something went really wrong! Exception: that was really unexpected!');
-    assert.ok(mockJobWorker.task.calledOnce);
+    // we expect the initial call plus one call every second (one third of the original interval in recovery mode)
+    assert.equal(4, mockJobWorker.task.callCount); 
     done();
   });
 
