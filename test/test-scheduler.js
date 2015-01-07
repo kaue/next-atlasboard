@@ -75,7 +75,7 @@ describe ('scheduler', function(){
 
   it('should handle and log asynchronous errors', function(done){
     mockJobWorker.task = function (config, dependencies, cb){
-      cb('error', {});
+      cb('error');
     };
     mockJobWorker.dependencies.logger.error = function(error){
       assert.ok(error);
@@ -86,7 +86,7 @@ describe ('scheduler', function(){
 
   it('should notify client on asynchronous errors', function(done){
     mockJobWorker.task = function (config, dependencies, cb){
-      cb('error', {});
+      cb('error');
     };
     widgets.sendData = function(data){
       assert.ok(data.error);
@@ -100,7 +100,7 @@ describe ('scheduler', function(){
     var numberCalls = 0;
     mockJobWorker.task = function (config, dependencies, cb){
       numberCalls++;
-      cb('err', {});
+      cb('err');
     };
     scheduler.schedule(mockJobWorker, widgets);
     clock.tick(3000/3);
