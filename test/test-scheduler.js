@@ -73,6 +73,16 @@ describe ('scheduler', function(){
     done();
   });
 
+  it('should schedule an empty data parameter', function(done){
+    mockJobWorker.task = function (config, dependencies, cb){
+      cb(null);
+    };
+    widgets.sendData = function(data){
+      done();
+    };
+    scheduler.schedule(mockJobWorker, widgets);
+  });
+
   it('should handle and log asynchronous errors', function(done){
     mockJobWorker.task = function (config, dependencies, cb){
       cb('error');
