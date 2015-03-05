@@ -1,9 +1,18 @@
+0.9.0
+	- Fix warning icon image
+	- Use spin.js instead of an image spinner
+	- Bump gridster to 0.5.6
+	- Bump rickshaw to 1.5
+	- Add an experimental confluence library to assist in fetching pages using Content API
+	- Fix issue #72 - Make sure config is never undefined
+	- Fixing schedulers so job execution doesn't overlap if it takes too long
+
 0.8.0
- - Improve project and job scaffolding
- - Add unit test to new job template
- - Bump up a bunch of dependencies (it was about time!)
- - Improve socket.io reconnect
- - Add new shinny 8x6 grid size screenshot
+	- Improve project and job scaffolding
+	- Add unit test to new job template	
+	- Bump up a bunch of dependencies (it was about time!)
+	- Improve socket.io reconnect
+	- Add new shinny 8x6 grid size screenshot
 
 0.7.0
 	- Allow configurable (per dashboard) grid size (issue #64)
@@ -75,7 +84,7 @@
 	- Other minor fixes.
 
 0.3.1
-	-	FIX: Require node 0.8 or higher in package.json
+	- FIX: Require node 0.8 or higher in package.json
 
 0.3.0
 	- Real-time logging visualization!.

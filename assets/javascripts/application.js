@@ -93,7 +93,8 @@ $(function() {
     $errorContainer.append($("<div>").addClass("container").append($("<img src=\"images/warning.png\">")));
 
     var $spinnerContainer = $("<div>").addClass("spinner").addClass("icon-message").appendTo($(li)).hide();
-    $spinnerContainer.append($("<div>").addClass("container").append($("<img src=\"images/spinner.gif\">")));
+    var spinner = new Spinner({className: 'spinner', color:'#fff', width:5, length:15, radius: 25, lines: 12,  speed:0.7}).spin();
+    $spinnerContainer.append($("<div>").addClass("container").append(spinner.el));
 
     var $widgetContainer = $("<div>").addClass("widget-container").appendTo($(li)).hide();
 
