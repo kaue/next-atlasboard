@@ -17,6 +17,10 @@
     {
       "name": "Ivan Loire",
       "email": "iloire@atlassian.com"
+    },
+    {
+      "name": "Sam Day",
+      "email": "sday@atlassian.com"
     }
   ],
   "name": "atlasboard",
@@ -28,7 +32,8 @@
     "url": "git@bitbucket.org:atlassian/atlasboard.git"
   },
   "engines": {
-    "node": ">=0.8"
+    "node": ">=0.10",
+    "npm": "~2.0.0"
   },
   "bin": {
     "atlasboard": "./lib/cli/cli.js"
