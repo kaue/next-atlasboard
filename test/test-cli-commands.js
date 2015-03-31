@@ -163,6 +163,43 @@ describe ('cli commands', function(){
       });
     });
 
+    it('should pass noinstall flag forward', function(done){
+      var args = ['3000', '--noinstall'];
+      commands = proxyquire('../lib/cli/commands', {
+        './commands-logic': {
+            'start' : function(options, callback){
+              assert.equal(options.install, false);
+              callback();
+            }
+        }
+      });
+
+      commands.start.run(args, function(err) {
+        assert.ok(!err, err);
+        done();
+      });
+    });
+
+  });
+
+  describe ('install', function(){
+
+    it('should call proper logic module', function(done){
+      var args = [];
+      commands = proxyquire('../lib/cli/commands', {
+        './commands-logic': {
+            'install' : function(options, callback){
+              callback('reached');
+            }
+        }
+      });
+
+      commands.install.run(args, function(err) {
+        assert.equal(err, 'reached');
+        done();
+      });
+    });
+
   });
 
 });
