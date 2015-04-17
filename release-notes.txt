@@ -1,3 +1,13 @@
+0.10.0
+	- Enable the cookie jar for request
+	- Introduce install command and --noinstall option to start command
+	- Add HipChat roomInfo endpoint and support for api v2
+	- Upgrade request to ^2.53.0
+	- Add support for expanding environment variables in globalAuth.json
+	- Send errors to the client immediately (ignoring retry settings) on the first run
+	- Fix Issue #79 - Always send error events to the client
+	- Fix Issue #78  - Don't use absolute links / proxy support
+
 0.9.0
 	- Fix warning icon image
 	- Use spin.js instead of an image spinner
