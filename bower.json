@@ -1,0 +1,19 @@
+{
+  "name": "atlasboard",
+  "version": "0.10.0",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "assets/third-party",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "2.1.3",
+    "underscore": "1.8.3",
+    "moment": "2.9.0",
+    "gridster": "0.5.6",
+    "spinjs": "2.0.2",
+    "rickshaw": "~1.5.1"
+  }
+}
