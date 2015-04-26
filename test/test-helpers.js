@@ -83,7 +83,7 @@ describe ('helpers', function(){
 
     it('should call callback if file is not valid JSON', function(done){
       var filePath = path.join(process.cwd(), 'test', 'fixtures', 'config', 'invalid_config.json');
-      var content = helpers.getJSONFromFile(filePath, {}, null, function(path, err){
+      helpers.getJSONFromFile(filePath, {}, null, function(path, err){
         assert.equal(filePath, path);
         done();
       });
@@ -94,6 +94,34 @@ describe ('helpers', function(){
       var content = helpers.getJSONFromFile(filePath, {});
       assert.equal("val1", content.key1);
       done();
+    });
+
+  });
+
+  describe('readJSONFile', function(){
+    it('should parse handle non existent paths', function(done){
+      var filePath = path.join(process.cwd(), 'test', 'fixtures', 'config', 'DOES-NOT-EXISTS-valid_config.json');
+      helpers.readJSONFile(filePath, function(err){
+        assert.equal(err.code, "ENOENT");
+        done();
+      });
+    });
+
+    it('should handle invalid JSON', function(done){
+      var filePath = path.join(process.cwd(), 'test', 'fixtures', 'config', 'invalid_config.json');
+      helpers.readJSONFile(filePath, function(err){
+        assert.ok(err);
+        done();
+      });
+    });
+
+    it('should parse JSON property', function(done){
+      var filePath = path.join(process.cwd(), 'test', 'fixtures', 'config', 'valid_config.json');
+      helpers.readJSONFile(filePath, function(err, content){
+        assert.ifError(err);
+        assert.equal("val1", content.key1);
+        done();
+      });
     });
 
   });
