@@ -13,7 +13,7 @@ describe ('scheduler', function(){
     clock = sinon.useFakeTimers();
     widgets = {sendData: function(){}};
     mockJobWorker = {
-      widget_item: 'dummy',
+      widget_item: { job: 'dummy' },
       config:{interval: 3000},
       task : function(){},
       dependencies : {
