@@ -13,6 +13,7 @@ describe ('scheduler', function(){
     clock = sinon.useFakeTimers();
     widgets = {sendData: function(){}};
     mockJobWorker = {
+      widget_item: 'dummy',
       config:{interval: 3000},
       task : function(){},
       dependencies : {
@@ -169,6 +170,18 @@ describe ('scheduler', function(){
     clock.tick(13000);
     assert.ok(stub.calledThrice);
     done();
+  });
+
+  it('should warn if multiple job callbacks are executed', function(done) {
+    mockJobWorker.task = function(config, dependencies, job_callback){
+      job_callback(null, {});
+      job_callback(null, {});
+    };
+    mockJobWorker.dependencies.logger.warn = function (msg) {
+      assert.ok(msg.indexOf('job_callback executed more than once') > -1);
+      done();
+    };
+    scheduler.schedule(mockJobWorker, widgets);
   });
 
 });
