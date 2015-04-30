@@ -68,7 +68,7 @@ $(function() {
     onPreError : function (el, data){
       $(el).children().hide();
       if (data && data.error === 'disabled'){
-        $(el).children(".widget-container").show().html('<div class=disabled>DISABLED</div>');
+        $(el).children(".widget-container").html('<div class=disabled>DISABLED</div>').show();
       } else {
         $(el).children(".error").show(); // error icon
       }
