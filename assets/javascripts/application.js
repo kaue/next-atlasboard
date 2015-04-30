@@ -67,7 +67,11 @@ $(function() {
   var globalHandlers = { // global pre-post event handlers
     onPreError : function (el, data){
       $(el).children().hide();
-      $(el).children(".error").show();
+      if (data && data.error === 'disabled'){
+        $(el).children(".widget-container").show().html('<div class=disabled>DISABLED</div>');
+      } else {
+        $(el).children(".error").show(); // error icon
+      }
     },
 
     onPreData : function (el, data){
