@@ -32,17 +32,18 @@ function getResponseForSendStatusCode (statusCode, done){
 
     },
 
-    sendfile: function (file){
-      done('not expected');
+    sendfile: function (){
+      done('not expected call to res.sendfile');
     },
 
-    write: function (data){
-      done("not expected");
+    write: function (){
+      done("not expected call to res.write");
     },
 
-    end: function (data){
-      done("not expected");
+    end: function (){
+      done("not expected call to res.end");
     },
+
     send: function (status, data){
       assert.equal(statusCode, status);
       done();
@@ -196,7 +197,7 @@ describe ('web_server', function(){
 
       it('handles request when requesting javascript assets for a dashboard with no customJS field', function(done){
         web_logic.renderJsDashboard([packagesLocalFolder, packagesAtlasboardFolder], wallboard_assets_folder,
-            "test_dashboard2", {},  getResponseForSendStatusCode(200, done));
+            "test_dashboard2", {},  getResponseWriteEnd(null, "application/javascript", done));
       });
 
       it('handles when requesting javascript assets and file is not found', function(done){
