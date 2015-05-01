@@ -40,7 +40,7 @@
                 <% dashboardConfig.layout.widgets.forEach(function (widget) { %>
                     <li data-row="<%= widget.row %>" data-col="<%= widget.col %>" data-sizex="<%= widget.width %>"
                         data-sizey="<%= widget.height %>" data-widget-id="<%= widget.widget %>"
-                        data-event-id="<%=(dashboardName + "_" + widget.config + "_" + widget.widget + "_" +  widget.job) %>"></li>
+                        data-event-id="<%=(dashboardName + '-' + widget.row + '-' + widget.col) %>"></li>
                 <% }) %>
             </ul>
         </div>
