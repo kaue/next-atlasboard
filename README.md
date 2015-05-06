@@ -1,15 +1,15 @@
 ![Atlasboard](https://bitbucket.org/atlassian/atlasboard/raw/master/screenshots/wallboard8x6.png)
 
-##Build status##
+## Build status
 
 [![Build Status](https://drone.io/bitbucket.org/atlassian/atlasboard/status.png)](https://drone.io/bitbucket.org/atlassian/atlasboard/latest)
 
-##Installation##
+## Installation
 
 `npm install -g atlasboard`
 
 
-##Creating your first wallboard##
+## Creating your first wallboard
 
 After installing Atlasboard as a global module, you may want to do this:
 
@@ -19,7 +19,7 @@ After installing Atlasboard as a global module, you may want to do this:
 to generate your wallboard.
 
 
-##Importing your first package##
+## Importing your first package
 
 You probably want to reuse the dashboards, widgets and jobs that people have already created.
 
@@ -40,7 +40,8 @@ Check out the [Atlasboard website](http://atlasboard.bitbucket.org).
 
 ## Release history
 
-###0.11.0
+### 0.11.0
+
 - Remove console-helper
 - Allow custom templates to be defined in the local wallboard
 - Add bower to manage Atlasboard core front-end dependencies
@@ -51,7 +52,8 @@ Check out the [Atlasboard website](http://atlasboard.bitbucket.org).
 - Fix deprecation warnings in use of Express
 - Warning when multiple callback execution detected in a job
 
-###0.10.0
+### 0.10.0
+
 - Enable the cookie jar for request
 - Introduce install command and --noinstall option to start command
 - Add HipChat roomInfo endpoint and support for api v2
@@ -61,7 +63,8 @@ Check out the [Atlasboard website](http://atlasboard.bitbucket.org).
 - Always send error events to the client
 - Don't use absolute links / proxy support
 
-###0.9.0
+### 0.9.0
+
 - Fix warning icon image
 - Use spin.js instead of an image spinner
 - Bump gridster to 0.5.6
@@ -70,14 +73,16 @@ Check out the [Atlasboard website](http://atlasboard.bitbucket.org).
 - Make sure config is never undefined
 - Fixing schedulers so job execution doesn't overlap if it takes too long
 
-###0.8.0
+### 0.8.0
+
 - Improve project and job scaffolding
 - Add unit test to new job template
 - Bump up a bunch of dependencies (it was about time!)
 - Improve socket.io reconnect
 - Add new shinny 8x6 grid size screenshot
 
-###0.7.0
+### 0.7.0
+
 - Allow configurable (per dashboard) grid size (issue #64)
 - Bump up cheerio to 0.13.1
 - Bump up grister to 0.5.1
@@ -85,7 +90,8 @@ Check out the [Atlasboard website](http://atlasboard.bitbucket.org).
 - related to issue #64)
 - Fix package.json "bin" attribute relative path.
 
-###0.6.0
+### 0.6.0
+
 - FIX: Issue #62. Properly namespace widget CSS by working with AST rules
 - Issue #50 and #60. Make easier developing new jobs by adding filters to atlasboard start
 - Refactor commands
@@ -94,33 +100,40 @@ Check out the [Atlasboard website](http://atlasboard.bitbucket.org).
 - Ensure that we return pg clients to the connection pool
 - Other minor fixes
 
-###0.5.6
+### 0.5.6
+
 - Added easyRequest for easier querying HTTP resources.
 
-###0.5.5
+### 0.5.5
+
 - Upping rickshaw graphics
 
-###0.5.4
+### 0.5.4
+
 - workaround was clearing the cache)
 
-###0.5.3
+### 0.5.3
+
 - FIX: Issue #53 Two versions of colors on disk throw.
 - Some refactoring and some of the pending code style changes.
 - Add build status using drone.io
 - package order resolution in widgets
 - FIX: Function.prototype.apply expect array in second arguments
 
-###0.5.2
+### 0.5.2
+
 - Add moment as job dependency
 - Add underscore job dependency
 - Add async dependency for jobs
 - Use non-minified versions for easy browser debugging
 - Add/remove widget-level loading class for better styling context
 
-###0.5.1
+### 0.5.1
+
 - Issue #42: fixed small regression for reconnects
 
-###0.5.0
+### 0.5.0
+
 - Move packages from packages to samples/project/packages to avoid users build the dashboard in an atlasboard clone.
 - Clearer error message when job not found
 - Add {"start": "atlasboard start"} to project scaffold package.json
@@ -132,7 +145,8 @@ Check out the [Atlasboard website](http://atlasboard.bitbucket.org).
 - Add storage dependency. Refactor dependency injection.
 - Issue #28 Add support for credentials file path
 
-###0.4.0
+### 0.4.0
+
 - Change widget naming to not include widget id anymore
 - Added default config file so the custom one gets extended from this one.
 - Fix default dashboard so it has the necessary widgets to fill the whole screen.
@@ -146,10 +160,12 @@ Check out the [Atlasboard website](http://atlasboard.bitbucket.org).
 - A dashboard name must match /^[a-zA-Z0-9_-]*$/ to be valid.
 - Other minor fixes.
 
-###0.3.1
+### 0.3.1
+
 - FIX: Require node 0.8 or higher in package.json
 
-###0.3.0
+### 0.3.0
+
 - Real-time logging visualization!.
 - Issue #13: "generate dashboard" generates files in a sub-folder.
 - Removed sample dashboard from atlasboard.
@@ -163,14 +179,17 @@ Check out the [Atlasboard website](http://atlasboard.bitbucket.org).
 - Enable serving of custom images from dashboards
 - Improve startup banner
 
-###0.2.0
+### 0.2.0
+
 - can now resize browser and scale AtlasBoard.
 - use connect-asset for common assets, since we are fetching now widget assets on demand.
 
-###0.1.1
+### 0.1.1
+
 - new atlasboard "list" command.
 - handle errors on child process when executing "npm install".
 - use minified versions of javascript libraries.
 
-###0.1.0
+### 0.1.0
+
 - first release after some important changes in the core architecture.
