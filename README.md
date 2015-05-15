@@ -40,6 +40,10 @@ Check out the [Atlasboard website](http://atlasboard.bitbucket.org).
 
 ## Release history
 
+### 0.12.0
+
+- Added a check to change the NPM command executed based on platform
+
 ### 0.11.0
 
 - Remove console-helper
