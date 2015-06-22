@@ -1,10 +1,11 @@
 var assert = require ('assert'),
-    sinon = require ('sinon');
+    sinon = require ('sinon'),
+    Scheduler = require('../lib/scheduler');
 
 describe ('scheduler', function(){
-  var scheduler = require('../lib/scheduler')();
-  var widgets;
 
+  var widgets;
+  var scheduler;
   var stub;
   var clock;
   var mockJobWorker;
@@ -25,6 +26,8 @@ describe ('scheduler', function(){
       }
     };
 
+    scheduler = new Scheduler(mockJobWorker, widgets, {});
+
     stub = sinon.stub(mockJobWorker, "task", function(config, dependencies, cb) {
       cb(null, {});
     });
@@ -37,9 +40,9 @@ describe ('scheduler', function(){
     done();
   });
 
-  it('should execute the job then it is run', function(done){
+  it('should execute the job then "start" is executed', function(done){
     this.timeout(50);
-    mockJobWorker.task = function (config, dependencies, cb){
+    mockJobWorker.task = function (){
       done();
     };
     scheduler.start(mockJobWorker, widgets);
@@ -154,7 +157,7 @@ describe ('scheduler', function(){
     scheduler.start(mockJobWorker, widgets);
     clock.tick(3000);
     // we expect the initial call plus one call every second (one third of the original interval in recovery mode)
-    assert.equal(4, mockJobWorker.task.callCount); 
+    assert.equal(4, mockJobWorker.task.callCount);
     done();
   });
 
