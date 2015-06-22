@@ -42,11 +42,11 @@ describe ('scheduler', function(){
     mockJobWorker.task = function (config, dependencies, cb){
       done();
     };
-    scheduler.schedule(mockJobWorker, widgets);
+    scheduler.start(mockJobWorker, widgets);
   });
 
   it('should schedule a job to be executed in the future in intervals of time', function(done){
-    scheduler.schedule(mockJobWorker, widgets);
+    scheduler.start(mockJobWorker, widgets);
     clock.tick(3000);
     clock.tick(3000);
     assert.ok(stub.calledThrice);
@@ -55,7 +55,7 @@ describe ('scheduler', function(){
 
   it('should set 1 sec as the minimum interval period', function(done){
     mockJobWorker.config.interval = 10; //really low interval
-    scheduler.schedule(mockJobWorker, widgets);
+    scheduler.start(mockJobWorker, widgets);
     clock.tick(1000);
     clock.tick(1000);
     assert.ok(stub.calledThrice);
@@ -67,7 +67,7 @@ describe ('scheduler', function(){
       this.counter = (this.counter || 0) + 1;
       cb(null, {});
     };
-    scheduler.schedule(mockJobWorker, widgets);
+    scheduler.start(mockJobWorker, widgets);
     clock.tick(3000);
     clock.tick(3000);
     assert.equal(3, mockJobWorker.counter);
@@ -81,7 +81,7 @@ describe ('scheduler', function(){
     widgets.sendData = function(data){
       done();
     };
-    scheduler.schedule(mockJobWorker, widgets);
+    scheduler.start(mockJobWorker, widgets);
   });
 
   it('should handle and log asynchronous errors', function(done){
@@ -92,7 +92,7 @@ describe ('scheduler', function(){
       assert.ok(error);
       done();
     };
-    scheduler.schedule(mockJobWorker, widgets);
+    scheduler.start(mockJobWorker, widgets);
   });
 
   it('should notify client on asynchronous errors', function(done){
@@ -103,7 +103,7 @@ describe ('scheduler', function(){
       assert.ok(data.error);
       done();
     };
-    scheduler.schedule(mockJobWorker, widgets);
+    scheduler.start(mockJobWorker, widgets);
   });
 
   it('should allow a grace period to raise errors if retryOnErrorTimes is defined', function(done){
@@ -113,7 +113,7 @@ describe ('scheduler', function(){
       numberCalls++;
       cb('err');
     };
-    scheduler.schedule(mockJobWorker, widgets);
+    scheduler.start(mockJobWorker, widgets);
     clock.tick(3000/3);
     clock.tick(3000/3);
     assert.equal(3, numberCalls);
@@ -122,7 +122,7 @@ describe ('scheduler', function(){
 
   it('should handle synchronous errors in job execution', function(done){
     mockJobWorker.task = sinon.stub().throws('err');
-    scheduler.schedule(mockJobWorker, widgets);
+    scheduler.start(mockJobWorker, widgets);
     assert.ok(mockJobWorker.task.calledOnce);
     done();
   });
@@ -133,7 +133,7 @@ describe ('scheduler', function(){
       assert.ok(data.error);
       done();
     };
-    scheduler.schedule(mockJobWorker, widgets);
+    scheduler.start(mockJobWorker, widgets);
     assert.ok(mockJobWorker.task.calledOnce);
   });
 
@@ -144,14 +144,14 @@ describe ('scheduler', function(){
       assert.ok(data.error);
       done();
     };
-    scheduler.schedule(mockJobWorker, widgets);
+    scheduler.start(mockJobWorker, widgets);
     assert.ok(mockJobWorker.task.calledOnce);
   });
 
   it('should schedule task even if there was a synchronous error', function (done) {
     mockJobWorker.task = sinon.stub().throws('err');
 
-    scheduler.schedule(mockJobWorker, widgets);
+    scheduler.start(mockJobWorker, widgets);
     clock.tick(3000);
     // we expect the initial call plus one call every second (one third of the original interval in recovery mode)
     assert.equal(4, mockJobWorker.task.callCount); 
@@ -165,7 +165,7 @@ describe ('scheduler', function(){
         cb(null, {});
       }, 10000);
     });
-    scheduler.schedule(mockJobWorker, widgets);
+    scheduler.start(mockJobWorker, widgets);
     clock.tick(13000);
     clock.tick(13000);
     assert.ok(stub.calledThrice);
@@ -181,7 +181,7 @@ describe ('scheduler', function(){
       assert.ok(msg.indexOf('job_callback executed more than once') > -1);
       done();
     };
-    scheduler.schedule(mockJobWorker, widgets);
+    scheduler.start(mockJobWorker, widgets);
   });
 
 });
