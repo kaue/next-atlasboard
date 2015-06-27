@@ -1,10 +1,11 @@
 var assert = require ('assert'),
-    sinon = require ('sinon');
+    sinon = require ('sinon'),
+    Scheduler = require('../lib/scheduler');
 
 describe ('scheduler', function(){
-  var scheduler = require('../lib/scheduler')();
-  var widgets;
 
+  var widgets;
+  var scheduler;
   var stub;
   var clock;
   var mockJobWorker;
@@ -37,16 +38,17 @@ describe ('scheduler', function(){
     done();
   });
 
-  it('should execute the job then it is run', function(done){
-    this.timeout(50);
-    mockJobWorker.task = function (config, dependencies, cb){
+  it('should execute the job when "start" is executed', function(done){
+    scheduler = new Scheduler(mockJobWorker, widgets, {});
+    mockJobWorker.task = function (){
       done();
     };
-    scheduler.schedule(mockJobWorker, widgets);
+    scheduler.start(mockJobWorker, widgets);
   });
 
   it('should schedule a job to be executed in the future in intervals of time', function(done){
-    scheduler.schedule(mockJobWorker, widgets);
+    scheduler = new Scheduler(mockJobWorker, widgets, {});
+    scheduler.start(mockJobWorker, widgets);
     clock.tick(3000);
     clock.tick(3000);
     assert.ok(stub.calledThrice);
@@ -54,10 +56,21 @@ describe ('scheduler', function(){
   });
 
   it('should set 1 sec as the minimum interval period', function(done){
-    mockJobWorker.config.interval = 10; //really low interval
-    scheduler.schedule(mockJobWorker, widgets);
+    mockJobWorker.config.interval = 10; // really low interval (ms)
+    scheduler = new Scheduler(mockJobWorker, widgets, {});
+    scheduler.start(mockJobWorker, widgets);
     clock.tick(1000);
     clock.tick(1000);
+    assert.ok(stub.calledThrice);
+    done();
+  });
+
+  it('should set 60 sec if interval is not provided', function(done){
+    mockJobWorker.config.interval = null;
+    scheduler = new Scheduler(mockJobWorker, widgets, {});
+    scheduler.start(mockJobWorker, widgets);
+    clock.tick(60000);
+    clock.tick(60000);
     assert.ok(stub.calledThrice);
     done();
   });
@@ -67,21 +80,23 @@ describe ('scheduler', function(){
       this.counter = (this.counter || 0) + 1;
       cb(null, {});
     };
-    scheduler.schedule(mockJobWorker, widgets);
+    scheduler = new Scheduler(mockJobWorker, widgets, {});
+    scheduler.start(mockJobWorker, widgets);
     clock.tick(3000);
     clock.tick(3000);
     assert.equal(3, mockJobWorker.counter);
     done();
   });
 
-  it('should schedule an empty data parameter', function(done){
+  it('should schedule when received an empty data parameter', function(done){
     mockJobWorker.task = function (config, dependencies, cb){
       cb(null);
     };
-    widgets.sendData = function(data){
+    widgets.sendData = function(){
       done();
     };
-    scheduler.schedule(mockJobWorker, widgets);
+    scheduler = new Scheduler(mockJobWorker, widgets, {});
+    scheduler.start(mockJobWorker, widgets);
   });
 
   it('should handle and log asynchronous errors', function(done){
@@ -92,7 +107,8 @@ describe ('scheduler', function(){
       assert.ok(error);
       done();
     };
-    scheduler.schedule(mockJobWorker, widgets);
+    scheduler = new Scheduler(mockJobWorker, widgets, {});
+    scheduler.start(mockJobWorker, widgets);
   });
 
   it('should notify client on asynchronous errors', function(done){
@@ -103,26 +119,48 @@ describe ('scheduler', function(){
       assert.ok(data.error);
       done();
     };
-    scheduler.schedule(mockJobWorker, widgets);
+    scheduler = new Scheduler(mockJobWorker, widgets, {});
+    scheduler.start(mockJobWorker, widgets);
   });
 
   it('should allow a grace period to raise errors if retryOnErrorTimes is defined', function(done){
     mockJobWorker.config.retryOnErrorTimes = 3;
-    var numberCalls = 0;
-    mockJobWorker.task = function (config, dependencies, cb){
-      numberCalls++;
-      cb('err');
+    var numberJobExecutions = 0;
+    var numberCallsSendDataWithErrors = 0;
+    var numberCallsSendDataWithSuccess = 0;
+
+    widgets.sendData = function (data) {
+      if (data.error) {
+        numberCallsSendDataWithErrors++;
+      } else {
+        numberCallsSendDataWithSuccess++;
+      }
     };
-    scheduler.schedule(mockJobWorker, widgets);
+
+    mockJobWorker.task = function (config, dependencies, cb){
+      if (numberJobExecutions === 0) {
+        cb();
+      }
+      else {
+        cb('err');
+      }
+      numberJobExecutions++;
+    };
+
+    scheduler = new Scheduler(mockJobWorker, widgets, {});
+    scheduler.start(mockJobWorker, widgets);
+    clock.tick(3000);
     clock.tick(3000/3);
     clock.tick(3000/3);
-    assert.equal(3, numberCalls);
+    assert.equal(4, numberJobExecutions);
+    assert.equal(1, numberCallsSendDataWithErrors);
     done();
   });
 
   it('should handle synchronous errors in job execution', function(done){
     mockJobWorker.task = sinon.stub().throws('err');
-    scheduler.schedule(mockJobWorker, widgets);
+    scheduler = new Scheduler(mockJobWorker, widgets, {});
+    scheduler.start(mockJobWorker, widgets);
     assert.ok(mockJobWorker.task.calledOnce);
     done();
   });
@@ -133,7 +171,8 @@ describe ('scheduler', function(){
       assert.ok(data.error);
       done();
     };
-    scheduler.schedule(mockJobWorker, widgets);
+    scheduler = new Scheduler(mockJobWorker, widgets, {});
+    scheduler.start(mockJobWorker, widgets);
     assert.ok(mockJobWorker.task.calledOnce);
   });
 
@@ -144,17 +183,19 @@ describe ('scheduler', function(){
       assert.ok(data.error);
       done();
     };
-    scheduler.schedule(mockJobWorker, widgets);
+    scheduler = new Scheduler(mockJobWorker, widgets, {});
+    scheduler.start(mockJobWorker, widgets);
     assert.ok(mockJobWorker.task.calledOnce);
   });
 
   it('should schedule task even if there was a synchronous error', function (done) {
     mockJobWorker.task = sinon.stub().throws('err');
 
-    scheduler.schedule(mockJobWorker, widgets);
+    scheduler = new Scheduler(mockJobWorker, widgets, {});
+    scheduler.start(mockJobWorker, widgets);
     clock.tick(3000);
     // we expect the initial call plus one call every second (one third of the original interval in recovery mode)
-    assert.equal(4, mockJobWorker.task.callCount); 
+    assert.equal(4, mockJobWorker.task.callCount);
     done();
   });
 
@@ -165,7 +206,8 @@ describe ('scheduler', function(){
         cb(null, {});
       }, 10000);
     });
-    scheduler.schedule(mockJobWorker, widgets);
+    scheduler = new Scheduler(mockJobWorker, widgets, {});
+    scheduler.start(mockJobWorker, widgets);
     clock.tick(13000);
     clock.tick(13000);
     assert.ok(stub.calledThrice);
@@ -181,7 +223,8 @@ describe ('scheduler', function(){
       assert.ok(msg.indexOf('job_callback executed more than once') > -1);
       done();
     };
-    scheduler.schedule(mockJobWorker, widgets);
+    scheduler = new Scheduler(mockJobWorker, widgets, {});
+    scheduler.start(mockJobWorker, widgets);
   });
 
 });
