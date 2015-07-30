@@ -12,41 +12,6 @@ $(function() {
     $('.content.auto-font-resize', $el).css({"font-size" : newFontSize + 'px'});
   }
 
-  //----------------------
-  // Alert for timeouts
-  //----------------------
-  function check_last_server_communication (li, config){
-    
-    config = $.extend({}, config);
-    
-    var lastUpdate = $(li).attr('last-update');
-
-    if (lastUpdate){
-      var elapsedEl = '.widget-title span.widget-elapsed';
-      if ($(elapsedEl, li).length === 0){
-        $('.widget-title', li).append('<span class="widget-elapsed"></span>');
-      }
-
-      var elapsed = ((+new Date()) - lastUpdate);
-
-      if (config.interval){ // job has a specific predefined interval
-        // calculate based on retryOnErrorTimes or use 2xinterval.
-        var max_time_to_show_offline = config.interval * (config.retryOnErrorTimes || 2);
-        if (elapsed > max_time_to_show_offline){ // this widget if offline
-          var str_elapsed = ' <span class="alert alert_high">&gt;1h</span>';
-          $('.widget-title span.widget-elapsed', li).html(str_elapsed);
-          $(li).addClass('offline');
-        }
-        else{
-          $('.widget-title span.widget-elapsed', li).html('');
-          $(li).removeClass('offline');
-        }
-
-        $('.widget-title span.widget-elapsed', li).html('');
-      }
-    }
-  }
-
   var defaultHandlers = { // they can be overwritten by widget´s custom implementation
     onError : function (el, data){
       console.error(data);
@@ -93,10 +58,10 @@ $(function() {
     var widgetId = encodeURIComponent($(li).attr("data-widget-id"));
     var eventId = $(li).attr("data-event-id");
 
-    var $errorContainer = $("<div>").addClass("error").addClass("icon-message").appendTo($(li)).hide();
+    var $errorContainer = $("<div>").addClass("error").appendTo($(li)).hide();
     $errorContainer.append($("<div>").addClass("container").append($("<img src=\"images/warning.png\">")));
 
-    var $spinnerContainer = $("<div>").addClass("spinner").addClass("icon-message").appendTo($(li)).hide();
+    var $spinnerContainer = $("<div>").addClass("spinner").appendTo($(li)).hide();
     var spinner = new Spinner({className: 'spinner', color:'#fff', width:5, length:15, radius: 25, lines: 12,  speed:0.7}).spin();
     $spinnerContainer.append($("<div>").addClass("container").append(spinner.el));
 
@@ -135,24 +100,9 @@ $(function() {
           catch (e){
             log_error(widget_js, e);
           }
-
-          // save timestamp
-          $(li).attr("last-update", +new Date());
-
-          //----------------------
-          // Server timeout notifications
-          //----------------------
-          if (!data.error && !widget_js.config){ // fill config when first data arrives
-            widget_js.config = data.config;
-            setInterval(function(){
-              check_last_server_communication(li, widget_js.config);
-            }, 5000);
-          }
         });
 
         io.emit("resend", eventId);
-        console.log("Sending resend for " + eventId);
-
       });
     });
   }
