@@ -40,6 +40,11 @@ Check out the [Atlasboard website](http://atlasboard.bitbucket.org).
 
 ## Release history
 
+### 0.13.0
+
+- Fix issue #98: Expose pushUpdate functions to jobs to push updates to the widget independently of the scheduler interval cycle
+- Internal scheduler refactoring. Remove singletons
+
 ### 0.12.0
 
 - Added a check to change the NPM command executed based on platform
@@ -91,7 +96,7 @@ Check out the [Atlasboard website](http://atlasboard.bitbucket.org).
 - Bump up cheerio to 0.13.1
 - Bump up grister to 0.5.1
 - Avoid widget title wrapping
-- related to issue #64)
+- related to issue #64
 - Fix package.json "bin" attribute relative path.
 
 ### 0.6.0
