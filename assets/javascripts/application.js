@@ -18,7 +18,7 @@ $(function() {
     },
     onInit : function (el, data){
       $(el).parent().children().hide();
-      $(el).parent().children(".spinner").show();
+      $(el).parent().children(".spinner").fadeIn();
       resizeBaseLineBasedOnWidgetWith($(el));
     }
   };
@@ -31,17 +31,24 @@ $(function() {
 
   var globalHandlers = { // global pre-post event handlers
     onPreError : function (el, data){
-      $(el).children().hide();
+      var $errorContainer = $(el).children(".widget-error");
       if (data && data.error === 'disabled'){
-        $(el).children(".widget-container").html('<div class=disabled>DISABLED</div>').show();
+        $errorContainer.html('<span class="disabled">DISABLED</span>');
       } else {
-        $(el).children(".error").show(); // error icon
+        $errorContainer.html('<span class="error">⚠</span>');
+      }
+
+      if (!$errorContainer.is(':visible')) {
+        $(el).children().hide();
+        $errorContainer.fadeIn();
       }
     },
 
     onPreData : function (el, data){
-      $(el).children().hide();
-      $(el).children(".widget-container").show();
+      if (!$('.widget-container', el).is(':visible')){
+        $(el).children().fadeOut(500);
+        $(el).children(".widget-container").fadeIn(1000);
+      }
     }
   };
 
@@ -58,12 +65,10 @@ $(function() {
     var widgetId = encodeURIComponent($(li).attr("data-widget-id"));
     var eventId = $(li).attr("data-event-id");
 
-    var $errorContainer = $("<div>").addClass("error").appendTo($(li)).hide();
-    $errorContainer.append($("<div>").addClass("container").append($("<img src=\"images/warning.png\">")));
+    var $errorContainer = $("<div>").addClass("widget-error").appendTo($(li)).hide();
 
-    var $spinnerContainer = $("<div>").addClass("spinner").appendTo($(li)).hide();
     var spinner = new Spinner({className: 'spinner', color:'#fff', width:5, length:15, radius: 25, lines: 12,  speed:0.7}).spin();
-    $spinnerContainer.append($("<div>").addClass("container").append(spinner.el));
+    $("<div>").addClass("spinner").append(spinner.el).appendTo($(li)).hide();
 
     var $widgetContainer = $("<div>").addClass("widget-container").appendTo($(li)).hide();
 
