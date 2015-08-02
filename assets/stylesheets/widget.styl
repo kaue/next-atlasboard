@@ -2,12 +2,18 @@
   background-color widgetBackgroundColor
   color #fff
   padding widgetPadding
-  border-radius (gutterSize / 8)
   box-shadow 0 0 5px #111
   overflow hidden
 
+  border-radius (gutterSize / 4)
+  border: widgetBorder
+
 .widget-container
   width 100%
+  padding widgetContainerPadding
+
+  > .content
+    padding widgetContentPadding
 
 .widget-error
   text-align center
@@ -24,6 +30,8 @@
   display block
 
 h2
+  background-color widgetTitleBackgroundColor
+  padding widgetTitlePadding
   font-size widgetTitleFontSize
   line-height widgetTitleFontSize
   margin-top 0

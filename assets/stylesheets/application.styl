@@ -16,6 +16,7 @@
 
 body
   background backgroundColor
+  padding bodyPadding
   font-family fontFamily
   overflow hidden
 
@@ -30,8 +31,11 @@ body
     opacity .3
 
 #widgets-container
-  & > ul > li
-    @import 'widget'
+  & > ul
+    list-style none
+
+    > li
+      @import 'widget'
 
 @import 'dashboard-list'
 @import 'common'
