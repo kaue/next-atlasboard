@@ -1,23 +1,39 @@
 #dashboard-list
   width 100%
+  padding 2em
+
+  h1
+    text-transform uppercase
+    font-size 1em
+    color widgetTitleColor
+    margin-bottom 1em
 
   ul
     list-style none
     padding 0
+    margin 0
 
     li
       background widgetBackgroundColor
-      color #fff
-      padding (gutterSize / 2)
       margin (gutterSize / 2)
       border-radius (gutterSize / 8)
       box-shadow 0 0 5px #111
       overflow hidden
       float left
-      width 23%
-      font-size 2em
+      width 30%
 
       a
+        border: widgetBorder
+        color #fff
+        display: inline-block;
+        font-size 2em
+        padding (gutterSize / 2) (gutterSize)
         text-decoration none
-        color white
         text-transform uppercase
+        -webkit-transition-duration: 0.2s;
+        transition-duration: 0.2s;
+        width 100%
+
+        &:hover
+          border: solid 2px #333
+          background-color #232323
