@@ -35,7 +35,7 @@ $(function() {
       if (data && data.error === 'disabled'){
         $errorContainer.html('<span class="disabled">DISABLED</span>');
       } else {
-        $errorContainer.html('<span class="error">⚠</span>');
+        $errorContainer.html('<span class="error">&#9888;</span>');
       }
 
       if (!$errorContainer.is(':visible')) {
