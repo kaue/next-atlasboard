@@ -1,11 +1,7 @@
 // nib is a powerful lib for stylus that provides cross-browser css3 mixins.
 // No more vendor prefixes. http//visionmedia.github.com/nib/
 @import 'nib'
-
-gutter = 30px
-dimmed = #444444
-background = #181818
-widgetheader = #454545
+@import 'variables'
 
 // Apply a natural box layout model to all elements.
 // http//paulirish.com/2012/box-sizing-border-box-ftw/
@@ -13,174 +9,33 @@ widgetheader = #454545
   box-sizing border-box
 
 @font-face
-  font-family 'Roboto Condensed'
+  font-family fontFamily
   font-style normal
   font-weight 400
   src local('Roboto Condensed Regular'), local('RobotoCondensed-Regular'), url('../../fonts/roboto-condensed.woff') format('woff')
 
-
 body
-  background background
-  font-family 'Roboto Condensed'
+  background backgroundColor
+  padding bodyPadding
+  font-family fontFamily
   overflow hidden
-
-.uppercase
-    text-transform uppercase
-
-.icon-message
-    display table
-    height 100%
-    width 100%
-    .container
-        display table-cell
-        vertical-align middle
-        .spinner
-            margin 0 auto
-            display block
-
-#disconnected
-  display none
-  background: #f00
-  border-radius 5px
-  color #fff
-  padding 10px
-  font-size 20px
-  position absolute
-  width 40%
-  margin auto
-  left 5%
-  top 5%
-  z-index 1000
 
 #main-container
   width 1920px
   height 1080px
-  padding (gutter/2)
+  padding (gutterSize/2)
   transform-origin 0 0
   margin 0 auto
 
   &.disconnected
     opacity .3
 
-  #dashboard-list
-    width 100%
-    ul
-        list-style none
-        padding 0
-    li
-        background rgb(15, 15, 15)
-        color #fff
-        padding (gutter / 2)
-        margin (gutter / 2)
-        border-radius (gutter / 8)
-        box-shadow 0 0 5px #111
-        overflow hidden
-        float left
-        width 23%
-        font-size 2em
-        a
-            text-decoration none
-            color white
-            text-transform uppercase
+#widgets-container
+  & > ul
+    list-style none
 
+    > li
+      @import 'widget'
 
-  #widgets-container
-
-      clear both
-
-      & > ul
-          list-style none
-          padding 0
-
-          & > li
-            background rgb(15, 15, 15)
-            color #fff
-            padding (gutter / 2)
-            border-radius (gutter / 8)
-            box-shadow 0 0 5px #111
-            overflow hidden
-
-            &.editing
-               z-index 32767
-               box-shadow 0 0 15px #333
-
-            &:hover .edit
-                display block
-
-            .content
-              &.offline, &.onerror
-                opacity 0.2
-
-            .edit
-                display none
-                width 20px
-                height 20px
-                position absolute
-                top (gutter/2)
-                right  (gutter/2)
-                border none
-                text-indent -9999px
-                background transparent no-repeat unquote('url(dataimage/pngbase64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAQAAAC1+jfqAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAGSSURBVCjPVVFNSwJhEF78Ad79Cf6PvXQRsotUlzKICosuRYmR2RJR0KE6lBFFZVEbpFBSqKu2rum6llFS9HHI4iUhT153n6ZtIWMOM+/MM88z7wwH7s9Ub16SJcnbmrNcxVm2q7Z8/QPvEOtntpj92NkCqITLepEpjix7xQtiLOoQ2b6+E7YAN/5nfOEJ2WbKqOIOJ4bYVMEQx4LfBBQDsvFMhUcCVU1/CxVXmDBGA5ZETrhDCQVcYAPbyEJBhvrnBVPiSpNr6cYDNCQwo4zzU/ySckkgDYuNuVpI42T9k4gLKGMPs/xPzzovQiY2hQYe0jlJfyNNhTqiWDYBq/wBMcSRpnyPzu1oS7WtxjVBSthU1vgVksiQ3Dn6Gp5ah2YOKQo5GiuHPA6xT1EKpxQNCNYejgIR457KKio0S56YckjSa9jo//3mrj+BV0QQagqGTOo+Y7gZIf1puP3WHoLhEb2PjTlCTCWGXtbp8DCX3hZuOdaIc9A+aQvWk4ihq95p67a7nP+u+Ws+r0dql9z/zv0NCYhdCPKZ7oYAAAAASUVORK5CYII=)')
-
-            .disabled
-                font-size 4em
-                text-align center
-                opacity 0.1
-
-      &.loading
-         color #333
-
-        h2
-            font-size gutter
-            // Stylus is trying to be damn too clever.
-            margin-top 0
-            margin-left -(gutter/2)
-            margin-right -(gutter/2)
-            margin-bottom (gutter/2)
-            padding 0 (gutter/2) 0 (gutter/2)
-            text-transform uppercase
-            color widgetheader
-            line-height 90%
-            overflow: hidden
-            text-overflow: ellipsis
-            white-space: nowrap
-
-big
-     color #fff
-     font-size gutter * 2
-     font-weight bold
-
-.error
-  color red
-  font-size gutter
-
-  .container 
-    text-align: center
-
-  &.icon-message > .container > img
-    opacity .4
-    height 40%
-
-
-.error-display
-    display none
-    padding-left 20px
-    padding-bottom 3px
-
-.error-display.show
-    display inline !important
-
-.widget-title span.alert
-  text-transform lowercase
-  font-size 80%
-  opacity 0.8
-
-.widget-title span.alert_low
-  color yellow
-
-.widget-container
-  width 100%
-
-.widget-title span.alert_high
-  color red
-
+@import 'dashboard-list'
+@import 'common'

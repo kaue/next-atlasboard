@@ -13,19 +13,16 @@
     <title>AtlasBoard</title>
     <meta name="viewport" content="width=device-width">
     <link rel="stylesheet" href="stylesheets/normalize.css" type="text/css" media="screen" />
-    <link rel="stylesheet" href="stylesheets/helpers.css" type="text/css" media="screen" />
     <link rel="stylesheet" href="stylesheets/application.css" type="text/css" media="screen" />
 </head>
 <body>
-<div id="main-container">
-    <h1>Available Dashboards</h1>
     <div id="dashboard-list">
+        <h1>Available Dashboards</h1>
         <ul>
             <% dashboards.forEach(function (dashboard) { %>
                 <li><a href="<%= dashboard %>"><%= dashboard %></a></li>
             <% }) %>
         </ul>
     </div>
-</div>
 </body>
 </html>
