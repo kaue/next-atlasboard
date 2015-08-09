@@ -9,21 +9,21 @@
   box-sizing border-box
 
 @font-face
-  font-family fontFamily
+  font-family $fontFamily
   font-style normal
   font-weight 400
   src local('Roboto Condensed Regular'), local('RobotoCondensed-Regular'), url('../../fonts/roboto-condensed.woff') format('woff')
 
 body
-  background backgroundColor
-  padding bodyPadding
-  font-family fontFamily
+  background $backgroundColor
+  padding $bodyPadding
+  font-family $fontFamily
   overflow hidden
 
 #main-container
   width 1920px
   height 1080px
-  padding (gutterSize/2)
+  padding ($gutterSize/2)
   transform-origin 0 0
   margin 0 auto
 

@@ -1,23 +1,22 @@
 &
-  background-color widgetBackgroundColor
-  color #fff
-  padding widgetPadding
+  background-color $widgetBackgroundColor
+  border-radius ($gutterSize / 4)
+  border: $widgetBorder
   box-shadow 0 0 5px #111
+  color #fff
   overflow hidden
-
-  border-radius (gutterSize / 4)
-  border: widgetBorder
+  padding $widgetPadding
 
 .widget-container
   width 100%
-  padding widgetContainerPadding
+  padding $widgetContainerPadding
 
   > .content
-    padding widgetContentPadding
+    padding $widgetContentPadding
 
 .widget-error
-  text-align center
   opacity 0.1
+  text-align center
 
   .disabled
     font-size 4em
@@ -26,19 +25,19 @@
     font-size 8em
 
 .spinner
-  margin 0 auto
   display block
+  margin 0 auto
 
 h2
-  background-color widgetTitleBackgroundColor
-  padding widgetTitlePadding
-  font-size widgetTitleFontSize
-  line-height widgetTitleFontSize
+  background-color $widgetTitleBackgroundColor
+  color $widgetTitleColor
+  font-size $widgetTitleFontSize
+  padding $widgetTitlePadding
+  line-height $widgetTitleFontSize
   margin-top 0
-  margin-bottom (gutterSize / 2)
-  text-transform uppercase
-  color widgetTitleColor
+  margin-bottom ($gutterSize / 2)
   overflow: hidden
+  text-transform uppercase
   text-overflow: ellipsis
   white-space: nowrap
 
