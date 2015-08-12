@@ -10,7 +10,8 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>AtlasBoard</title>
+    <title>AtlasBoard <% if (dashboardConfig.title) { %> - <%= dashboardConfig.title %><% } %>
+    </title>
     <meta name="viewport" content="width=device-width">
 
     <!--
@@ -26,16 +27,16 @@
     <link rel="icon" type="image/png" href="images/favicon.png"/>
 </head>
 <body>
-    <% if (dashboardConfig.title) { %>
-        <h1><%= dashboardConfig.title %></h1>
-    <% } %>
-
     <script>
         var grid_columns = <%=(dashboardConfig.layout.gridSize && dashboardConfig.layout.gridSize.columns || 6) %>;
         var grid_rows = <%=(dashboardConfig.layout.gridSize && dashboardConfig.layout.gridSize.rows || 4) %>;
     </script>
 
     <div id="main-container">
+        <% if (dashboardConfig.title) { %>
+        <h1 class="title"><%= dashboardConfig.title %></h1>
+        <% } %>
+
         <div id="widgets-container" class="gridster">
             <ul>
                 <% dashboardConfig.layout.widgets.forEach(function (widget) { %>
