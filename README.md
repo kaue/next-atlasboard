@@ -17,9 +17,9 @@ Atlasboard is a dashboard framework written in nodejs. Check out the [website](h
 
 # Importing your first package
 
-You probably want to reuse other people's dashboards, widgets and jobs, so you'll need to import a "package", which is just a [git submodule](http://git-scm.com/docs/git-submodule).
+You will probably want to reuse other people's dashboards, widgets and jobs. To do so, you'll need to import a "package", which is just a [git submodule](http://git-scm.com/docs/git-submodule).
 
-The [Atlassian package](https://bitbucket.org/atlassian/atlasboard-atlassian-package) is a good start. If you didn't, initialise a git repository for your new wallboard first, and then type:
+The [Atlassian package](https://bitbucket.org/atlassian/atlasboard-atlassian-package) is a good place to start. If you haven't already, initialise a git repository for your new wallboard, and then type:
 
     git init
     git submodule add https://bitbucket.org/atlassian/atlasboard-atlassian-package packages/atlassian
@@ -38,7 +38,7 @@ The [Atlassian package](https://bitbucket.org/atlassian/atlasboard-atlassian-pac
 - [dcopestake's atlasboard-aws package](https://www.npmjs.com/package/atlasboard-aws)
 - [arhs-atlasboard](https://www.npmjs.com/package/arhs-atlasboard)
 
-Feel free to send us links to your own packages and we will list them here.
+If you'd like your packages to be included here, please send us a link.
 
 
 # Documentation
@@ -51,46 +51,46 @@ Feel free to send us links to your own packages and we will list them here.
 
 #### Dashboards
 
-Create your first dashboard:
+To create your first dashboard, type the following command:
 
 ```
 atlasboard generate dashboard mydashboard
 ```
 
-will create a default dashboard from [this template](https://bitbucket.org/atlassian/atlasboard/raw/master/samples/dashboard?at=master).
+This will generate a default dashboard using [this template](https://bitbucket.org/atlassian/atlasboard/raw/master/samples/dashboard?at=master).
 
 
 ##### Dashboard descriptor structure:
 
-* `enabled` enables/displays the dashboard. A quick way to hide your dashboard without having to delete it.
+* `enabled` enables/displays the dashboard. This is a quick way to hide your dashboard without having to delete it.
 
-* `title` dashboard title (optional). Most of the times you don't want it.
+* `title` dashboard title (optional). Most of the time you will not need this.
 
 * `layout`
 
     * `gridSize` grid size is customizable ( `"gridSize" : { "columns" : 8, "rows" : 6 } `)
 
-    * `customJs` the names of any extra JavaScript libraries, located in assets/javascripts, that you'd like included. *(warning: this could be moved out of the layout key in future releases)*.
+    * `customJs` the names of any extra JavaScript libraries, located in `assets/javascripts`, that you'd like included. *(warning: this could be moved out of the layout key in future releases)*.
 
-    * `widgets` an array of objects detailing each widget to be displayed on the dashboard. Each `widgets` object has the following markup:
+    * `widgets` an array of objects detailing each widget to be displayed on the dashboard. Each `widgets` object has the following attributes:
 
         * `enabled` true/false
 
-        * `row` value from 1 to max-rows.
+        * `row` value from 1 to maxRows.
 
-        * `col` value from 1 to max-columns.
+        * `col` value from 1 to maxColumns.
 
-        * `width` number of columns this widget is going to take
+        * `width` number of columns this widget will occupy
 
-        * `height` number of rows for this widget
+        * `height` number of rows this widget will occupy
 
-        * `widget` widget name. If want to refer to a widget inside an specific package, use the namespace <package>#<widgetname> syntax (i.ex: ``atlasboard#quotes``).
+        * `widget` widget name. If you want to refer to a widget inside an specific package, use the namespace `<package>#<widgetname>` syntax (e.g. ``atlasboard#quotes``).
 
-        * `job` Job to be executed. The same namespace rule applies to jobs.
+        * `job` Job to be executed. The same namespace syntax applies to specifying jobs.
 
         * `config` The config key that will be use for this dashboard item.
 
-* `config` a config object for this dashboard, containing a key value container for job configuration. 
+* `config` a config object for this dashboard, containing a key-value container for job configuration. 
 
 
 ##### Example dashboard config file
@@ -121,20 +121,19 @@ will create a default dashboard from [this template](https://bitbucket.org/atlas
 
 ##### Using the common dashboard config file
 
-If you want to share the same configuration for more than one dashboard, just place it in `/config/dashboard_common.json` so you don´t have to repeat it. Atlasboard will merge the configuration keys found in this file with the current dashboard configuration.
+If you want to share the same configuration for more than one dashboard, place it inside `/config/dashboard_common.json` so that you don´t have to repeat it. Atlasboard will merge the configuration keys found in this file with the current dashboard configuration.
 
 #### Jobs
 
-Jobs are run in the backend by the scheduler, and send data the client side widgets. You can generate one in the default package by typing:
+Jobs are run in the background by the scheduler. Their purpose is to send data to the client-side widgets. You can generate one in the default package by typing:
 
 ```
 atlasboard generate job myjob
 ```
 
-which will create a job from [this template](https://bitbucket.org/atlassian/atlasboard/raw/master/samples/job?at=master).
+This will generate a job using [this template](https://bitbucket.org/atlassian/atlasboard/raw/master/samples/job?at=master).
 
-The simplest job look like this:
-
+A very simple job could look like this:
 
 ```
 module.exports = function(config, dependencies, job_callback) {
@@ -148,7 +147,7 @@ module.exports = function(config, dependencies, job_callback) {
 };
 ```
 
-If you want to do something more interesting like doing some data scraping:
+If you want to do something more interesting, like scraping data for example:
 
 ```
 var $ = require('cheerio');
@@ -178,13 +177,13 @@ As you may notice, Atlasboards exposes a few handy dependencies. Check [their so
 
 #### Widgets
 
-Widgets run in the client side. Go ahead and create one:
+Widgets run in the client-side. To create one:
 
 ```
 atlasboard generate widget mywidget
 ```
 
-which will create a widget from [this template](https://bitbucket.org/atlassian/atlasboard/raw/master/samples/widget?at=master).
+This will generate a widget using [this template](https://bitbucket.org/atlassian/atlasboard/raw/master/samples/widget?at=master).
 
 
 These are the files created for you in your default package:
@@ -282,7 +281,7 @@ export HIPCHAT_TOKEN='yourpassword'
 
 Planned for future releases:
 
-- Extension points. Packages would be able to plug routes. Middleware. Client side plugins.
+- Extension points. Packages would be able to plug routes. Middleware. Client-side plugins.
 - Theme support.
 - Edit dashboard configuration live.
 - More and better widgets. Make easier to introduce front-end dependencies in packages. Examples of widgets written using React.
