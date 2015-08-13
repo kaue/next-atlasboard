@@ -3,12 +3,13 @@ var assert = require ('assert'),
     fs = require ('fs');
 
 describe ('sample folder integrity', function(){
-  var sampleFolder = path.join(process.cwd(), '/samples');
+
+  var templateFolder = path.join(process.cwd(), '/templates/new-components');
 
   describe ('scaffold folder', function(){
 
     describe ('config file', function(){
-      var dashboardFile = path.join(sampleFolder, 'project', 'config', 'atlasboard.json');
+      var dashboardFile = path.join(templateFolder, 'project', 'config', 'atlasboard.json');
       it('should be valid json', function(done){
         JSON.parse(fs.readFileSync(dashboardFile));
         done();
@@ -22,7 +23,7 @@ describe ('sample folder integrity', function(){
     });
 
     describe ('dashboard file', function(){
-      var dashboardFile = path.join(sampleFolder, 'dashboard', 'default.json');
+      var dashboardFile = path.join(templateFolder, 'dashboard', 'default.json');
       it('should be valid json', function(done){
         JSON.parse(fs.readFileSync(dashboardFile));
         done();
@@ -30,7 +31,7 @@ describe ('sample folder integrity', function(){
     });
 
     describe ('job file', function(){
-      var jobFile = path.join(sampleFolder, 'job', 'default.js');
+      var jobFile = path.join(templateFolder, 'job', 'default.js');
       it('should be valid executable', function(done){
         var job = require(jobFile);
 
@@ -52,7 +53,7 @@ describe ('sample folder integrity', function(){
   });
 
   describe ('project folder', function(){
-    var projectFolder = path.join(sampleFolder, 'project');
+    var projectFolder = path.join(templateFolder, 'project');
 
     describe ('dashboard file', function(){
       var dashboardFile = path.join(projectFolder, 'packages', 'demo', 'dashboards', 'myfirst_dashboard.json');

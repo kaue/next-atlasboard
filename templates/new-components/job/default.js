@@ -48,10 +48,8 @@ module.exports = function(config, dependencies, job_callback) {
     You can send data back to the widget anytime (ex: if you are hooked into a real-time data stream and
     don't want to depend on the job_callback triggered by the scheduler to push data to widgets)
 
-    */
-    this.pushUpdate({data: { title: config.widgetTitle, html: 'loading...' }});
+    jobWorker.pushUpdate({data: { title: config.widgetTitle, html: 'loading...' }});
 
-    /*
 
     4. USE OF JOB_CALLBACK
 
@@ -65,7 +63,7 @@ module.exports = function(config, dependencies, job_callback) {
     */
 
     dependencies.easyRequest.HTML('http://google.com', function(err, html){
-      logger.log(html);
+      // logger.log(html);
       job_callback(err, { title: config.widgetTitle, html: html });
     });
 };
