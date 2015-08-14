@@ -48,7 +48,7 @@ module.exports = function(config, dependencies, job_callback) {
     You can send data back to the widget anytime (ex: if you are hooked into a real-time data stream and
     don't want to depend on the job_callback triggered by the scheduler to push data to widgets)
 
-    jobWorker.pushUpdate({data: { title: config.widgetTitle, html: 'loading...' }});
+    jobWorker.pushUpdate({data: { title: config.widgetTitle, html: 'loading...' }}); // on Atlasboard > 1.0
 
 
     4. USE OF JOB_CALLBACK
