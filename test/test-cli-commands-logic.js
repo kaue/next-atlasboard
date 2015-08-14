@@ -19,6 +19,7 @@ describe ('cli commands logic', function(){
 
   var temp_folder = "test/tmp";
   var packagesLocalFolder = path.join(process.cwd(), "/test/fixtures/packages");
+  var PROJECT_TEMPLATE_PATH = "templates/new-components/project";
 
   function cleanup (cb){
     rm(temp_folder, function(){
@@ -39,7 +40,7 @@ describe ('cli commands logic', function(){
 
     it('should create a new project ok', function(done){
       var projectPath = path.join(temp_folder, 'test');
-      commandLogic.newProject("samples/project", projectPath, function(err){
+      commandLogic.newProject(PROJECT_TEMPLATE_PATH, projectPath, function(err){
         assert.ok(!err, err);
         assert.ok(fs.existsSync(path.join(projectPath, "package.json")));
         assert.ok(fs.existsSync(path.join(projectPath, "globalAuth.json")));
@@ -55,7 +56,7 @@ describe ('cli commands logic', function(){
       function test (name, cb){
         rm(temp_folder, function(err){
           fs.mkdir(temp_folder, function(err){
-            commandLogic.newProject('samples/project', path.join(temp_folder, '' + name), function(err){
+            commandLogic.newProject(PROJECT_TEMPLATE_PATH, path.join(temp_folder, '' + name), function(err){
               cb(null, !err);
             });
           });
@@ -78,14 +79,14 @@ describe ('cli commands logic', function(){
     });
 
     it('should return error if invalid path', function(done){
-      commandLogic.newProject("samples/project", '/etc/', function(err){
+      commandLogic.newProject(PROJECT_TEMPLATE_PATH, '/etc/', function(err){
         assert.ok(err);
         done();
       });
     });
 
     it('should not create a new project from a folder where a atlasboard project already exists', function(done){
-      commandLogic.newProject("samples/project", temp_folder, function(err){
+      commandLogic.newProject(PROJECT_TEMPLATE_PATH, temp_folder, function(err){
         assert.ok(err);
         done();
       });
@@ -93,7 +94,7 @@ describe ('cli commands logic', function(){
 
     it('should have a valid config file', function(done){ //avoid shiping an invalid config file
       var projectPath = path.join(temp_folder, 'test');
-      commandLogic.newProject("samples/project", projectPath, function(err){
+      commandLogic.newProject(PROJECT_TEMPLATE_PATH, projectPath, function(err){
         var config_path_contents = fs.readFileSync(path.join(projectPath, "config", "dashboard_common.json"));
         var JSONconfig = JSON.parse(config_path_contents);
         assert.ok(JSONconfig.config);
@@ -109,7 +110,7 @@ describe ('cli commands logic', function(){
 
     beforeEach(function(done){
       fs.mkdir(temp_folder, function(){
-        commandLogic.newProject("samples/project", projectPath, done);
+        commandLogic.newProject(PROJECT_TEMPLATE_PATH, projectPath, done);
       });
     });
 
