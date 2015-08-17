@@ -1,5 +1,4 @@
 //= jquery
-//= console-helper
 //= jquery.gridster.with-extras
 //= underscore
 
