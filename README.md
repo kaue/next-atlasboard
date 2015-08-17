@@ -225,6 +225,22 @@ widget = {
 };
 ```
 
+## Command line filters
+
+To run one particular job only:
+
+```
+atlasboard start --job thejobIAmWorkingOnRegEx
+```
+
+Or one particular dashboard:
+
+```
+atlasboard start --dashboard theDashboardIAmWorkingOnRegex
+```
+
+This is specially useful during development so you only bring up the components you need.
+
 ## Log visualizer
 
 If you enable real-time logging in ``yourwallboard/config/atlasboard.json``, you will be able to access logs through a socket.io connection:
