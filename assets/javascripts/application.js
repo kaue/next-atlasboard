@@ -24,7 +24,7 @@ $(function() {
 
   var widgetMethods = { // common methods that all widgets implement
     log : function (data){
-      socket_log.emit('log', {widgetId : this.eventId, data : data}); // emit to logger
+      socket.emit('log', {widgetId : this.eventId, data : data}); // emit to logger
     }
   };
 
@@ -57,7 +57,7 @@ $(function() {
   function log_error (widget, err){
     var errMsg = 'ERROR on ' + widget.eventId + ': ' + err;
     console.error(errMsg);
-    socket_log.emit('log', {widgetId : widget.eventId, error : errMsg}); // emit to logger
+    socket.emit('log', {widgetId : widget.eventId, error : errMsg}); // emit to logger
   }
 
   function bind_widget(io, li){
@@ -158,61 +158,37 @@ $(function() {
 
   buildUI(mainContainer, gridsterContainer);
 
-  var options = {
-    'reconnect': true,
-    'reconnection delay': 1000,
-    'reopen delay': 3000,
-    'max reconnection attempts': Infinity,
-    'reconnection limit': 60000
-  };
+  var serverInfo;
+  var socket = io.connect();
 
-  //----------------------
-  // widget socket
-  //----------------------
-  var socket_w = io.connect('/widgets', options);
-
-  socket_w.on("connect", function() {
+  socket.on("connect", function() {
 
     console.log('connected');
     $('#main-container').removeClass("disconnected");
 
-    bindSocket(socket_w, gridsterContainer);
+    bindSocket(socket, gridsterContainer);
 
-    socket_w.on("disconnect", function() {
+    socket.on("disconnect", function() {
       $('#main-container').addClass("disconnected");
       console.log('disconnected');
     });
 
     // reconnect
-    socket_w.on('reconnecting', function () {
+    socket.on('reconnecting', function () {
       console.log('reconnecting...');
     });
 
-    socket_w.on('reconnect_failed', function () {
+    socket.on('reconnect_failed', function () {
       console.log('reconnected FAILED');
     });
 
-  });
-
-  //----------------------
-  // log socket
-  //----------------------
-  var socket_log = io.connect('/log', options);
-  socket_log.on("connect", function() {
-    console.log('log socket connected');
-  });
-
-  //----------------------
-  // status socket
-  //----------------------
-  var socket_s = io.connect('/', options);
-  var serverInfo;
-  socket_s.on("serverinfo", function(newServerInfo) {
-    if (!serverInfo) {
-      serverInfo = newServerInfo;
-    } else if (newServerInfo.startTime > serverInfo.startTime) {
-      window.location.reload();
-    }
+    socket.on("serverinfo", function(newServerInfo) {
+      if (!serverInfo) {
+        serverInfo = newServerInfo;
+      } else if (newServerInfo.startTime > serverInfo.startTime) {
+        window.location.reload();
+      }
+    });
   });
 });
 
