@@ -7,17 +7,19 @@ var path = require('path'),
 describe ('static assets', function(){
   var app;
   var port = 4444;
+  var server;
+
   before(function(){
     app = require('express')();
     var configPath = path.join(process.cwd(), 'test', 'fixtures', 'config','log-disabled.json');
     var config = require('../lib/config-manager')(configPath);
     config.wallboardAssetFolder = path.join(process.cwd(), 'test', 'fixtures', 'assets');
     web_routes(app, null, null, config);
-    app.listen(port);
+    server = app.listen(port);
   });
 
   after(function(){
-    //app.close(); //close method in express.js 3.x?
+    server.close();
   });
 
   describe ('images', function(){
