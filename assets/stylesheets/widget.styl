@@ -1,21 +1,22 @@
 &
-  background-color $widgetBackgroundColor
-  border-radius ($gutterSize / 4)
-  border: $widgetBorder
-  box-shadow 0 0 5px #111
-  color #fff
+  background-color $widget-background-color
+  border-radius ($gutter-size / 4)
+  border: $widget-border
+  box-shadow 0 0 5px $gray-base
+  color $widget-body-text-color
   overflow hidden
-  padding $widgetPadding
+  padding $widget-padding
 
 .widget-container
   width 100%
-  padding $widgetContainerPadding
+  padding $widget-container-padding
 
   > .content
-    padding $widgetContentPadding
+    padding $widget-content-padding
 
 .widget-error
-  opacity 0.1
+  color $brand-warning
+  opacity 0.3
   text-align center
 
   .disabled
@@ -29,14 +30,13 @@
   margin 0 auto
 
 h2
-  background-color $widgetTitleBackgroundColor
-  color $widgetTitleColor
-  font-size $widgetTitleFontSize
-  padding $widgetTitlePadding
-  line-height $widgetTitleFontSize
-  margin-top 0
-  margin-bottom ($gutterSize / 2)
+  background-color $widget-title-background-color
+  color $widget-title-color
+  font-size $widget-title-font-size
+  line-height $widget-title-font-size
+  margin $widget-title-margin
   overflow: hidden
+  padding $widget-title-padding
   text-transform uppercase
   text-overflow: ellipsis
   white-space: nowrap
