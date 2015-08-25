@@ -5,7 +5,7 @@ var web_logic = require ('../lib/webapp/logic');
 var widgetRouteLogic = require ('../lib/webapp/routes/widget');
 var responseHelpers = require ('./includes/responseHelpers');
 
-describe ('web_server', function(){
+describe ('web server', function(){
 
   var wallboard_assets_folder = path.join(process.cwd(), "/test/fixtures/assets_folder");
   var packagesLocalFolder = path.join(process.cwd(), "/test/fixtures/packages");

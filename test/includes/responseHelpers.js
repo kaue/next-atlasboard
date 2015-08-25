@@ -43,8 +43,12 @@ exports = module.exports = (function(){
         done("not expected call to res.end");
       },
 
-      send: function (status, data){
-        assert.equal(statusCode, status);
+      status: function (code) {
+        assert.equal(statusCode, code);
+        return this;
+      },
+
+      send: function (){
         done();
       }
     };
