@@ -22,39 +22,31 @@
     <script>
 
       var maxLogsPerContainer = 100;
+      var socket = io.connect();
 
-      var options = {
-        'reconnect': true,
-        'reconnection delay': 5000,
-        'reopen delay': 3000,
-        'max reconnection attempts': 100
-      };
-
-      var socket_log = io.connect('/log', options);
-
-      socket_log.on("connect", function() {
+      socket.on("connect", function() {
         console.log('connected');
         $('#main-container').removeClass("disconnected");
 
-        socket_log.on("disconnect", function() {
+        socket.on("disconnect", function() {
           $('#main-container').addClass("disconnected");
           console.log('disconnected');
         });
 
         // reconnect
-        socket_log.on('reconnecting', function () {
+        socket.on('reconnecting', function () {
           console.log('reconnecting...');
         });
 
-        socket_log.on('reconnect_failed', function () {
+        socket.on('reconnect_failed', function () {
           console.log('reconnected FAILED');
         });
 
-        socket_log.on('client', function(data){
+        socket.on('client', function(data){
           log('client', data.error ? 'error' : 'log', JSON.stringify(data));
         });
 
-        socket_log.on('server', function(data){
+        socket.on('server', function(data){
           log('server', data.type, data.msg);
         });
 
