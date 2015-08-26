@@ -287,6 +287,14 @@ in your shell:
 export HIPCHAT_TOKEN='yourpassword' 
 ```
 
+## Logging
+
+Atlasboard uses [tracer](https://www.npmjs.com/package/tracer)
+Since 1.0 you can override the default logging configuration:
+
+```
+<yourwallboardlocation>/config/logger.js
+```
 
 # Contributing to Atlasboard
 

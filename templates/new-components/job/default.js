@@ -63,7 +63,7 @@ module.exports = function(config, dependencies, job_callback) {
     */
 
     dependencies.easyRequest.HTML('http://google.com', function(err, html){
-      // logger.log(html);
+      // logger.trace(html);
       job_callback(err, { title: config.widgetTitle, html: html });
     });
 };

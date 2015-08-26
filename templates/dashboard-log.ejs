@@ -57,7 +57,7 @@
       }
 
       //msg_type: log, warn, error
-      function log (container, msg_type, content){
+      function log (container, level, content){
         var filter = $('div.filter input', '#' + container).val();
         if (filter){
           if (content.indexOf(filter)==-1)
@@ -68,7 +68,7 @@
           return;
         }
 
-        content = '<span class="log_text logtype_' + msg_type + '"">' + escapeHtml(content) + '</span>';
+        content = '<span class="log_text logtype_' + level + '"">' + escapeHtml(content) + '</span>';
         $('.content', '#' +container).prepend('<div class="entry">' + timestamp() + ' ' + content + '</div>');
 
         // maintain a limit number of entries in the screen (delete old ones)
@@ -156,15 +156,15 @@ h1 {
   overflow: visible;
 }
 
-span.logtype_log {
+.log_text{
   color:black;
 }
 
-span.logtype_error {
+span.logtype_5 {
   color:red;
 }
 
-span.logtype_warn {
+span.logtype_4 {
   color: orange;
   font-weight:bold;
 }
