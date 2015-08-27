@@ -61,7 +61,7 @@ $(function() {
     socket.emit('log', {widgetId : widget.eventId, error : errMsg}); // emit to logger
   }
 
-  function bind_widget(io, li){
+  function bindWidget(io, li){
     var widgetId = encodeURIComponent($(li).attr("data-widget-id"));
     var eventId = $(li).attr("data-event-id");
 
@@ -78,32 +78,32 @@ $(function() {
       // fetch widget js
       $.get('/widgets/' + widgetId + '/js', function(js) {
 
-        var widget_js;
+        var widgetJS;
         try{
-          eval('widget_js = ' + js);
-          widget_js.eventId = eventId;
-          widget_js = $.extend({}, defaultHandlers, widget_js);
-          widget_js = $.extend({}, widgetMethods, widget_js);
-          widget_js.onInit($widgetContainer[0]);
+          eval('widgetJS = ' + js);
+          widgetJS.eventId = eventId;
+          widgetJS = $.extend({}, defaultHandlers, widgetJS);
+          widgetJS = $.extend({}, widgetMethods, widgetJS);
+          widgetJS.onInit($widgetContainer[0]);
         }
         catch (e){
-          logError(widget_js, e);
+          logError(widgetJS, e);
         }
 
         io.on(eventId, function (data) { //bind socket.io event listener
           if (data.error){
-            globalHandlers.onPreError.apply(widget_js, [$(li), data]);
+            globalHandlers.onPreError.apply(widgetJS, [$(li), data]);
           } else {
-            globalHandlers.onPreData.apply(widget_js, [$(li)]);
+            globalHandlers.onPreData.apply(widgetJS, [$(li)]);
           }
 
-          var f = data.error ? widget_js.onError : widget_js.onData;
+          var f = data.error ? widgetJS.onError : widgetJS.onData;
           var $container = data.error ? $errorContainer : $widgetContainer;
           try{
-            f.apply(widget_js, [$container, data]);
+            f.apply(widgetJS, [$container, data]);
           }
           catch (e){
-            logError(widget_js, e);
+            logError(widgetJS, e);
           }
         });
 
@@ -124,8 +124,8 @@ $(function() {
     };
 
     gridsterContainer.gridster({
-      widget_margins: [gridsterGutter, gridsterGutter],
-      widget_base_dimensions: [widgetSize.w, widgetSize.h]
+      'widget_margins': [gridsterGutter, gridsterGutter],
+      'widget_base_dimensions': [widgetSize.w, widgetSize.h]
     });
 
     // Handle browser resize
@@ -143,7 +143,7 @@ $(function() {
   function bindSocket (io, gridsterContainer){
     gridsterContainer.children("li").each(function(index, li) {
       $(li).empty();
-      bind_widget(io, li);
+      bindWidget(io, li);
     });
   }
 
