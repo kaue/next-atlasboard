@@ -296,6 +296,24 @@ Since 1.0 you can override the default logging configuration:
 <yourwallboardlocation>/config/logger.js
 ```
 
+### Logging from your job:
+
+```
+module.exports = function(config, dependencies, job_callback) {
+  var text = "Hello World!";
+
+  var logger = dependencies.logger;
+  logger.log('I am a log message');
+  logger.trace('text is ' + text);
+  logger.debug('text is ' + text);
+  logger.info('I am an info message');
+  logger.warn('I am a warning message');
+  logger.error('this is an error!')
+
+  job_callback(null, {title: config.widgetTitle, text: text});
+};
+```
+
 # Contributing to Atlasboard
 
 - Raise bug reports
