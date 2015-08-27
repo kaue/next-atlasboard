@@ -211,17 +211,16 @@ These are the files created for you in your default package:
 
 ```
 widget = {
-    //runs when we receive data from the job
-    onData: function(el, data) {
-
-        //The parameters our job passed through are in the data object
-        //el is our widget element, so our actions should all be relative to that
-        if (data.title) {
-            $('h2', el).text(data.title);
-        }
-
-        $('.content', el).html(data.text);
+  //runs when we receive data from the job
+  onData: function(el, data) {
+    //The parameters our job passed through are in the data object
+    //el is our widget element, so our actions should all be relative to that
+    if (data.title) {
+      $('h2', el).text(data.title);
     }
+
+    $('.content', el).html(data.text);
+  }
 };
 ```
 
@@ -287,6 +286,32 @@ in your shell:
 export HIPCHAT_TOKEN='yourpassword' 
 ```
 
+## Logging
+
+Atlasboard uses [tracer](https://www.npmjs.com/package/tracer)
+Since 1.0 you can override the default logging configuration:
+
+```
+<yourwallboardlocation>/config/logger.js
+```
+
+### Logging from your job:
+
+```
+module.exports = function(config, dependencies, job_callback) {
+  var text = "Hello World!";
+
+  var logger = dependencies.logger;
+  logger.log('I am a log message');
+  logger.trace('text is ' + text);
+  logger.debug('text is ' + text);
+  logger.info('I am an info message');
+  logger.warn('I am a warning message');
+  logger.error('this is an error!')
+
+  job_callback(null, {title: config.widgetTitle, text: text});
+};
+```
 
 # Contributing to Atlasboard
 
