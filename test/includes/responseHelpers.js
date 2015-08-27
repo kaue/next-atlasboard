@@ -8,7 +8,7 @@ exports = module.exports = (function(){
         assert.equal("application/javascript", data);
       },
 
-      sendfile: function (file){
+      sendFile: function (file){
         assert.ok(file.indexOf(expectedFileContains)>-1);
         done();
       },
@@ -31,8 +31,8 @@ exports = module.exports = (function(){
 
       },
 
-      sendfile: function (){
-        done('not expected call to res.sendfile');
+      sendFile: function (){
+        done('not expected call to res.sendFile');
       },
 
       write: function (){
@@ -64,7 +64,7 @@ exports = module.exports = (function(){
         }
       },
 
-      sendfile: function (file){
+      sendFile: function (file){
         done("not expected");
       },
 
