@@ -51,10 +51,11 @@ $(function() {
     }
   };
 
-  if (!$("#widgets-container").length)
-      return;
+  if (!$("#widgets-container").length){
+    return;
+  }
 
-  function log_error (widget, err){
+  function logError (widget, err){
     var errMsg = 'ERROR on ' + widget.eventId + ': ' + err;
     console.error(errMsg);
     socket.emit('log', {widgetId : widget.eventId, error : errMsg}); // emit to logger
@@ -86,7 +87,7 @@ $(function() {
           widget_js.onInit($widgetContainer[0]);
         }
         catch (e){
-          log_error(widget_js, e);
+          logError(widget_js, e);
         }
 
         io.on(eventId, function (data) { //bind socket.io event listener
@@ -102,7 +103,7 @@ $(function() {
             f.apply(widget_js, [$container, data]);
           }
           catch (e){
-            log_error(widget_js, e);
+            logError(widget_js, e);
           }
         });
 
