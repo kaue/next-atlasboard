@@ -38,7 +38,7 @@ describe('logger', function () {
     var jobMock = {};
     var ioMock = {};
 
-    it.only('should should emit to io sink', function (done) {
+    it('should should emit to io sink', function (done) {
       ioMock = {
         emit: function () {
           done();
