@@ -240,20 +240,6 @@ atlasboard start --dashboard theDashboardIAmWorkingOnRegex
 
 This is specially useful during development so you only bring up the components you need.
 
-## Log visualizer
-
-If you enable real-time logging in ``yourwallboard/config/atlasboard.json``, you will be able to access logs through a socket.io connection:
-
-```
-{
-  "live-logging" : {
-    "enabled": true
-  }
-}
-```
-
-[Log viewer](https://bitbucket.org/atlassian/atlasboard/raw/master/atlasboard-log-viewer.png)
-
 ## Credentials
 
 [Check the wiki for more info about the globalAuth.json file](https://bitbucket.org/atlassian/atlasboard/wiki/Atlasboard%20Authentication)
@@ -312,6 +298,27 @@ module.exports = function(config, dependencies, job_callback) {
   job_callback(null, {title: config.widgetTitle, text: text});
 };
 ```
+
+### Log visualizer
+
+If you enable real-time logging in ``yourwallboard/config/atlasboard.json``, you will be able to access logs through a socket.io connection:
+
+```
+{
+  "live-logging" : {
+    "enabled": true
+  }
+}
+```
+
+[Log viewer](https://bitbucket.org/atlassian/atlasboard/raw/master/atlasboard-log-viewer.png)
+
+## Custom templates
+
+You can use your custom ``dashboard.ejs`` or ``dashboard-list.ejs`` template just creating a file with that name in:
+
+``yourwallboard/templates/dashboard.ejs``
+``yourwallboard/templates/dashboard-list.ejs``
 
 # Contributing to Atlasboard
 
