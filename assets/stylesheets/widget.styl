@@ -1,8 +1,8 @@
 &
   background-color $widget-background-color
   border-radius ($gutter-size / 4)
-  border: $widget-border
-  box-shadow 0 0 5px $gray-base
+  border $widget-border
+  box-shadow $widget-box-shadow
   color $widget-body-text-color
   overflow hidden
   padding $widget-padding
@@ -28,6 +28,7 @@
 .spinner
   display block
   margin 0 auto
+  color $widget-spinner-color
 
 h2
   background-color $widget-title-background-color

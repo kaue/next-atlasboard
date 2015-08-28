@@ -15,7 +15,7 @@ $(function() {
     onError : function (el, data){
       console.error(data);
     },
-    onInit : function (el, data){
+    onInit : function (el){
       $(el).parent().children().hide();
       $(el).parent().children(".spinner").fadeIn();
       resizeBaseLineBasedOnWidgetWith($(el));
@@ -43,12 +43,13 @@ $(function() {
       }
     },
 
-    onPreData : function (el, data){
-      if (!$('.widget-container', el).is(':visible')){
+    onPreData: function (el) {
+      if (!$('.widget-container', el).is(':visible')) {
         $(el).children().fadeOut(500);
         $(el).children(".widget-container").fadeIn(1000);
       }
     }
+
   };
 
   if (!$("#widgets-container").length){
@@ -67,7 +68,7 @@ $(function() {
 
     var $errorContainer = $("<div>").addClass("widget-error").appendTo($(li)).hide();
 
-    var spinner = new Spinner({className: 'spinner', color:'#fff', width:5, length:15, radius: 25, lines: 12,  speed:0.7}).spin();
+    var spinner = new Spinner({className: 'spinner', width:5, length:15, radius: 25, lines: 12,  speed:0.7}).spin();
     $("<div>").addClass("spinner").append(spinner.el).appendTo($(li)).hide();
 
     var $widgetContainer = $("<div>").addClass("widget-container").appendTo($(li)).hide();
