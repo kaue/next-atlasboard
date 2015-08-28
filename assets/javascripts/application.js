@@ -192,5 +192,3 @@ $(function() {
     });
   });
 });
-
-var Widgets = {}; //support legacy widgets
