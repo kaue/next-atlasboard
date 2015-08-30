@@ -8,11 +8,11 @@ var proxyquire = require('proxyquire');
 describe('static assets', function () {
   var app;
   var port = 4444;
-  var server;
+  var httpServer;
 
   before(function () {
     app = express();
-    var routes = proxyquire('../lib/webapp/routes', {
+    var server = proxyquire('../lib/webapp/server', {
       'path': {
         join: function () {
           if (arguments[1] === 'assets') {
@@ -22,16 +22,15 @@ describe('static assets', function () {
         }
       }
     });
-    routes(app);
-    server = app.listen(port);
+    httpServer = server(app, {port: port});
   });
 
   after(function () {
-    server.close();
+    httpServer.close();
   });
 
   describe('images', function () {
-    it('should return atlasboard images', function (done) {
+    it('should return Atlasboard images', function (done) {
       request('http://localhost:' + port + '/images/red-up.png', function (err, response, body) {
         assert.ifError(err);
         assert.equal(response.statusCode, 200);
@@ -40,7 +39,7 @@ describe('static assets', function () {
       });
     });
 
-    it('should not return non existent atlasboard images', function (done) {
+    it('should not return non existent Atlasboard images', function (done) {
       request('http://localhost:' + port + '/images/red-upxxxxxx.png', function (err, response, body) {
         assert.ifError(err);
         assert.equal(response.statusCode, 404);
