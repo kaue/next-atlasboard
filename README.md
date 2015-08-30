@@ -136,14 +136,14 @@ This will generate a job using [this template](https://bitbucket.org/atlassian/a
 A very simple job could look like this:
 
 ```
-module.exports = function(config, dependencies, job_callback) {
+module.exports = function(config, dependencies, jobCallback) {
     var text = "Hello World!";
     // first parameter is error (if any). Second parameter is the job result (if success)
     // you can use the following dependencies:
     // - dependencies.request : request module (https://github.com/mikeal/request)
     // - dependencies.logger : logger interface
 
-   job_callback(null, {title: config.widgetTitle, text: text});
+   jobCallback(null, {title: config.widgetTitle, text: text});
 };
 ```
 
@@ -172,8 +172,37 @@ module.exports = function(config, dependencies, job_callback) {
 };
 ```
 
-As you may notice, Atlasboards exposes a few handy dependencies. Check [their source](https://bitbucket.org/atlassian/atlasboard/raw/master/lib/job-dependencies/?at=master).
+Since 1.0, you can export a job object containing an ``onInit`` and ``onRun`` functions:
 
+```
+module.exports = {
+
+  /**
+   * Executed on job initialisation (only once)
+   * @param config
+   * @param dependencies
+   */
+  onInit: function (config, dependencies) {
+
+  },
+
+  /**
+   * Executed every interval
+   * @param config
+   * @param dependencies
+   * @param jobCallback
+   */
+  onRun: function (config, dependencies, jobCallback) {
+
+  }
+}
+```
+
+This is handy when you want to run some initialisation code only once in your job.
+
+#### Job dependencies
+
+As you may notice, Atlasboards exposes a few handy dependencies. Check [their source](https://bitbucket.org/atlassian/atlasboard/raw/master/lib/job-dependencies/?at=master).
 
 #### Widgets
 
@@ -183,10 +212,7 @@ Widgets run in the client-side. To create one:
 atlasboard generate widget mywidget
 ```
 
-This will generate a widget using [this template](https://bitbucket.org/atlassian/atlasboard/raw/master/samples/widget?at=master).
-
-
-These are the files created for you in your default package:
+This will generate a widget using [this template](https://bitbucket.org/atlassian/atlasboard/raw/master/samples/widget?at=master). These are the files created for you in your default package:
 
 ##### mywidget.html
 
@@ -195,16 +221,17 @@ These are the files created for you in your default package:
 <div class="content"></div>
 ```
 
+Since 1.0, you can create widgets in stylus and pick up variables exported by your current theme:
 
-##### mywidget.css
+##### mywidget.styl
 
 ```
-.content {
-    font-size: 35px;
-    color: #454545;
-    font-weight: bold;
-    text-align: center;
-}
+.content
+    font-size 2em
+    color $gray-lighter
+
+    .error
+      color $error-color
 ```
 
 ##### mywidget.js
@@ -280,6 +307,18 @@ config/auth.js
 { "authenticationFilePath": "globalAuth.json" }
 ```
 
+## Configuration
+
+Both default Atlasboard configuration and the local configuration for your wallboard is stored in the ``config`` folder.
+
+Your wallboard will extend Atlasboard's.
+
+```
+<yourwallboardlocation>/config/logging.js
+<yourwallboardlocation>/config/auth.js
+<yourwallboardlocation>/config/theming.js
+```
+
 ## Logging
 
 Atlasboard uses [tracer](https://www.npmjs.com/package/tracer)
@@ -323,20 +362,83 @@ If you enable real-time logging in ``yourwallboard/config/logging.js``, you will
 
 You can use your custom ``dashboard.ejs`` or ``dashboard-list.ejs`` template just creating a file with that name in:
 
-``yourwallboard/templates/dashboard.ejs``
-``yourwallboard/templates/dashboard-list.ejs``
+```
+yourwallboard/templates/dashboard.ejs
+yourwallboard/templates/dashboard-list.ejs
+```
+
+## Theming support
+
+Since 1.0 you can use themes. For example:
+
+``yourwallboard/themes/inferno/variables.styl``
+
+The inferno theme overrides the following stylus variables:
+
+```
+$background-color = red
+$widget-background-color = red;
+$widget-border = 0
+$widget-box-shadow = none
+```
+
+You can define as many themes as you want:
+
+```
+yourwallboard/themes/default/variables.styl
+yourwallboard/themes/inferno/variables.styl
+yourwallboard/themes/adg/variables.styl
+yourwallboard/themes/lego/variables.styl
+```
+
+and set your current one in the ``theming.js`` configuration file:
+
+```
+// yourwallboard/config/theming.js
+
+module.exports = {
+  theme: 'inferno'
+};
+
+```
+
+## Adding express routes in your job
+
+Since 1.0, jobs have access to the express app, so you can easily add routes to the app. Example:
+
+```
+/**
+ * Job: my job
+ */
+
+module.exports = {
+
+  onInit: function (config, dependencies) {
+    dependencies.logger.info('adding routes...');
+    dependencies.app.route("/jobs/mycustomroute")
+        .get(function (req, res) {
+          res.end('So something useful here');
+        });
+
+  },
+
+  onRun: function (config, dependencies, jobCallback) {
+    // code to be executed every interval
+  }
+};
+```
 
 # Contributing to Atlasboard
 
 - Raise bug reports
 - Fix anything on https://bitbucket.org/atlassian/atlasboard/issues?status=new&status=open
+- Submit new themes
 
 # Roadmap
 
 Planned for future releases:
 
-- Extension points. Packages would be able to plug routes. Middleware. Client-side plugins.
-- Theme support.
+- Client-side plugins.
 - Edit dashboard configuration live.
 - More and better widgets. Make easier to introduce front-end dependencies in packages. Examples of widgets written using React.
 
@@ -344,10 +446,13 @@ Planned for future releases:
 
 ## 1.0.0
 
+- Bump socket.io to support windows installations (issue: XX)
 - Bump to Express 4
 - Stylus support in Widgets
-- Atlaboard default color palette in stylus (which widgets can use)
- 
+- Atlasboard stylus global variables (which widgets can use)
+- Theme support
+- Jobs can register ``onInit`` function
+
 ## 0.13.0
 
 - Fix issue #98: Expose pushUpdate functions to jobs to push updates to the widget independently of the scheduler interval cycle
