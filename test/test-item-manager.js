@@ -11,19 +11,19 @@ describe ('item_manager', function(){
 
   describe ('resolve location', function(){ 
     it('should resolve location of dashboards correctly', function(done){
-      var location = item_manager.resolve_location("dashboard1","dashboards",'.json');
+      var location = item_manager.resolveLocation("dashboard1","dashboards",'.json');
       assert.equal("dashboards/dashboard1.json", location);
       done();
     });
 
     it('should resolve location of jobs correctly', function(done){
-      var location = item_manager.resolve_location("job1","jobs",'.js');
+      var location = item_manager.resolveLocation("job1","jobs",'.js');
       assert.equal("jobs/job1/job1.js", location);
       done();
     });
 
     it('should resolve location of widgets correctly', function(done){
-      var location = item_manager.resolve_location("widget1","widgets",'.js');
+      var location = item_manager.resolveLocation("widget1","widgets",'.js');
       assert.equal("widgets/widget1/widget1.js", location);
       done();
     });
@@ -37,7 +37,7 @@ describe ('item_manager', function(){
           '/Volumes/SSD/confluence-wallboard/packages/alek-atlassian/widgets/buildoverview/buildoverview.html',
           '/Volumes/SSD/confluence-wallboard/packages/atlassian/widgets/buildoverview/buildoverview.html' 
         ];
-      var candidates = item_manager.resolve_candidates(items, 'atlassian#buildoverview', 'widgets', '.html');
+      var candidates = item_manager.resolveCandidates(items, 'atlassian#buildoverview', 'widgets', '.html');
       assert.equal(1, candidates.length);
       assert.equal(items[1], candidates[0]);
       done();
@@ -110,7 +110,7 @@ describe ('item_manager', function(){
     });
 
     it('should be able to pick up the right job with namespacing (1)', function(done){
-      item_manager.get_first([packagesLocalFolder], "otherpackage1#job1", "jobs", ".js", function(err, job_path){
+      item_manager.getFirst([packagesLocalFolder], "otherpackage1#job1", "jobs", ".js", function(err, job_path){
         assert.ok(!err, err);
         assert.ok(job_path);
         var job = require (job_path);
@@ -121,7 +121,7 @@ describe ('item_manager', function(){
     });
 
     it('should be able to pick up the right job with namespacing (2)', function(done){
-      item_manager.get_first([packagesLocalFolder], "default#job1", "jobs", ".js", function(err, job_path){
+      item_manager.getFirst([packagesLocalFolder], "default#job1", "jobs", ".js", function(err, job_path){
         assert.ok(!err, err);
         assert.ok(job_path);
         var job = require (job_path);
@@ -143,7 +143,7 @@ describe ('item_manager', function(){
     });
 
     it('should be able to pick up the right widget with namespacing', function(done){
-      item_manager.get_first([packagesTestNamespacing], "cccccc#blockers", "widgets", ".html", function(err, widget_path){
+      item_manager.getFirst([packagesTestNamespacing], "cccccc#blockers", "widgets", ".html", function(err, widget_path){
         assert.ok(!err, err);
         assert.ok(widget_path.indexOf('test/fixtures/package_test_namespacing/cccccc/widgets/blockers/blockers.html') > -1);
         done();

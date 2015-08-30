@@ -26,7 +26,7 @@ describe ('job_manager', function(){
       configPath: configPath
     };
 
-    jobs_manager.get_jobs(options, function(err, job_workers){
+    jobs_manager.getJobs(options, function(err, job_workers){
       assert.ok(!err, err);
       assert.equal(8, job_workers.length);
 
@@ -52,7 +52,7 @@ describe ('job_manager', function(){
       }
     };
 
-    jobs_manager.get_jobs(options, function(err, job_workers){
+    jobs_manager.getJobs(options, function(err, job_workers){
       assert.ok(!err, err);
       assert.equal(3, job_workers.length); // 4 job items, 3 valid jobs
 
@@ -73,7 +73,7 @@ describe ('job_manager', function(){
       }
     };
 
-    jobs_manager.get_jobs(options, function(err, job_workers){
+    jobs_manager.getJobs(options, function(err, job_workers){
       assert.ok(!err, err);
       assert.equal(3, job_workers.length);
 
@@ -90,7 +90,7 @@ describe ('job_manager', function(){
       configPath: configPath
     };
 
-    jobs_manager.get_jobs(options, function(err, job_workers){
+    jobs_manager.getJobs(options, function(err, job_workers){
       assert.ok(!err);
       var disabled_jobs = job_workers.filter(function(job){ return job.widget_item.enabled;});
       assert.equal(6, disabled_jobs.length);
@@ -104,7 +104,7 @@ describe ('job_manager', function(){
       configPath: configPath
     };
 
-    jobs_manager.get_jobs(options, function(err, job_workers){
+    jobs_manager.getJobs(options, function(err, job_workers){
       assert.ok(!err);
       assert.equal(0, job_workers.length);
       done();
@@ -117,7 +117,7 @@ describe ('job_manager', function(){
       configPath: configPath
     };
 
-    jobs_manager.get_jobs(options, function(err, job_workers){
+    jobs_manager.getJobs(options, function(err, job_workers){
       assert.ok(err.indexOf('No layout field found')>-1);
       done();
     });
@@ -129,7 +129,7 @@ describe ('job_manager', function(){
       configPath: configPath
     };
 
-    jobs_manager.get_jobs(options, function(err, job_workers){
+    jobs_manager.getJobs(options, function(err, job_workers){
       assert.ok(err.indexOf('No widgets field found')>-1);
       done();
     });
@@ -141,7 +141,7 @@ describe ('job_manager', function(){
       configPath: configPath
     };
 
-    jobs_manager.get_jobs(options, function(err, job_workers){
+    jobs_manager.getJobs(options, function(err, job_workers){
       assert.ok(err);
       done();
     });
@@ -153,7 +153,7 @@ describe ('job_manager', function(){
       configPath: configPath
     };
 
-    jobs_manager.get_jobs(options, function(err, job_workers){
+    jobs_manager.getJobs(options, function(err, job_workers){
       assert.ok(!err);
       job_workers.forEach(function(job){
         assert.ok(typeof job.task === "function" );
@@ -168,7 +168,7 @@ describe ('job_manager', function(){
       configPath: configPath
     };
 
-    jobs_manager.get_jobs(options, function(err, job_workers){
+    jobs_manager.getJobs(options, function(err, job_workers){
       assert.ok(!err);
       // job_conf1 is defined in general config file (shared config)
       // the rest of them are defined in the related dashboard file.
@@ -185,7 +185,7 @@ describe ('job_manager', function(){
       configPath: configPath
     };
 
-    jobs_manager.get_jobs(options, function(err, job_workers){
+    jobs_manager.getJobs(options, function(err, job_workers){
       assert.ok(!err);
       // job_conf1 should have some properties from the global config files
       // and other properties from the dashboard file
@@ -218,7 +218,7 @@ describe ('job_manager', function(){
       configPath: configPath
     };
 
-    jobs_manager.get_jobs(options, function(err, job_workers){
+    jobs_manager.getJobs(options, function(err, job_workers){
       assert.ok(!err, err);
       assert.equal(2, job_workers.length);
       job_workers[0].task(null, null, function(err, data){
@@ -237,7 +237,7 @@ describe ('job_manager', function(){
       configPath: invalidConfigPath
     };
 
-    jobs_manager.get_jobs(options, function(err, job_workers){
+    jobs_manager.getJobs(options, function(err, job_workers){
       assert.ok(err);
       done();
     });
@@ -249,7 +249,7 @@ describe ('job_manager', function(){
       configPath: validJsonWithInvalidFormatConfigPath
     };
 
-    jobs_manager.get_jobs(options, function(err, job_workers){
+    jobs_manager.getJobs(options, function(err, job_workers){
       assert.ok(err);
       done();
     });
@@ -261,7 +261,7 @@ describe ('job_manager', function(){
       configPath: noExistentConfigPath
     };
 
-    jobs_manager.get_jobs(options, function(err, job_workers){
+    jobs_manager.getJobs(options, function(err, job_workers){
       assert.ok(!err, err);
       done();
     });
