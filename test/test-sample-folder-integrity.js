@@ -38,7 +38,7 @@ describe('sample folder integrity', function () {
           }
         };
 
-        job({}, mockedDependencies, function (err, data) {
+        job.onRun({}, mockedDependencies, function (err, data) {
           assert.equal('hi!', data.html);
           done();
         });
