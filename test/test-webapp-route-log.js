@@ -1,52 +1,51 @@
-var path = require('path'),
-    request = require('request'),
-    assert = require('assert'),
-    fs = require('fs'),
-    web_routes = require ('../lib/webapp/routes.js');
+var path = require('path');
+var request = require('request');
+var assert = require('assert');
+var fs = require('fs');
+var express = require('express');
+var proxyquire = require('proxyquire');
 
-describe ('logging route', function(){
+describe('logging route', function () {
   var app;
   var port = 4444;
   var server;
 
-  afterEach(function(){
+  var uri = 'http://localhost:' + port + '/log';
+
+  afterEach(function () {
     server.close();
   });
 
-  function createServer(configFile) {
-    app = require('express')();
-    var configPath = path.join(process.cwd(), 'test', 'fixtures', 'config', configFile);
-    var config = require('../lib/config-manager')(configPath);
-    web_routes(app, null, null, config);
-    server = app.listen(port);
+  function createServerWithLoggingSettings(enabled, cb) {
+    var routes = proxyquire('../lib/webapp/routes', {
+      '../config-manager': function () {
+        return {
+          liveLoggingWebAccess: enabled
+        }
+      }
+    });
+    app = express();
+    routes(app, null, null, {});
+    server = app.listen(port, cb);
   }
 
-  describe ('disabled', function(){
-    beforeEach(function(){
-      createServer('log-disabled.json');
-    });
-
-    it('should return error message', function(done){
-      request('http://localhost:' + port + '/log', function(err, response, body){
-        assert.ok(!err);
-        assert.equal(200, response.statusCode);
-        assert.ok(body.indexOf('live logging it disabled')>-1);
+  it('should return error message', function (done) {
+    createServerWithLoggingSettings(false, function () {
+      request(uri, function (err, response, body) {
+        assert.ifError(err);
+        assert.equal(403, response.statusCode);
+        assert.ok(body.indexOf('Live logging it disabled') > -1);
         done();
       });
     });
   });
 
-  describe ('enabled', function(){
-    beforeEach(function(){
-      createServer('log-enabled.json');
-    });
-
-    it('should render log the proper template', function(done){
-      request('http://localhost:' + port + '/log', function(err, response, body){
-        assert.ok(!err);
+  it('should render log the proper template', function (done) {
+    createServerWithLoggingSettings(true, function () {
+      request(uri, function (err, response, body) {
+        assert.ifError(err);
         assert.equal(200, response.statusCode);
-        console.log( body)
-        assert.ok(body.indexOf('use regex for dynamic filtering')>-1);
+        assert.ok(body.indexOf('use regex for dynamic filtering') > -1);
         done();
       });
     });

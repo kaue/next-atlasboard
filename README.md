@@ -272,13 +272,21 @@ in your shell:
 export HIPCHAT_TOKEN='yourpassword' 
 ```
 
+you can define where the authentication file lives by setting the appropriate path here:
+
+```
+config/auth.js
+
+{ "authenticationFilePath": "globalAuth.json" }
+```
+
 ## Logging
 
 Atlasboard uses [tracer](https://www.npmjs.com/package/tracer)
 Since 1.0 you can override the default logging configuration:
 
 ```
-<yourwallboardlocation>/config/logger.js
+<yourwallboardlocation>/config/logging.js
 ```
 
 ### Logging from your job:
@@ -301,13 +309,11 @@ module.exports = function(config, dependencies, job_callback) {
 
 ### Log visualizer
 
-If you enable real-time logging in ``yourwallboard/config/atlasboard.json``, you will be able to access logs through a socket.io connection:
+If you enable real-time logging in ``yourwallboard/config/logging.js``, you will be able to access logs through a socket.io connection:
 
 ```
 {
-  "live-logging" : {
-    "enabled": true
-  }
+  "liveLoggingWebAccess" : true
 }
 ```
 

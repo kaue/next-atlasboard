@@ -1,37 +1,17 @@
 var assert = require('assert');
+var loggerFactory = require('../lib/logger');
 
 describe('logger', function () {
 
   var logger = require('../lib/logger')();
 
-  it('should contain a log method', function (done) {
+  it('should contain all required method', function () {
     assert.equal('function', typeof logger.log);
-    done();
-  });
-
-  it('should contain a trace method', function (done) {
     assert.equal('function', typeof logger.trace);
-    done();
-  });
-
-  it('should contain a debug method', function (done) {
     assert.equal('function', typeof logger.debug);
-    done();
-  });
-
-  it('should contain an info method', function (done) {
     assert.equal('function', typeof logger.info);
-    done();
-  });
-
-  it('should contain a warn method', function (done) {
     assert.equal('function', typeof logger.warn);
-    done();
-  });
-
-  it('should contain an error method', function (done) {
     assert.equal('function', typeof logger.error);
-    done();
   });
 
   describe('io dependency', function () {
@@ -45,7 +25,7 @@ describe('logger', function () {
         }
       };
 
-      logger = require('../lib/logger')(jobMock, ioMock);
+      logger = loggerFactory(jobMock, ioMock);
       logger.error('hola');
     });
   });

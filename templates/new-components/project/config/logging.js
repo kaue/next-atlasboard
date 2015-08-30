@@ -1,8 +1,12 @@
-module.exports = (function() {
+module.exports = {
 
-  return {
+  "liveLoggingWebAccess": false, // disabled by default for security reasons
 
-    // https://www.npmjs.com/package/tracer
+  /**
+   * https://www.npmjs.com/package/tracer
+   */
+
+  "logger": {
 
     "format": [
       "{{timestamp}} <{{title}}> {{message}} ({{file}})",
@@ -14,5 +18,4 @@ module.exports = (function() {
     "dateformat": "HH:MM:ss.L",
     "level": 3
   }
-
-})();
+};

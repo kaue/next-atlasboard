@@ -11,7 +11,7 @@
  * }
  */
 
-module.exports = function(config, dependencies, job_callback) {
+module.exports = function(config, dependencies, jobCallback) {
 
     /*
 
@@ -39,14 +39,14 @@ module.exports = function(config, dependencies, job_callback) {
     Checking for the right configuration could be something like this:
 
     if (!config.myrequiredConfig) {
-        return job_callback('missing configuration properties!');
+        return jobCallback('missing configuration properties!');
     }
 
 
     3. SENDING DATA BACK TO THE WIDGET
 
     You can send data back to the widget anytime (ex: if you are hooked into a real-time data stream and
-    don't want to depend on the job_callback triggered by the scheduler to push data to widgets)
+    don't want to depend on the jobCallback triggered by the scheduler to push data to widgets)
 
     jobWorker.pushUpdate({data: { title: config.widgetTitle, html: 'loading...' }}); // on Atlasboard > 1.0
 
@@ -64,6 +64,6 @@ module.exports = function(config, dependencies, job_callback) {
 
     dependencies.easyRequest.HTML('http://google.com', function(err, html){
       // logger.trace(html);
-      job_callback(err, { title: config.widgetTitle, html: html });
+      jobCallback(err, { title: config.widgetTitle, html: html });
     });
 };

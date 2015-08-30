@@ -1,58 +1,66 @@
-var path = require('path'),
-    web_routes = require ('../lib/webapp/routes.js'),
-    request = require('request'),
-    assert = require('assert'),
-    fs = require('fs');
+var path = require('path');
+var request = require('request');
+var assert = require('assert');
+var fs = require('fs');
+var express = require('express');
+var proxyquire = require('proxyquire');
 
-describe ('static assets', function(){
+describe('static assets', function () {
   var app;
   var port = 4444;
   var server;
 
-  before(function(){
-    app = require('express')();
-    var configPath = path.join(process.cwd(), 'test', 'fixtures', 'config','log-disabled.json');
-    var config = require('../lib/config-manager')(configPath);
-    config.wallboardAssetFolder = path.join(process.cwd(), 'test', 'fixtures', 'assets');
-    web_routes(app, null, null, config);
+  before(function () {
+    app = express();
+    var routes = proxyquire('../lib/webapp/routes', {
+      'path': {
+        join: function () {
+          if (arguments[1] === 'assets') {
+            return path.join(process.cwd(), 'test', 'fixtures', 'assets');
+          }
+          return path.join.apply(null, arguments);
+        }
+      }
+    });
+    routes(app);
     server = app.listen(port);
   });
 
-  after(function(){
+  after(function () {
     server.close();
   });
 
-  describe ('images', function(){
-    it('should return atlasboard images', function(done){
-      request('http://localhost:' + port + '/images/red-up.png', function(err, response, body){
-        assert.ok(!err);
-        assert.equal(200, response.statusCode);
+  describe('images', function () {
+    it('should return atlasboard images', function (done) {
+      request('http://localhost:' + port + '/images/red-up.png', function (err, response, body) {
+        assert.ifError(err);
+        assert.equal(response.statusCode, 200);
         assert.ok(body);
         done();
       });
     });
 
-    it('should not return non existant atlasboard images', function(done){
-      request('http://localhost:' + port + '/images/red-upxxxxxx.png', function(err, response, body){
-        assert.ok(!err);
-        assert.equal(404, response.statusCode);
+    it('should not return non existent atlasboard images', function (done) {
+      request('http://localhost:' + port + '/images/red-upxxxxxx.png', function (err, response, body) {
+        assert.ifError(err);
+        assert.equal(response.statusCode, 404);
         done();
       });
     });
 
-    it('should return wallboard images', function(done){
-      request('http://localhost:' + port + '/images/green-down-wallboard-asset.png', function(err, response, body){
-        assert.ok(!err);
-        assert.equal(200, response.statusCode);
+    it('should return wallboard images', function (done) {
+      request('http://localhost:' + port + '/images/green-down-wallboard-asset.png', function (err, response, body) {
+        assert.ifError(err);
+        assert.equal(response.statusCode, 200);
         assert.ok(body);
         done();
       });
     });
 
-    it('should return wallboard images over atlasboard ones if the name is the same', function(done){
-      request('http://localhost:' + port + '/images/red-up.png', function(err, response, body){
-        assert.ok(!err);
-        assert.equal(200, response.statusCode);
+    it('should return wallboard images over atlasboard ones if the name is the same', function (done) {
+      request('http://localhost:' + port + '/images/red-up.png', function (err, response, body) {
+        assert.ifError(err);
+        assert.equal(response.statusCode, 200);
         // this file is not a valid image. It contains just one character to be able to assert
         // that we are fetching the one in the wallboard folder and not the one in atlasboard.
         assert.equal(1, body.length);
@@ -61,31 +69,31 @@ describe ('static assets', function(){
     });
   });
 
-  describe ('css and stylus', function(){
-    it('should render and return stylus', function(done){
-      request('http://localhost:' + port + '/stylesheets/application.css', function(err, response, body){
-        assert.ok(!err);
-        assert.equal(200, response.statusCode);
+  describe('css and stylus', function () {
+    it('should render and return stylus', function (done) {
+      request('http://localhost:' + port + '/stylesheets/application.css', function (err, response, body) {
+        assert.ifError(err);
+        assert.equal(response.statusCode, 200);
         assert.ok(body);
         done();
       });
     });
 
-    it('should cache stylus output so the second request should be blazing fast', function(done){
+    it('should cache stylus output so the second request should be blazing fast', function (done) {
       this.timeout(50);
-      request('http://localhost:' + port + '/stylesheets/application.css', function(err, response, body){
-        assert.ok(!err);
-        assert.equal(200, response.statusCode);
+      request('http://localhost:' + port + '/stylesheets/application.css', function (err, response, body) {
+        assert.ifError(err);
+        assert.equal(response.statusCode, 200);
         assert.ok(body);
         done();
       });
     });
 
-    it('should render the output in compiled folder', function(done){
+    it('should render the output in compiled folder', function (done) {
       var compiledCSSPath = path.join(process.cwd(), '/test/fixtures/assets/compiled/stylesheets/application.css');
-      fs.exists(compiledCSSPath, function(exist){
+      fs.exists(compiledCSSPath, function (exist) {
         assert.ok(exist);
-        fs.unlink(compiledCSSPath, function(err){
+        fs.unlink(compiledCSSPath, function (err) {
           assert.ifError(err);
           done();
         })

@@ -38,53 +38,49 @@ describe ('scheduler', function(){
   });
 
   it('should execute the job when "start" is executed', function(done){
-    scheduler = new Scheduler(mockJobWorker, {});
+    scheduler = new Scheduler(mockJobWorker);
     mockJobWorker.task = function (){
       done();
     };
     scheduler.start();
   });
 
-  it('should schedule a job to be executed in the future in intervals of time', function(done){
-    scheduler = new Scheduler(mockJobWorker, {});
+  it('should schedule a job to be executed in the future in intervals of time', function(){
+    scheduler = new Scheduler(mockJobWorker);
     scheduler.start();
     clock.tick(3000);
     clock.tick(3000);
     assert.ok(stub.calledThrice);
-    done();
   });
 
-  it('should set 1 sec as the minimum interval period', function(done){
+  it('should set 1 sec as the minimum interval period', function(){
     mockJobWorker.config.interval = 10; // really low interval (ms)
-    scheduler = new Scheduler(mockJobWorker, {});
+    scheduler = new Scheduler(mockJobWorker);
     scheduler.start();
     clock.tick(1000);
     clock.tick(1000);
     assert.ok(stub.calledThrice);
-    done();
   });
 
-  it('should set 60 sec if interval is not provided', function(done){
+  it('should set 60 sec if interval is not provided', function(){
     mockJobWorker.config.interval = null;
-    scheduler = new Scheduler(mockJobWorker, {});
+    scheduler = new Scheduler(mockJobWorker);
     scheduler.start();
     clock.tick(60000);
     clock.tick(60000);
     assert.ok(stub.calledThrice);
-    done();
   });
 
-  it('should allow job workers to maintain state across calls', function(done){
+  it('should allow job workers to maintain state across calls', function(){
     mockJobWorker.task = function (config, dependencies, cb){
       this.counter = (this.counter || 0) + 1;
       cb(null, {});
     };
-    scheduler = new Scheduler(mockJobWorker, {});
+    scheduler = new Scheduler(mockJobWorker);
     scheduler.start();
     clock.tick(3000);
     clock.tick(3000);
     assert.equal(3, mockJobWorker.counter);
-    done();
   });
 
   it('should schedule when received an empty data parameter', function(done){
@@ -94,7 +90,7 @@ describe ('scheduler', function(){
     mockJobWorker.pushUpdate = function(){
       done();
     };
-    scheduler = new Scheduler(mockJobWorker, {});
+    scheduler = new Scheduler(mockJobWorker);
     scheduler.start();
   });
 
@@ -106,7 +102,7 @@ describe ('scheduler', function(){
       assert.ok(error);
       done();
     };
-    scheduler = new Scheduler(mockJobWorker, {});
+    scheduler = new Scheduler(mockJobWorker);
     scheduler.start();
   });
 
@@ -118,11 +114,11 @@ describe ('scheduler', function(){
       assert.ok(data.error);
       done();
     };
-    scheduler = new Scheduler(mockJobWorker, {});
+    scheduler = new Scheduler(mockJobWorker);
     scheduler.start();
   });
 
-  it('should allow a grace period to raise errors if retryOnErrorTimes is defined', function(done){
+  it('should allow a grace period to raise errors if retryOnErrorTimes is defined', function(){
     mockJobWorker.config.retryOnErrorTimes = 3;
     var numberJobExecutions = 0;
     var numberCallsSendDataWithErrors = 0;
@@ -146,22 +142,20 @@ describe ('scheduler', function(){
       numberJobExecutions++;
     };
 
-    scheduler = new Scheduler(mockJobWorker, {});
+    scheduler = new Scheduler(mockJobWorker);
     scheduler.start();
     clock.tick(3000);
     clock.tick(3000/3);
     clock.tick(3000/3);
     assert.equal(4, numberJobExecutions);
     assert.equal(1, numberCallsSendDataWithErrors);
-    done();
   });
 
-  it('should handle synchronous errors in job execution', function(done){
+  it('should handle synchronous errors in job execution', function(){
     mockJobWorker.task = sinon.stub().throws('err');
-    scheduler = new Scheduler(mockJobWorker, {});
+    scheduler = new Scheduler(mockJobWorker);
     scheduler.start();
     assert.ok(mockJobWorker.task.calledOnce);
-    done();
   });
 
   it('should notify client when synchronous error occurred during job execution', function(done){
@@ -170,7 +164,7 @@ describe ('scheduler', function(){
       assert.ok(data.error);
       done();
     };
-    scheduler = new Scheduler(mockJobWorker, {});
+    scheduler = new Scheduler(mockJobWorker);
     scheduler.start();
     assert.ok(mockJobWorker.task.calledOnce);
   });
@@ -182,23 +176,22 @@ describe ('scheduler', function(){
       assert.ok(data.error);
       done();
     };
-    scheduler = new Scheduler(mockJobWorker, {});
+    scheduler = new Scheduler(mockJobWorker);
     scheduler.start();
     assert.ok(mockJobWorker.task.calledOnce);
   });
 
-  it('should schedule task even if there was a synchronous error', function (done) {
+  it('should schedule task even if there was a synchronous error', function () {
     mockJobWorker.task = sinon.stub().throws('err');
 
-    scheduler = new Scheduler(mockJobWorker, {});
+    scheduler = new Scheduler(mockJobWorker);
     scheduler.start();
     clock.tick(3000);
     // we expect the initial call plus one call every second (one third of the original interval in recovery mode)
     assert.equal(4, mockJobWorker.task.callCount);
-    done();
   });
 
-  it('should not schedule more than one job when job execution takes long time', function(done) {
+  it('should not schedule more than one job when job execution takes long time', function() {
     mockJobWorker.task = function() {};
     var stub = sinon.stub(mockJobWorker, "task", function (config, dependencies, cb) {
       setTimeout(function() {
@@ -210,7 +203,6 @@ describe ('scheduler', function(){
     clock.tick(13000);
     clock.tick(13000);
     assert.ok(stub.calledThrice);
-    done();
   });
 
   it('should warn if multiple job callbacks are executed', function(done) {
@@ -222,7 +214,7 @@ describe ('scheduler', function(){
       assert.ok(msg.indexOf('job_callback executed more than once') > -1);
       done();
     };
-    scheduler = new Scheduler(mockJobWorker, {});
+    scheduler = new Scheduler(mockJobWorker);
     scheduler.start();
   });
 

@@ -1,51 +1,60 @@
-var assert = require ('assert'),
-    path = require('path');
+var assert = require('assert');
+var path = require('path');
+var proxyquire = require('proxyquire');
 
-describe ('config manager', function(){
+describe('config manager', function () {
 
-  it('should handle non existant config file', function(done){
-    var configFilePath = path.join(process.cwd(), 'config', 'non_existant_config.json');
-    var config = require ('../lib/config-manager')(configFilePath);
-    assert.equal(null, config.get('test'));
-    done();
-  });
-
-  it('should throw if invalid config file', function(done){
-    var configFilePath = path.join(process.cwd(), 'test', 'fixtures', 'config', 'invalid_config.json');
-    try {
-      var config = require ('../lib/config-manager')(configFilePath);
-    }
-    catch(e){
-      done();
-    }
-  });
-
-  it('should handle valid config file', function(done){
-    var configFilePath = path.join(process.cwd(), 'test', 'fixtures', 'config', 'valid_config.json');
-    var config = require ('../lib/config-manager')(configFilePath);
-    assert.equal('val1', config.get('key1'));
-    done();
-  });
-
-  describe ('wallboard specific config', function(){
-
-    it('should extend from atlasboard config', function(done){
-      var atlasboardConfigFilePath = path.join(process.cwd(), 'test','fixtures', 'config', 'valid_config.json');
-      var wallboardConfigFilePath = path.join(process.cwd(), 'test','fixtures', 'config', 'log-enabled.json');
-      var config = require ('../lib/config-manager')(wallboardConfigFilePath, atlasboardConfigFilePath);
-      assert.equal('val1', config.get('key1'));
-      assert.equal(true, config.get('live-logging').enabled);
-      done();
+  describe('single configuration file', function () {
+    var configManager = proxyquire('../lib/config-manager', {
+      'path': {
+        join: function () {
+          if (arguments[0] === process.cwd()) {
+            arguments[0] = path.join(process.cwd(), 'test', 'fixtures');
+            return path.join.apply(this, arguments);
+          }
+          return path.join.apply(null, arguments);
+        }
+      }
     });
 
-    it('should shadow atlasboard default config', function(done){
-      var atlasboardConfigFilePath = path.join(process.cwd(), 'test', 'fixtures', 'config', 'valid_config.json');
-      var wallboardConfigFilePath = path.join(process.cwd(), 'test', 'fixtures', 'config', 'valid_config_shadowing.json');
-      var config = require ('../lib/config-manager')(wallboardConfigFilePath, atlasboardConfigFilePath);
-      assert.equal('val2', config.get('key1'));
-      done();
+    it('should handle non existent files', function () {
+      assert.deepEqual(configManager('non_existent_config'), {});
+    });
+
+    it('should throw if the configuration file is invalid', function () {
+      assert.throws(function () {
+        configManager('invalid-config');
+      });
+    });
+
+    it('should read values from the configuration file', function () {
+      var config = configManager('valid-config');
+      assert.equal(config.key1, 'val1');
+    });
+  });
+
+  describe('multiple config files', function () {
+    var configManager;
+
+    beforeEach(function(){
+      configManager = proxyquire('../lib/config-manager', {
+        'path': {
+          join: function () {
+            if (arguments[0] === process.cwd()) {
+              return path.join(path.join(process.cwd(), 'test', 'fixtures', 'config', 'local'), arguments[2]);
+            } else {
+              return path.join(path.join(process.cwd(), 'test', 'fixtures', 'config', 'atlasboard'), arguments[2]);            }
+          }
+        }
+      });
+    });
+
+    it('should extend atlasboard config', function () {
+      var config = configManager('test');
+      assert.equal(config.key1, 'key 1 - localvalue');
+      assert.equal(config.key2, 'key 2 - atlasboard value');
+      assert.equal(config.key3, 'key 3 - localvalue');
     });
 
   });
-
 });

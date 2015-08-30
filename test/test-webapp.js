@@ -1,7 +1,7 @@
 var assert = require ('assert');
 var path = require ('path');
 var fs = require('fs');
-var web_logic = require ('../lib/webapp/logic');
+var webLogic = require ('../lib/webapp/logic');
 var widgetRouteLogic = require ('../lib/webapp/routes/widget');
 var responseHelpers = require ('./includes/responseHelpers');
 
@@ -23,7 +23,7 @@ describe ('web server', function(){
         }
       };
 
-      web_logic.listAllDashboards([packagesLocalFolder, packagesAtlasboardFolder], {}, res);
+      webLogic.listAllDashboards([packagesLocalFolder, packagesAtlasboardFolder], {}, res);
     });
 
     it('redirects to dashboard page if we only have one', function(done){
@@ -37,7 +37,7 @@ describe ('web server', function(){
         }
       };
 
-      web_logic.listAllDashboards([packageWithJustOneDashboard], {}, res);
+      webLogic.listAllDashboards([packageWithJustOneDashboard], {}, res);
     });
 
     it('render one', function(done){
@@ -53,12 +53,12 @@ describe ('web server', function(){
         }
       };
 
-      web_logic.renderDashboard([packagesLocalFolder, packagesAtlasboardFolder], "test_dashboard1", {}, res);
+      webLogic.renderDashboard([packagesLocalFolder, packagesAtlasboardFolder], "test_dashboard1", {}, res);
     });
 
 
     it('returns 404 if there is a dashboard with an invalid format', function(done){
-      web_logic.renderDashboard([packagesLocalFolder, packagesAtlasboardFolder, packagesWithInvalidDashboardFile], "invalid_json_file",
+      webLogic.renderDashboard([packagesLocalFolder, packagesAtlasboardFolder, packagesWithInvalidDashboardFile], "invalid_json_file",
           {}, responseHelpers.getResponseForSendStatusCode(404, done));
     });
 
@@ -76,11 +76,11 @@ describe ('web server', function(){
         }
       };
 
-      web_logic.renderDashboard([packagesLocalFolder, packagesAtlasboardFolder], "../test_dashboard1", {}, res);
+      webLogic.renderDashboard([packagesLocalFolder, packagesAtlasboardFolder], "../test_dashboard1", {}, res);
     });
 
     it('return 404 if dashboard not found', function(done){
-      web_logic.renderDashboard([packagesLocalFolder, packagesAtlasboardFolder], "tttest_dashboard1",
+      webLogic.renderDashboard([packagesLocalFolder, packagesAtlasboardFolder], "tttest_dashboard1",
           {}, responseHelpers.getResponseForSendStatusCode(404, done));
     });
 
@@ -91,27 +91,27 @@ describe ('web server', function(){
     describe ('for dashboard', function(){
 
       it('return javascript assets for a certain dashboard', function(done){
-        web_logic.renderJsDashboard([packagesLocalFolder, packagesAtlasboardFolder], wallboard_assets_folder,
+        webLogic.renderJsDashboard([packagesLocalFolder, packagesAtlasboardFolder], wallboard_assets_folder,
             "test_dashboard1", {}, responseHelpers.getResponseWriteEnd("Peity", "application/javascript", done));
       });
 
       it('returns error when requesting javascript assets for a dashboard that doesn\'t exist', function(done){
-        web_logic.renderJsDashboard([packagesLocalFolder, packagesAtlasboardFolder], wallboard_assets_folder,
+        webLogic.renderJsDashboard([packagesLocalFolder, packagesAtlasboardFolder], wallboard_assets_folder,
           "tttttest_dashboard1", {}, responseHelpers.getResponseForSendStatusCode(404, done));
       });
 
       it('returns error when requesting javascript assets for a dashboard with incorrect format', function(done){
-        web_logic.renderJsDashboard([packagesWithInvalidDashboardFile], wallboard_assets_folder,
+        webLogic.renderJsDashboard([packagesWithInvalidDashboardFile], wallboard_assets_folder,
             "invalid_json_file", {},  responseHelpers.getResponseForSendStatusCode(404, done));
       });
 
       it('handles request when requesting javascript assets for a dashboard with no customJS field', function(done){
-        web_logic.renderJsDashboard([packagesLocalFolder, packagesAtlasboardFolder], wallboard_assets_folder,
+        webLogic.renderJsDashboard([packagesLocalFolder, packagesAtlasboardFolder], wallboard_assets_folder,
             "test_dashboard2", {},  responseHelpers.getResponseWriteEnd(null, "application/javascript", done));
       });
 
       it('handles when requesting javascript assets and file is not found', function(done){
-        web_logic.renderJsDashboard([packagesLocalFolder, packagesAtlasboardFolder], wallboard_assets_folder,
+        webLogic.renderJsDashboard([packagesLocalFolder, packagesAtlasboardFolder], wallboard_assets_folder,
             "other_test_dashboard1", {}, responseHelpers.getResponseWriteEnd(null, "application/javascript", done));
       });
 
