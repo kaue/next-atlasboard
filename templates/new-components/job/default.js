@@ -20,6 +20,15 @@ module.exports = {
    */
   onInit: function (config, dependencies) {
 
+    /*
+    This is a good place for initialisation logic, like registering routes in express:
+
+    dependencies.logger.info('adding routes...');
+    dependencies.app.route("/jobs/mycustomroute")
+        .get(function (req, res) {
+          res.end('So something useful here');
+        });
+    */
   },
 
   /**
@@ -73,7 +82,7 @@ module.exports = {
      as the first parameter, and the widget's data as the second parameter.
 
      This is an example of how to make an HTTP call to google using the easyRequest dependency,
-     and send the result to the registered atlasboard widgets.
+     and send the result to the registered widgets.
      Have a look at test/<%=name%> for an example of how to unit tests this easily by mocking easyRequest calls
 
      */
