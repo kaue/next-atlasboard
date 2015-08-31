@@ -11,8 +11,6 @@ describe ('<%=name%> test', function(){
 
   beforeEach(function (done) {
     
-    // you may probably need a mocked configuration object like this to unit test configuration
-    // parameter check
     mockedConfig = {
       globalAuth: {
         myconfigKey: {
@@ -23,7 +21,6 @@ describe ('<%=name%> test', function(){
       interval: 20000
     };
 
-    // mocking easyRequest in order to unit test this job (check the test below)
     mockedDependencies = {
       logger: console,
       easyRequest : {
@@ -58,8 +55,8 @@ describe ('<%=name%> test', function(){
       };
 
       var config = {};
-      <%=name%>SUT(config, mockedDependencies, function(err, data){
-        assert.equal('hello from google', data.html, 'expected reply from goodle but got ' + data.html);
+      <%=name%>SUT.onRun(config, mockedDependencies, function(err, data){
+        assert.equal('hello from google', data.html, 'expected a different reply from google: ' + data.html);
         done();
       });
     });
