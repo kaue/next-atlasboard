@@ -70,7 +70,7 @@
     "errorhandler": "^1.4.2"
   },
   "devDependencies": {
-    "mocha": "2.2.5",
+    "mocha": "2.3.0",
     "expect.js": "0.1.2",
     "rimraf": "2.1.4",
     "sinon": "1.16.1",
