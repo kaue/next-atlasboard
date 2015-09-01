@@ -1,7 +1,7 @@
 var gulp = require('gulp');
 var plugins = require('gulp-load-plugins')();
 var eslint = require('gulp-eslint');
-var bower_files = require('bower-files')({
+var bowerFiles = require('bower-files')({
   overrides: {
     gridster: {
       main: './dist/jquery.gridster.with-extras.js',
@@ -15,7 +15,7 @@ var bower_files = require('bower-files')({
 });
 
 gulp.task('bower-js', function() {
-  return gulp.src(bower_files.ext('js').files)
+  return gulp.src(bowerFiles.ext('js').files)
       .pipe(plugins.filter('*.js'))
       .pipe(plugins.uglify())
       .pipe(plugins.concat('vendor.js'))
