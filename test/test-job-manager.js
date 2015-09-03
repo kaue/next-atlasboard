@@ -2,7 +2,7 @@ var assert = require ('assert');
 var path = require ('path');
 var jobs_manager = require('../lib/job-manager');
 
-describe ('job_manager', function(){
+describe ('job manager', function(){
 
   var packagesLocalFolder = path.join(process.cwd(), "/test/fixtures/packages");
   var packagesWithInvalidJob = path.join(process.cwd(), "/test/fixtures/package_invalid_job");
@@ -147,7 +147,7 @@ describe ('job_manager', function(){
     });
   });
 
-  it('should have tasks', function(done){
+  it('should have an onRun function', function(done){
     var options = {
       packagesPath: [packagesLocalFolder],
       configPath: configPath
@@ -156,7 +156,7 @@ describe ('job_manager', function(){
     jobs_manager.getJobs(options, function(err, job_workers){
       assert.ok(!err);
       job_workers.forEach(function(job){
-        assert.ok(typeof job.task === "function" );
+        assert.ok(typeof job.onRun === "function" );
       });
       done();
     });
@@ -221,9 +221,9 @@ describe ('job_manager', function(){
     jobs_manager.getJobs(options, function(err, job_workers){
       assert.ok(!err, err);
       assert.equal(2, job_workers.length);
-      job_workers[0].task(null, null, function(err, data){
+      job_workers[0].onRun(null, null, function(err, data){
         assert.ok(!data);
-        job_workers[1].task(null, null, function(err, data){
+        job_workers[1].onRun(null, null, function(err, data){
           assert.ok(!data);
           done();
         });
@@ -266,6 +266,5 @@ describe ('job_manager', function(){
       done();
     });
   });
-
 
 });

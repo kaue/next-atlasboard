@@ -1,6 +1,6 @@
-var assert = require ('assert'),
-    sinon = require ('sinon'),
-    Scheduler = require('../lib/scheduler');
+var assert = require ('assert');
+var sinon = require ('sinon');
+var Scheduler = require('../lib/scheduler');
 
 describe ('scheduler', function(){
 
@@ -14,7 +14,7 @@ describe ('scheduler', function(){
     mockJobWorker = {
       widget_item: { job: 'dummy' },
       config:{interval: 3000},
-      task : function(){},
+      onRun : function(){},
       pushUpdate: function(){},
       dependencies : {
         logger : {
@@ -25,7 +25,7 @@ describe ('scheduler', function(){
       }
     };
 
-    stub = sinon.stub(mockJobWorker, "task", function(config, dependencies, cb) {
+    stub = sinon.stub(mockJobWorker, "onRun", function(config, dependencies, cb) {
       cb(null, {});
     });
     done();
@@ -39,7 +39,7 @@ describe ('scheduler', function(){
 
   it('should execute the job when "start" is executed', function(done){
     scheduler = new Scheduler(mockJobWorker);
-    mockJobWorker.task = function (){
+    mockJobWorker.onRun = function (){
       done();
     };
     scheduler.start();
@@ -72,7 +72,7 @@ describe ('scheduler', function(){
   });
 
   it('should allow job workers to maintain state across calls', function(){
-    mockJobWorker.task = function (config, dependencies, cb){
+    mockJobWorker.onRun = function (config, dependencies, cb){
       this.counter = (this.counter || 0) + 1;
       cb(null, {});
     };
@@ -84,7 +84,7 @@ describe ('scheduler', function(){
   });
 
   it('should schedule when received an empty data parameter', function(done){
-    mockJobWorker.task = function (config, dependencies, cb){
+    mockJobWorker.onRun = function (config, dependencies, cb){
       cb(null);
     };
     mockJobWorker.pushUpdate = function(){
@@ -95,7 +95,7 @@ describe ('scheduler', function(){
   });
 
   it('should handle and log asynchronous errors', function(done){
-    mockJobWorker.task = function (config, dependencies, cb){
+    mockJobWorker.onRun = function (config, dependencies, cb){
       cb('error');
     };
     mockJobWorker.dependencies.logger.error = function(error){
@@ -107,7 +107,7 @@ describe ('scheduler', function(){
   });
 
   it('should notify client on asynchronous errors', function(done){
-    mockJobWorker.task = function (config, dependencies, cb){
+    mockJobWorker.onRun = function (config, dependencies, cb){
       cb('error');
     };
     mockJobWorker.pushUpdate = function(data){
@@ -132,7 +132,7 @@ describe ('scheduler', function(){
       }
     };
 
-    mockJobWorker.task = function (config, dependencies, cb){
+    mockJobWorker.onRun = function (config, dependencies, cb){
       if (numberJobExecutions === 0) {
         cb();
       }
@@ -152,25 +152,25 @@ describe ('scheduler', function(){
   });
 
   it('should handle synchronous errors in job execution', function(){
-    mockJobWorker.task = sinon.stub().throws('err');
+    mockJobWorker.onRun = sinon.stub().throws('err');
     scheduler = new Scheduler(mockJobWorker);
     scheduler.start();
-    assert.ok(mockJobWorker.task.calledOnce);
+    assert.ok(mockJobWorker.onRun.calledOnce);
   });
 
   it('should notify client when synchronous error occurred during job execution', function(done){
-    mockJobWorker.task = sinon.stub().throws('err');
+    mockJobWorker.onRun = sinon.stub().throws('err');
     mockJobWorker.pushUpdate = function(data){
       assert.ok(data.error);
       done();
     };
     scheduler = new Scheduler(mockJobWorker);
     scheduler.start();
-    assert.ok(mockJobWorker.task.calledOnce);
+    assert.ok(mockJobWorker.onRun.calledOnce);
   });
 
   it('should notify client on first synchronous error during job execution even when retryAttempts are configured', function(done){
-    mockJobWorker.task = sinon.stub().throws('err');
+    mockJobWorker.onRun = sinon.stub().throws('err');
     mockJobWorker.config.retryOnErrorTimes = 3;
     mockJobWorker.pushUpdate = function(data){
       assert.ok(data.error);
@@ -178,22 +178,22 @@ describe ('scheduler', function(){
     };
     scheduler = new Scheduler(mockJobWorker);
     scheduler.start();
-    assert.ok(mockJobWorker.task.calledOnce);
+    assert.ok(mockJobWorker.onRun.calledOnce);
   });
 
-  it('should schedule task even if there was a synchronous error', function () {
-    mockJobWorker.task = sinon.stub().throws('err');
+  it('should schedule onRun even if there was a synchronous error', function () {
+    mockJobWorker.onRun = sinon.stub().throws('err');
 
     scheduler = new Scheduler(mockJobWorker);
     scheduler.start();
     clock.tick(3000);
     // we expect the initial call plus one call every second (one third of the original interval in recovery mode)
-    assert.equal(4, mockJobWorker.task.callCount);
+    assert.equal(4, mockJobWorker.onRun.callCount);
   });
 
   it('should not schedule more than one job when job execution takes long time', function() {
-    mockJobWorker.task = function() {};
-    var stub = sinon.stub(mockJobWorker, "task", function (config, dependencies, cb) {
+    mockJobWorker.onRun = function() {};
+    var stub = sinon.stub(mockJobWorker, "onRun", function (config, dependencies, cb) {
       setTimeout(function() {
         cb(null, {});
       }, 10000);
@@ -206,7 +206,7 @@ describe ('scheduler', function(){
   });
 
   it('should warn if multiple job callbacks are executed', function(done) {
-    mockJobWorker.task = function(config, dependencies, job_callback){
+    mockJobWorker.onRun = function(config, dependencies, job_callback){
       job_callback(null, {});
       job_callback(null, {});
     };
