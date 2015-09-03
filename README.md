@@ -66,6 +66,10 @@ This will generate a default dashboard using [this template](https://bitbucket.o
 
 * `title` dashboard title (optional). Most of the time you will not need this.
 
+* `titleVisible` if true, the title will appear in the wallboard. Otherwise, it will be used only in the dashboard list page.
+
+* `description` dashboard description (optional). To be displayed in the dashboard list page.
+
 * `layout`
 
     * `gridSize` grid size is customizable ( `"gridSize" : { "columns" : 8, "rows" : 6 } `)

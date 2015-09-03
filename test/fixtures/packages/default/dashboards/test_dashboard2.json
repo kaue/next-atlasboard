@@ -1,6 +1,7 @@
 {
+  "title": false,
+  "description": "description for test_dashboard2",
   "layout": {
-      "title": false,
       "widgets" : [
           { "enabled" : true, "row" : 1, "col" : 1, "width" : 2, "height" : 2, "widget" : "blockers", "job" : "otherpackage1#job1", "config": "job1_conf"},
           { "enabled" : false, "row" : 1, "col" : 3, "width" : 2, "height" : 4, "widget" : "buildoverview", "job" : "job2", "config": "job2_conf"},

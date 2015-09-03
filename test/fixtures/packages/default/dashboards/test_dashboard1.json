@@ -1,7 +1,7 @@
 {
+  "title": "A custom title for test_dashboard1",
   "layout": {
       "customJS" : ["jquery.peity.js"],
-      "title": false,
       "widgets" : [
           { "enabled" : true, "row" : 1, "col" : 1, "width" : 2, "height" : 2, "widget" : "blockers", "job" : "default#job1", "config": "job1_conf"},
           { "enabled" : true, "row" : 1, "col" : 3, "width" : 2, "height" : 4, "widget" : "buildoverview", "job" : "job2", "config": "job2_conf"}
