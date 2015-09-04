@@ -302,21 +302,119 @@ widget = {
 };
 ```
 
-## Command line filters
+##### Widget event handlers
 
-To run one particular job only:
-
-```
-atlasboard start --job thejobIAmWorkingOnRegEx
-```
-
-Or one particular dashboard:
+You can use the following handlers in your widget:
 
 ```
-atlasboard start --dashboard theDashboardIAmWorkingOnRegex
+/**
+ * Called when the widget gets initialised. Before the arrival of first data
+ * @param {JQuery} $widgetContainer widget container object
+ * @param {string} widgetId
+ */
+
+onInit: function($widgetContainer, widgetId){}
+
+/**
+ * Called when the widget receives data from the server
+ * @param {JQuery} $widgetContainer widget container object
+ * @param {Object} data data parameter
+ * @param {string} widgetId
+ */
+
+onData: function($widgetContainer, data, widgetId){}
+
+/**
+ * Called when the widget receives an error response from the server
+ * @param {JQuery} $errorContainer error container object
+ * @param {Object} data data parameter
+ * @param {Object} data.error error object
+ * @param {string} widgetId
+ */
+
+onError: function($errorContainer, data, widgetId){}
 ```
 
-This is specially useful during development so you only bring up the components you need.
+Most of the times you only want to work with ``onData`` though.
+
+## Client side plugins
+
+You can add client side plugins to extend Atlasboard's default behaviour. Just register global
+event handlers that will be called for each widget according to its life-cycle.
+
+The client side events you can subscribe to are:
+
+```
+// widget events:
+
+atlasboard.on("widgetInit", function (e, data) {}
+atlasboard.on("widgetError", function (e, data) {}
+altasboard.on("widgetData", function (e, data) {}
+
+// socket.io events:
+
+atlasboard.on("socketConnected", function (e) {}
+atlasboard.on("socketDisconnected", function (e) {}
+atlasboard.on("socketReconnectFailed", function (e) {}
+atlasboard.on("socketReconnecting", function (e) {}
+```
+
+For example, the client side plugin that manages the spinner is just this:
+
+```
+(function () {
+
+  atlasboard.on("widgetInit", function (e, data) {
+
+    var spinner = new Spinner({
+      className: 'spinner',
+      color: '#f5f5f5',
+      width: 5,
+      length: 15,
+      radius: 25,
+      lines: 12,
+      speed: 0.7,
+      shadow: true
+    }).spin();
+
+    $("<div>").addClass("spinner").append(spinner.el).appendTo(data.$widgetContainer.parent());
+  });
+
+  atlasboard.on("widgetPreData", function (e, data) {
+    $('.spinner', data.$widgetContainer.parent()).hide();
+  });
+
+  atlasboard.on("widgetPreError", function (e, data) {
+    $('.spinner', data.$errorContainer.parent()).hide();
+  });
+
+})();
+```
+
+Or, let's see you want to build a silly plugin that makes the content of the 'goal-metrics' widget yellow:
+
+```
+// custom-color.js
+(function(){
+
+  atlasboard.on("widgetInit", function(e, data){
+    if (data.widgetId === 'goal-metrics') {
+      data.$widgetContainer.css({css: 'yellow'});
+    }
+  });
+
+})();
+```
+
+Remember that you add custom JS to your wallboard using the ``customJS`` field in the dashboard.json file:
+
+```
+    "layout": {
+        "gridSize" : { "columns" : 20, "rows" : 12 },
+        "customJS": ["custom-color.js", "jquery.peity.js", "md5.js"],
+        "widgets": [ ... ]
+
+```
 
 ## Credentials
 

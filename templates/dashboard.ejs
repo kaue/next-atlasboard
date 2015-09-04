@@ -28,8 +28,8 @@
 </head>
 <body>
     <script>
-        var grid_columns = <%=(dashboardConfig.layout.gridSize && dashboardConfig.layout.gridSize.columns || 6) %>;
-        var grid_rows = <%=(dashboardConfig.layout.gridSize && dashboardConfig.layout.gridSize.rows || 4) %>;
+        var GRID_COLUMNS = <%=(dashboardConfig.layout.gridSize && dashboardConfig.layout.gridSize.columns || 6) %>;
+        var GRID_ROWS = <%=(dashboardConfig.layout.gridSize && dashboardConfig.layout.gridSize.rows || 4) %>;
     </script>
 
     <div id="main-container">
@@ -59,8 +59,7 @@
 
     <script src="socket.io/socket.io.js"></script>
 
-    <script src="javascripts/application.js"></script>
-
+    <script src="build/app.js"></script>
     <script src="<%=dashboardName%>/js"></script>
 
 </body>
