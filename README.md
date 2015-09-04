@@ -14,6 +14,53 @@ Atlasboard is a dashboard framework written in nodejs. Check out the [website](h
 
 ``atlasboard new mywallboard``
 
+# Running atlasboard
+
+## Using the global atlasboard module:
+
+``atlasboard start``
+
+with a predefined port:
+
+``atlasboard start 3000``
+
+### Command line filters
+
+To run one particular job only:
+
+```
+atlasboard start --job thejobIAmWorkingOnRegEx
+```
+
+Or one particular dashboard:
+
+```
+atlasboard start --dashboard theDashboardIAmWorkingOnRegex
+```
+
+This is specially useful during development so you only bring up the components you need.
+
+## Running your wallboard using atlasboard as a module
+
+You can start your wallboard without needing Atlasboard to be installed globally.
+From your wallboard directory, assuming that you have ``start.js`` run:
+
+```
+npm start
+```
+
+``start.js`` looks like this and it is included in > 1.0:
+
+```
+var atlasboard = require('atlasboard');
+atlasboard({port: 3000}, function (err) {
+  if (err) {
+    throw err;
+  }
+});
+```
+
+You'll need to add the atlasboard dependency to your ``package.json``.
 
 # Importing your first package
 
