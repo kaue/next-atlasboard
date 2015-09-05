@@ -149,8 +149,11 @@ This will generate a default dashboard using [this template](https://bitbucket.o
 ```
 {
   "enabled": true,
-  "layout": {           
-    "title": false,
+
+  "title": "aurora",
+  "description": "aurora's wallboard",
+
+  "layout": {
     "gridSize" : { "columns" : 6, "rows" : 4 },
     "customJS" : [],
     "widgets" : [
