@@ -16,7 +16,6 @@ describe('dashboards', function () {
       var res = {
         render: function (template, data) {
           assert.equal(4, data.dashboards.length);
-          console.log(data.dashboards.map(function(d){return d.friendlyDashboardName}));
           assert.equal(data.dashboards[0].friendlyDashboardName, 'A custom title for test_dashboard1');
           assert.equal(data.dashboards[1].friendlyDashboardName, 'other test dashboard1');
           assert.equal(data.dashboards[2].friendlyDashboardName, 'other test dashboards2');
