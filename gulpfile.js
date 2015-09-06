@@ -2,6 +2,7 @@ var gulp = require('gulp');
 var plugins = require('gulp-load-plugins')();
 var eslint = require('gulp-eslint');
 var watch = require('gulp-watch');
+var mocha = require('gulp-mocha');
 var bowerFiles = require('bower-files')({
   overrides: {
     gridster: {
@@ -15,14 +16,16 @@ var bowerFiles = require('bower-files')({
   }
 });
 
-var appFiles = ['assets/javascripts/application.js', 'assets/javascripts/plugins/*.js'];
+var watchForClientJSFiles = ['assets/javascripts/application.js', 'assets/javascripts/plugins/*.js'];
+var watchForServerJSFiles = ['test/*.js', 'lib/**/*.js'];
 
 var watch = function () {
-  gulp.watch(appFiles, ['build-client-js']);
+  gulp.watch(watchForClientJSFiles, ['build-client-js']);
+  gulp.watch(watchForServerJSFiles, ['unit']);
 };
 
 var buildApplicationJS = function () {
-  return gulp.src(appFiles)
+  return gulp.src(watchForClientJSFiles)
       .pipe(plugins.filter('*.js'))
       .pipe(plugins.uglify())
       .pipe(plugins.concat('app.js'))
@@ -35,6 +38,11 @@ var buildBowerJS = function () {
       .pipe(plugins.uglify())
       .pipe(plugins.concat('vendor.js'))
       .pipe(gulp.dest('assets/build'));
+};
+
+var runUnitTests = function () {
+  return gulp.src('test/*.js')
+      .pipe(mocha({reporter: 'list'}));
 };
 
 var lintJS = function () {
@@ -83,6 +91,7 @@ var lintJS = function () {
 gulp.task('bower-js', buildBowerJS);
 gulp.task('build-client-js', buildApplicationJS);
 gulp.task('lint', lintJS);
+gulp.task('unit', runUnitTests);
 
 gulp.task('watch', watch);
-gulp.task('default', ['lint', 'build-client-js']);
+gulp.task('default', ['lint', 'unit', 'build-client-js']);
