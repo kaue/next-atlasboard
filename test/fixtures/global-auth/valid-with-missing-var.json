@@ -1,0 +1,6 @@
+{
+  "foo": {
+    "username": "${MISSING_VAR}",
+    "password": "before_${TEST_PASSWORD}_after"
+  }
+}
