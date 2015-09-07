@@ -40,7 +40,7 @@ atlasboard start --dashboard theDashboardIAmWorkingOnRegex
 
 This is specially useful during development so you only bring up the components you need.
 
-## Running your wallboard using atlasboard as a module
+## Running your wallboard using Atlasboard as a module
 
 You can start your wallboard without needing Atlasboard to be installed globally.
 From your wallboard directory, assuming that you have ``start.js`` run:
@@ -53,7 +53,7 @@ npm start
 
 ```
 var atlasboard = require('atlasboard');
-atlasboard({port: 3000}, function (err) {
+atlasboard({port: process.env.ATLASBOARD_PORT || 3000, install: true}, function (err) {
   if (err) {
     throw err;
   }

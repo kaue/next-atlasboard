@@ -17,7 +17,7 @@
     "mocha": "2.3.0"
   },
   "dependencies": {
-    "atlasboard": "*"
+    "atlasboard": "^1.0.0"
   },
   "scripts":{
     "start":"node start",
