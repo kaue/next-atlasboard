@@ -147,7 +147,7 @@ describe ('cli commands logic', function(){
         commandLogic.generate(projectPath, "default", "widget", "newcalendar", function(err, data){
           assert.ok(!err, err);
           var htmlFileWidget = path.join(projectPath, "packages", "default", "widgets", "newcalendar", 'newcalendar.html');
-          assertFileContains(htmlFileWidget, '<h2>newcalendar</h2>', done);
+          assertFileContains(htmlFileWidget, '<h2 class="widget-title">newcalendar</h2>', done);
         });
       });
 
