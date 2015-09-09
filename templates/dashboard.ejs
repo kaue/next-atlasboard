@@ -40,8 +40,11 @@
         <div id="widgets-container" class="gridster">
             <ul>
                 <% dashboardConfig.layout.widgets.forEach(function (widget) { %>
-                    <li data-row="<%= widget.row %>" data-col="<%= widget.col %>" data-sizex="<%= widget.width %>"
-                        data-sizey="<%= widget.height %>" data-widget-id="<%= widget.widget %>"
+                    <li data-row="<%= widget.r || widget.row %>"
+                        data-col="<%= widget.c || widget.col %>"
+                        data-sizex="<%= widget.w || widget.width %>"
+                        data-sizey="<%= widget.h || widget.height %>"
+                        data-widget-id="<%= widget.widget %>"
                         data-event-id="<%=(dashboardName + '-' + widget.row + '-' + widget.col) %>"></li>
                 <% }) %>
             </ul>
