@@ -29,13 +29,25 @@ With a predefined port:
 To run one particular job only:
 
 ```
-atlasboard start --job thejobIAmWorkingOnRegEx
+atlasboard start --job myjob
+```
+
+you can use regular expressions:
+
+```
+atlasboard start --job "my(.*)b"
 ```
 
 Or one particular dashboard:
 
 ```
-atlasboard start --dashboard theDashboardIAmWorkingOnRegex
+atlasboard start --dashboard mydashboard
+```
+
+or use regular expressions:
+
+```
+atlasboard start --dashboard my(.*)board
 ```
 
 This is specially useful during development so you only bring up the components you need.
