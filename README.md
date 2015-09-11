@@ -1,14 +1,13 @@
-![Atlasboard](https://bitbucket.org/atlassian/atlasboard/raw/master/screenshots/wallboard8x6.png)
+![Atlasboard - Default theme](https://bitbucket.org/atlassian/atlasboard/raw/master/screenshots/wallboard8x6.png)
+![Atlasboard - Foundation theme](https://bitbucket.org/atlassian/atlasboard/raw/master/screenshots/foundation-theme.png)
 
 [![Build Status](https://drone.io/bitbucket.org/atlassian/atlasboard/status.png)](https://drone.io/bitbucket.org/atlassian/atlasboard/latest)
 
 Atlasboard is a dashboard framework written in nodejs. Check out the [website](http://atlasboard.bitbucket.org).
 
-
 # Installation
 
 ``npm install -g atlasboard``
-
 
 # Creating your first wallboard
 
@@ -90,6 +89,16 @@ If you'd like your packages to be included here, please send us a link.
 
 # Documentation
 
+## Migrating from Atlasboard 0.x
+
+Nothing is supposed to break once you upgrade but you may want to update a few things:
+
+- Make sure you are running nodejs >= 0.10
+- Make sure your configuration is properly moved to the new [file structure](https://bitbucket.org/atlassian/atlasboard/raw/master/config) and delete the old configuration files.
+Adjust verbosity in logging as you see it fit.
+- Writing jobs: Old jobs are still compatible but you probably want to start writing new ones using the new ``onInit`` and ``onRun`` handlers (read below for more details).
+- Updating dashboards: Feel free to update your dashboards to use the new ``title``, ``titleVisible`` and ``description`` properties so they look good in the dashboard list page.
+
 ## Architecture
 
 ![Build Status](https://bitbucket.org/repo/48jGE4/images/3890828144-atlasboard-structure.png)
@@ -127,13 +136,13 @@ This will generate a default dashboard using [this template](https://bitbucket.o
 
         * `enabled` true/false
 
-        * `row` value from 1 to maxRows.
+        * `row` value from 1 to maxRows. You can also uwe `r`.
 
-        * `col` value from 1 to maxColumns.
+        * `col` value from 1 to maxColumns. You can also use `c`.
 
-        * `width` number of columns this widget will occupy
+        * `width` number of columns this widget will occupy. You can also use `w`.
 
-        * `height` number of rows this widget will occupy
+        * `height` number of rows this widget will occupy. You can also use `h`.
 
         * `widget` widget name. If you want to refer to a widget inside an specific package, use the namespace `<package>#<widgetname>` syntax (e.g. ``atlasboard#quotes``).
 
@@ -586,11 +595,35 @@ module.exports = {
 - Fix anything on https://bitbucket.org/atlassian/atlasboard/issues?status=new&status=open
 - Submit new themes
 
+# Atlasboard core development
+
+Running unit tests:
+
+```
+gulp unit
+```
+
+Building client assets
+
+```
+gulp build-client-js
+
+```
+Linting:
+
+```
+gulp lint
+```
+
+Watch mode (linting + testing + asset build)
+
+```
+gulp watch
+```
+
 # Roadmap
 
-Planned for future releases:
-
-- Client-side plugins.
+- Being able to override any configuration properties through ``ENV`` variables.
 - Edit dashboard configuration live.
 - More and better widgets. Make easier to introduce front-end dependencies in packages. Examples of widgets written using React.
 
@@ -598,12 +631,18 @@ Planned for future releases:
 
 ## 1.0.0
 
-- Bump socket.io to support windows installations (issue: XX)
-- Bump to Express 4
-- Stylus support in Widgets
-- Atlasboard stylus global variables (which widgets can use)
-- Theme support
-- Jobs can register ``onInit`` function
+- Bump socket.io to support windows installations (fixes issue: #99).
+- Bump to Express 4 (Atlasboard now requires node >= 0.10).
+- General dependency  bump.
+- Add theme support. Add "foundation" theme.
+- Add client side plugins points.
+- Add stylus support in widgets with access to the global theme palette.
+- Jobs can register ``onInit`` functions (see the docs above).
+- Add support for using "w" and "h" as "width" and "height" properties in dashboard definition.
+- Add gulp.
+- Better configuration management, that can be overridden easily in the wallboard.
+- Better logging configuration.
+- General code refactoring and cleanup.
 
 ## 0.13.0
 
