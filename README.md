@@ -1,4 +1,5 @@
 ![Atlasboard - Default theme](https://bitbucket.org/atlassian/atlasboard/raw/master/screenshots/wallboard8x6.png)
+
 ![Atlasboard - Foundation theme](https://bitbucket.org/atlassian/atlasboard/raw/master/screenshots/foundation-theme.png)
 
 [![Build Status](https://drone.io/bitbucket.org/atlassian/atlasboard/status.png)](https://drone.io/bitbucket.org/atlassian/atlasboard/latest)
@@ -13,13 +14,13 @@ Atlasboard is a dashboard framework written in nodejs. Check out the [website](h
 
 ``atlasboard new mywallboard``
 
-# Running atlasboard
+# Running your wallboard
 
 ## Using the global atlasboard module:
 
 ``atlasboard start``
 
-with a predefined port:
+With a predefined port:
 
 ``atlasboard start 3000``
 
@@ -113,12 +114,12 @@ To create your first dashboard, type the following command:
 atlasboard generate dashboard mydashboard
 ```
 
-This will generate a default dashboard using [this template](https://bitbucket.org/atlassian/atlasboard/raw/master/samples/dashboard?at=master).
+This will generate a default dashboard using [this template](https://bitbucket.org/atlassian/atlasboard/raw/master/templates/new-components/dashboard?at=master).
 
 
 ##### Dashboard descriptor structure:
 
-* `enabled` enables/displays the dashboard. This is a quick way to hide your dashboard without having to delete it.
+* `enabled` enables/displays the dashboard. This is a quick way to hide your dashboard without having to delete it. Defaults to ``true``.
 
 * `title` dashboard title (optional). Most of the time you will not need this.
 
@@ -128,13 +129,13 @@ This will generate a default dashboard using [this template](https://bitbucket.o
 
 * `layout`
 
-    * `gridSize` grid size is customizable ( `"gridSize" : { "columns" : 8, "rows" : 6 } `)
+    * `gridSize` grid size is customizable. Example: `"gridSize" : { "columns" : 8, "rows" : 6 } `
 
     * `customJs` the names of any extra JavaScript libraries, located in `assets/javascripts`, that you'd like included. *(warning: this could be moved out of the layout key in future releases)*.
 
     * `widgets` an array of objects detailing each widget to be displayed on the dashboard. Each `widgets` object has the following attributes:
 
-        * `enabled` true/false
+        * `enabled` enables/disables this particular widget/job. Defaults to ``true``.
 
         * `row` value from 1 to maxRows. You can also uwe `r`.
 
@@ -188,13 +189,13 @@ If you want to share the same configuration for more than one dashboard, place i
 
 #### Jobs
 
-Jobs are run in the background by the scheduler. Their purpose is to send data to the client-side widgets. You can generate one in the default package by typing:
+Jobs are run in the background (server side) by the scheduler. Their purpose is to send data to the client-side widgets. You can generate one in the default package by typing:
 
 ```
 atlasboard generate job myjob
 ```
 
-This will generate a job using [this template](https://bitbucket.org/atlassian/atlasboard/raw/master/samples/job?at=master).
+This will generate a job using [this template](https://bitbucket.org/atlassian/atlasboard/raw/master/templates/new-components/job?at=master).
 
 A very simple job could look like this:
 
@@ -261,21 +262,21 @@ module.exports = {
 }
 ```
 
-This is handy when you want to run some initialisation code only once in your job.
+This is handy when you want to run some initialisation code only once in your job. This is also the preferred way and the old way may not be supported in future releases.
 
 #### Job dependencies
 
-As you may notice, Atlasboards exposes a few handy dependencies. Check [their source](https://bitbucket.org/atlassian/atlasboard/raw/master/lib/job-dependencies/?at=master).
+As you may have noticed, Atlasboards exposes a few handy dependencies. Check [their source](https://bitbucket.org/atlassian/atlasboard/raw/master/lib/job-dependencies/?at=master).
 
 #### Widgets
 
-Widgets run in the client-side. To create one:
+Widgets run in the client-side (web browser). To create one:
 
 ```
 atlasboard generate widget mywidget
 ```
 
-This will generate a widget using [this template](https://bitbucket.org/atlassian/atlasboard/raw/master/samples/widget?at=master). These are the files created for you in your default package:
+This will generate a widget using [this template](https://bitbucket.org/atlassian/atlasboard/raw/master/templates/new-components/widget?at=master). These are the files created for you in your default package:
 
 ##### mywidget.html
 
@@ -359,8 +360,34 @@ The client side events you can subscribe to are:
 ```
 // widget events:
 
+
+/**
+ * Called when the widget gets initialised. Before the arrival of first data
+ * @param e event
+ * @param {JQuery} data.$widgetContainer widget container object
+ * @param {string} data.widgetId
+ */
+
 atlasboard.on("widgetInit", function (e, data) {}
+
+/**
+ * Called when the widget receives an error response from the server
+ * @param e event
+ * @param {JQuery} data.$errorContainer error container object
+ * @param {Object} data.data.error error object
+ * @param {string} data.widgetId
+ */
+
 atlasboard.on("widgetError", function (e, data) {}
+
+/**
+ * Called when the widget receives data from the server
+ * @param e event
+ * @param {JQuery} data.$widgetContainer widget container object
+ * @param {Object} data.data data object
+ * @param {string} data.widgetId
+ */
+
 altasboard.on("widgetData", function (e, data) {}
 
 // socket.io events:
