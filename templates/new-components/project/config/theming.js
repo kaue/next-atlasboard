@@ -1,3 +1,3 @@
-exports.exports = {
+module.exports = {
   theme: 'default'
 };
