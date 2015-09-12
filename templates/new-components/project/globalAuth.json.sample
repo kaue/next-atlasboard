@@ -1,9 +1,10 @@
 {
-    "google":{
-        "username":"atlasuser",
-        "password":"enigma"
-    }, "twitter":{
-        "username":"atlasboardpro",
-        "password":"turing"
+    "stash":{
+        "username":"${STASH_USER}",
+        "password":"${STASH_PASSWORD}"
+    },
+    "jira":{
+        "username":"${JIRA_USER}",
+        "password":"${JIRA_PASSWORD}"
     }
 }
