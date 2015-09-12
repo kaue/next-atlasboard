@@ -8,21 +8,29 @@ Atlasboard is a dashboard framework written in nodejs. Check out the [website](h
 
 # Installation
 
-``npm install -g atlasboard``
+```
+npm install -g atlasboard
+```
 
 # Creating your first wallboard
 
-``atlasboard new mywallboard``
+```
+atlasboard new mywallboard
+```
 
 # Running your wallboard
 
 ## Using the global atlasboard module:
 
-``atlasboard start``
+```
+atlasboard start
+```
 
 With a predefined port:
 
-``atlasboard start 3000``
+```
+atlasboard start 3000
+```
 
 ### Command line filters
 
@@ -371,7 +379,6 @@ The client side events you can subscribe to are:
 
 ```
 // widget events:
-
 
 /**
  * Called when the widget gets initialised. Before the arrival of first data
