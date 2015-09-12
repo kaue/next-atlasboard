@@ -563,7 +563,7 @@ If you enable real-time logging in ``yourwallboard/config/logging.js``, you will
 }
 ```
 
-[Log viewer](https://bitbucket.org/atlassian/atlasboard/raw/master/atlasboard-log-viewer.png)
+![Log viewer](https://bitbucket.org/atlassian/atlasboard/raw/master/screenshots/atlasboard-log-viewer.png)
 
 ## Custom templates
 
