@@ -17,36 +17,32 @@ describe ('cli commands logic', function(){
 
   require('./includes/startup');
 
-  var temp_folder = "test/tmp";
+  var tempFolder = "test/tmp";
   var packagesLocalFolder = path.join(process.cwd(), "/test/fixtures/packages");
   var PROJECT_TEMPLATE_PATH = "templates/new-components/project";
 
   function cleanup (cb){
-    rm(temp_folder, function(){
-      fs.mkdir(temp_folder, cb);
+    rm(tempFolder, function(){
+      fs.mkdir(tempFolder, cb);
     });
   }
 
   //make sure temp folder is deleted even if tests fail (before and after)
-  beforeEach(function(done){
-    cleanup(done);
-  });
+  beforeEach(cleanup);
 
-  afterEach(function(done){
-    cleanup(done);
-  });
+  afterEach(cleanup);
 
   describe ('new', function(){
 
     it('should create a new project ok', function(done){
-      var projectPath = path.join(temp_folder, 'test');
+      var projectPath = path.join(tempFolder, 'test');
       commandLogic.newProject(PROJECT_TEMPLATE_PATH, projectPath, function(err){
-        assert.ok(!err, err);
-        assert.ok(fs.existsSync(path.join(projectPath, "package.json")));
-        assert.ok(fs.existsSync(path.join(projectPath, "globalAuth.json")));
-        assert.ok(fs.existsSync(path.join(projectPath, "assets")));
-        assert.ok(fs.existsSync(path.join(projectPath, "packages")));
-        assert.ok(fs.existsSync(path.join(projectPath, "packages", "demo", "dashboards")));
+        assert.ifError(err);
+        assert.ok(fs.existsSync(path.join(projectPath, "package.json")), 'missing package.json in new generated project: ' + projectPath);
+        assert.ok(fs.existsSync(path.join(projectPath, "globalAuth.json")), 'missing globalAuth.json in new generated project: ' + projectPath);
+        assert.ok(fs.existsSync(path.join(projectPath, "assets")), 'missing assets folder in new generated project: ' + projectPath);
+        assert.ok(fs.existsSync(path.join(projectPath, "packages")), 'missing packages in new generated project:'  + projectPath);
+        assert.ok(fs.existsSync(path.join(projectPath, "packages", "demo", "dashboards")), 'missing packages in new generated project: '  + projectPath);
         assertFileContains(path.join(projectPath, "README.md"), "# test, my awesome", done); // templating works
       });
     });
@@ -54,9 +50,9 @@ describe ('cli commands logic', function(){
     it('should return error if file name is not considered safe or valid', function(done){
 
       function test (name, cb){
-        rm(temp_folder, function(err){
-          fs.mkdir(temp_folder, function(err){
-            commandLogic.newProject(PROJECT_TEMPLATE_PATH, path.join(temp_folder, '' + name), function(err){
+        rm(tempFolder, function(err){
+          fs.mkdir(tempFolder, function(err){
+            commandLogic.newProject(PROJECT_TEMPLATE_PATH, path.join(tempFolder, '' + name), function(err){
               cb(null, !err);
             });
           });
@@ -86,14 +82,14 @@ describe ('cli commands logic', function(){
     });
 
     it('should not create a new project from a folder where a atlasboard project already exists', function(done){
-      commandLogic.newProject(PROJECT_TEMPLATE_PATH, temp_folder, function(err){
+      commandLogic.newProject(PROJECT_TEMPLATE_PATH, tempFolder, function(err){
         assert.ok(err);
         done();
       });
     });
 
     it('should have a valid config file', function(done){ //avoid shiping an invalid config file
-      var projectPath = path.join(temp_folder, 'test');
+      var projectPath = path.join(tempFolder, 'test');
       commandLogic.newProject(PROJECT_TEMPLATE_PATH, projectPath, function(err){
         var config_path_contents = fs.readFileSync(path.join(projectPath, "config", "dashboard_common.json"));
         var JSONconfig = JSON.parse(config_path_contents);
@@ -106,10 +102,10 @@ describe ('cli commands logic', function(){
 
 
   describe ('generate', function(){
-    var projectPath = path.join(temp_folder, 'test');
+    var projectPath = path.join(tempFolder, 'test');
 
     beforeEach(function(done){
-      fs.mkdir(temp_folder, function(){
+      fs.mkdir(tempFolder, function(){
         commandLogic.newProject(PROJECT_TEMPLATE_PATH, projectPath, done);
       });
     });
@@ -201,7 +197,7 @@ describe ('cli commands logic', function(){
       });
 
       it('should return error if dashboard already exists', function(done){
-        commandLogic.generate(temp_folder, "default", "dashboard", "newdashboard", function(err){
+        commandLogic.generate(tempFolder, "default", "dashboard", "newdashboard", function(err){
           assert.ok(err, err);
           done();
         });
