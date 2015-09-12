@@ -500,16 +500,16 @@ You can also use environment variables in your globalAuth.json:
 }
 ```
 
-in your shell:
+in your ``.bashrc``:
 
 ```
-export HIPCHAT_TOKEN='yourpassword' 
+export HIPCHAT_TOKEN='yourtoken'
 ```
 
 you can define where the authentication file lives by setting the appropriate path here:
 
 ```
-config/auth.js
+//config/auth.js
 
 { "authenticationFilePath": "globalAuth.json" }
 ```
@@ -524,6 +524,14 @@ Your wallboard will extend Atlasboard's.
 <yourwallboardlocation>/config/logging.js
 <yourwallboardlocation>/config/auth.js
 <yourwallboardlocation>/config/theming.js
+```
+
+Also, you can extend the final configuration with your ``ENV``:
+
+``ATLASBOARD_CONFIG_<config-file-name>`` expects JSON format:
+
+```
+export ATLASBOARD_CONFIG_theming='{"theme":"foundation"}'
 ```
 
 ## Logging

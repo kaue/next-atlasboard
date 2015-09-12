@@ -36,14 +36,15 @@ describe('config manager', function () {
   describe('multiple config files', function () {
     var configManager;
 
-    beforeEach(function(){
+    beforeEach(function () {
       configManager = proxyquire('../lib/config-manager', {
         'path': {
           join: function () {
             if (arguments[0] === process.cwd()) {
               return path.join(path.join(process.cwd(), 'test', 'fixtures', 'config', 'local'), arguments[2]);
             } else {
-              return path.join(path.join(process.cwd(), 'test', 'fixtures', 'config', 'atlasboard'), arguments[2]);            }
+              return path.join(path.join(process.cwd(), 'test', 'fixtures', 'config', 'atlasboard'), arguments[2]);
+            }
           }
         }
       });
@@ -56,5 +57,44 @@ describe('config manager', function () {
       assert.equal(config.key3, 'key 3 - localvalue');
     });
 
+  });
+
+  describe('reads env input', function () {
+    var configManager;
+
+    beforeEach(function () {
+      configManager = proxyquire('../lib/config-manager', {
+        'path': {
+          join: function () {
+            if (arguments[0] === process.cwd()) {
+              return path.join(path.join(process.cwd(), 'test', 'fixtures', 'config', 'local'), arguments[2]);
+            } else {
+              return path.join(path.join(process.cwd(), 'test', 'fixtures', 'config', 'atlasboard'), arguments[2]);
+            }
+          }
+        }
+      });
+    });
+
+    it('should be extended by ENV variables', function () {
+      process.env['ATLASBOARD_CONFIG_test'] = JSON.stringify({key1: 'key from env'});
+      var config = configManager('test');
+      assert.equal(config.key1, 'key from env');
+      assert.equal(config.key2, 'key 2 - atlasboard value');
+    });
+
+    it('should throw if invalid JSON', function () {
+      process.env['ATLASBOARD_CONFIG_test'] = '{key1: INVALID JSON';
+      assert.throws(function(){
+        configManager('test');
+      });
+    });
+
+    it('should throw if ENV key can not be serialized to an object', function () {
+      process.env['ATLASBOARD_CONFIG_test'] = '"VALID JSON, but not an object"';
+      assert.throws(function(){
+        configManager('test');
+      });
+    });
   });
 });
