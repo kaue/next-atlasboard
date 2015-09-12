@@ -1,5 +1,4 @@
 var ical = require('ical');
-var _ = require('underscore');
 
 module.exports = {
 
@@ -8,6 +7,7 @@ module.exports = {
   },
 
   onRun: function (config, dependencies, jobCallback) {
+    var _ = dependencies.underscore;
     var maxEntries = config.maxEntries || 10;
 
     var formatDate = function (date) {
