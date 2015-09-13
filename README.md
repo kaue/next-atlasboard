@@ -122,7 +122,7 @@ Adjust verbosity in logging as you see it fit.
 
 ## Architecture
 
-![Build Status](https://bitbucket.org/repo/48jGE4/images/3890828144-atlasboard-structure.png)
+![Architecture](https://bitbucket.org/atlassian/atlasboard/raw/master/screenshots/atlasboard-architecture.png?at=master)
 
 ## Components
 
@@ -650,8 +650,9 @@ module.exports = {
 # Contributing to Atlasboard
 
 - Raise bug reports
-- Fix anything on https://bitbucket.org/atlassian/atlasboard/issues?status=new&status=open
+- Anything on https://bitbucket.org/atlassian/atlasboard/issues?status=new&status=open
 - Submit new themes
+- Other ideas: spike on Web Components, React views, widget administration UI, etc
 
 # Atlasboard core development
 
@@ -681,9 +682,10 @@ gulp watch
 
 # Roadmap
 
-- Being able to override any configuration properties through ``ENV`` variables.
 - Edit dashboard configuration live.
-- More and better widgets. Make easier to introduce front-end dependencies in packages. Examples of widgets written using React.
+- More and better widgets.
+- Make easier to introduce front-end dependencies in packages.
+- Spike on React and Web Components for the UI.
 
 # Release history
 
