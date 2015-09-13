@@ -617,6 +617,10 @@ module.exports = {
 
 ```
 
+[These](https://bitbucket.org/atlassian/atlasboard/raw/master/assets/stylesheets/variables.styl?at=master) are the variables you can override with your custom theme.
+
+
+
 ## Adding express routes in your job
 
 Since 1.0, jobs have access to the express app, so you can easily add routes to the app. Example:

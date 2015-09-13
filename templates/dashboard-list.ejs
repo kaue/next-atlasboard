@@ -15,23 +15,21 @@
     <link rel="stylesheet" href="stylesheets/normalize.css" type="text/css" media="screen" />
     <link rel="stylesheet" href="stylesheets/application.css" type="text/css" media="screen" />
 </head>
-<body>
-    <div id="dashboard-list">
-        <h1>Available Dashboards</h1>
-        <ul>
-            <% dashboards.forEach(function (dashboard) { %>
-                <li>
-                    <a href="<%= dashboard.dashboardName %>">
-                        <%= dashboard.friendlyDashboardName %>
-                        <%if (dashboard.description){%>
-                            <span class="description">
-                            <%=dashboard.description%>
-                            </span>
-                        <%}%>
-                    </a>
-                </li>
-            <% }) %>
-        </ul>
-    </div>
+<body class="dashboard-list">
+    <h1>Available Dashboards</h1>
+    <ul>
+        <% dashboards.forEach(function (dashboard) { %>
+            <li>
+                <a href="<%= dashboard.dashboardName %>">
+                    <%= dashboard.friendlyDashboardName %>
+                    <%if (dashboard.description){%>
+                        <span class="description">
+                        <%=dashboard.description%>
+                        </span>
+                    <%}%>
+                </a>
+            </li>
+        <% }) %>
+    </ul>
 </body>
 </html>
