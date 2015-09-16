@@ -302,7 +302,11 @@ This will generate a widget using [this template](https://bitbucket.org/atlassia
 
 ```
 <h2>mywidget</h2>
-<div class="content"></div>
+<div class="content">
+  <p>This is how you link a "cold.png" image that is located on the 'hot-overview' widget inside the
+    "default" package</p>
+  <img src="/widgets/resources?resource=default/hot-overview/cold.png" alt="my image"/>
+</div>
 ```
 
 Since 1.0, you can create widgets in stylus and pick up variables exported by your current theme:
