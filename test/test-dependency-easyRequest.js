@@ -1,6 +1,6 @@
-var assert = require ('assert'),
-    path = require('path'),
-    nock = require('nock');
+var assert = require ('assert');
+var path = require('path');
+var nock = require('nock');
  
 describe ('dependency easyRequest', function(){
 
@@ -14,19 +14,19 @@ describe ('dependency easyRequest', function(){
   });
 
   describe ('JSON', function(){
-    it('should handle non 200 status code', function(done){
-      nock('http://invalid').get('/').reply(404, {});
-    
-      easyRequest.JSON(options, function(err, data){
+    it('should handle empty successful responses', function(done){
+      nock('http://invalid').get('/').reply(200, "");
+
+      easyRequest.JSON(options, function(err){
         assert.ok(err);
         done();
       });
     });
 
-    it('should handle empty responses', function(done){
+    it('should handle empty error responses', function(done){
       nock('http://invalid').get('/').reply(500, "");
 
-      easyRequest.JSON(options, function(err, data){
+      easyRequest.JSON(options, function(err){
         assert.ok(err);
         done();
       });
@@ -35,9 +35,19 @@ describe ('dependency easyRequest', function(){
     it('should handle non JSON responses', function(done){
       nock('http://invalid').get('/').reply(200, "this is not json, is it?");
 
-      easyRequest.JSON(options, function(err, data){
+      easyRequest.JSON(options, function(err){
         assert.ok(err);
         assert.equal('invalid json response', err);
+        done();
+      });
+    });
+
+    it('should return valid JSON if applicable even if the response fails', function(done){
+      nock('http://invalid').get('/').reply(500, { attr: 'this is json'});
+
+      easyRequest.JSON(options, function(err, data){
+        assert.ok(err.indexOf('bad statusCode') > -1);
+        assert.equal(data.attr, 'this is json');
         done();
       });
     });
@@ -47,7 +57,7 @@ describe ('dependency easyRequest', function(){
 
       easyRequest.JSON(options, function(err, data){
         assert.ifError(err);
-        assert.equal('some data', data.attr);
+        assert.equal(data.attr, 'some data');
         done();
       });
     });
@@ -55,18 +65,19 @@ describe ('dependency easyRequest', function(){
 
   describe ('HTML', function(){
     it('should handle non 200 status code', function(done){
-      nock('http://invalid').get('/').reply(404, "not found");
+      nock('http://invalid').get('/').reply(404, 'not found');
     
-      easyRequest.HTML(options, function(err, data){
+      easyRequest.HTML(options, function(err, body){
         assert.ok(err);
+        assert.equal(body, 'not found');
         done();
       });
     });
 
     it('should handle empty responses', function(done){
-      nock('http://invalid').get('/').reply(500, "");
+      nock('http://invalid').get('/').reply(500, '');
 
-      easyRequest.HTML(options, function(err, data){
+      easyRequest.HTML(options, function(err){
         assert.ok(err);
         done();
       });
