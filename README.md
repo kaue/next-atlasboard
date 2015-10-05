@@ -241,7 +241,7 @@ module.exports = function(config, dependencies, job_callback) {
 	dependencies.easyRequest.HTML('http://myprivatewebsite.com', function(err, html) {
 		var result = [];
 		if (err) {
-			logger.error('there was an error running my job, let\'s log it!);
+			logger.error('there was an error running my job, let\'s log it!');
 			// send error message to the widget so it can handle it
 			job_callback(err);
 		} else {
