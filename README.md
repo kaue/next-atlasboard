@@ -157,7 +157,7 @@ This will generate a default dashboard using [this template](https://bitbucket.o
 
         * `enabled` enables/disables this particular widget/job. Defaults to ``true``.
 
-        * `row` value from 1 to maxRows. You can also uwe `r`.
+        * `row` value from 1 to maxRows. You can also use `r`.
 
         * `col` value from 1 to maxColumns. You can also use `c`.
 
