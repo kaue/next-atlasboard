@@ -3,7 +3,7 @@
  */
 
 var assert = require ('assert');
-<%=name%>SUT = require('../<%=name%>');
+var <%=name%>SUT = require('../<%=name%>');
 
 var mockedConfig, mockedDependencies;
 
