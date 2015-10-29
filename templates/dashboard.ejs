@@ -45,7 +45,7 @@
                         data-sizex="<%= widget.w || widget.width %>"
                         data-sizey="<%= widget.h || widget.height %>"
                         data-widget-id="<%= widget.widget %>"
-                        data-event-id="<%=(dashboardName + '-' + widget.row + '-' + widget.col) %>"></li>
+                        data-event-id="<%=(dashboardName + '-' + (widget.r || widget.row) + '-' + (widget.c || widget.col)) %>"></li>
                 <% }) %>
             </ul>
         </div>
