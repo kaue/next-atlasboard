@@ -693,6 +693,10 @@ gulp watch
 
 # Release history
 
+## 1.0.1
+
+- Bug fixes.
+
 ## 1.0.0
 
 - Bump socket.io to support windows installations (fixes issue: #99).
