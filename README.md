@@ -686,7 +686,8 @@ gulp watch
 
 # Roadmap
 
-- Edit dashboard configuration live.
+- Using ``npm`` instead of git submodules for package management.
+- Make editing a dashboard configuration easier.
 - More and better widgets.
 - Make easier to introduce front-end dependencies in packages.
 - Spike on React and Web Components for the UI.
