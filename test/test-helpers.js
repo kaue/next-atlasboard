@@ -56,7 +56,7 @@ describe('helpers', function () {
     it('should return default value if file not found', function () {
       var defaultValue = {};
       assert.equal(defaultValue, helpers.getJSONFromFile(FILE_NOT_EXIST_PATH, defaultValue));
-      assert.equal("test", helpers.getJSONFromFile(FILE_NOT_EXIST_PATH, "test"));
+      assert.equal(helpers.getJSONFromFile(FILE_NOT_EXIST_PATH, "test"), "test");
     });
 
     it('should call callback if file not found', function (done) {
@@ -74,7 +74,7 @@ describe('helpers', function () {
 
     it('should call callback if file is not valid JSON', function (done) {
       helpers.getJSONFromFile(INVALID_JSON_PATH, {}, null, function (path) {
-        assert.equal(INVALID_JSON_PATH, path);
+        assert.equal(path, INVALID_JSON_PATH);
         done();
       });
     });
@@ -104,7 +104,7 @@ describe('helpers', function () {
     it('should parse JSON property', function (done) {
       helpers.readJSONFile(VALID_JSON_PATH, function (err, content) {
         assert.ifError(err);
-        assert.equal("val1", content.key1);
+        assert.equal(content.key1, "val1");
         done();
       });
     });

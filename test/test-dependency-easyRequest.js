@@ -1,7 +1,7 @@
 var assert = require ('assert');
 var path = require('path');
 var nock = require('nock');
- 
+
 describe ('dependency easyRequest', function(){
 
   var options, easyRequest;
@@ -37,7 +37,7 @@ describe ('dependency easyRequest', function(){
 
       easyRequest.JSON(options, function(err){
         assert.ok(err);
-        assert.equal('invalid json response', err);
+        assert.equal(err, 'invalid json response');
         done();
       });
     });
@@ -66,7 +66,7 @@ describe ('dependency easyRequest', function(){
   describe ('HTML', function(){
     it('should handle non 200 status code', function(done){
       nock('http://invalid').get('/').reply(404, 'not found');
-    
+
       easyRequest.HTML(options, function(err, body){
         assert.ok(err);
         assert.equal(body, 'not found');
@@ -88,7 +88,7 @@ describe ('dependency easyRequest', function(){
 
       easyRequest.HTML(options, function(err, data){
         assert.ifError(err);
-        assert.equal('<h2>hello</h2>', data);
+        assert.equal(data, '<h2>hello</h2>');
         done();
       });
     });

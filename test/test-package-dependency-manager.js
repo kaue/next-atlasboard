@@ -38,7 +38,7 @@ describe ('package dependency manager', function(){
   it('should return error if invalid package.json', function(done){
     packageDependencyManagerMocked.installDependencies([packagesInvalidPackageJSON], function(err){
       assert.ok(err);
-      assert.equal('EJSONPARSE', err.code);
+      assert.equal(err.code, 'EJSONPARSE');
       done();
     });
   });
@@ -58,4 +58,3 @@ describe ('package dependency manager', function(){
   });
 
 });
-

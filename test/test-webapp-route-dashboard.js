@@ -15,7 +15,7 @@ describe('dashboards', function () {
     it('get title and description in alphabetical order', function (done) {
       var res = {
         render: function (template, data) {
-          assert.equal(4, data.dashboards.length);
+          assert.equal(data.dashboards.length, 4);
           assert.equal(data.dashboards[0].friendlyDashboardName, 'A custom title for test_dashboard1');
           assert.equal(data.dashboards[1].friendlyDashboardName, 'other test dashboard1');
           assert.equal(data.dashboards[2].friendlyDashboardName, 'other test dashboards2');

@@ -6,7 +6,7 @@ describe('template manager', function(){
 
   it('should resolve global location of template', function(done) {
     templateManager.resolveTemplateLocation("dashboard.ejs", function(err, location){
-      assert.equal(path.join(__dirname, "../templates", "dashboard.ejs"), location);
+      assert.equal(location, path.join(__dirname, "../templates", "dashboard.ejs"));
       done();
     });
   });

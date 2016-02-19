@@ -28,7 +28,7 @@ describe ('job manager', function(){
 
     jobs_manager.getJobs(options, function(err, job_workers){
       assert.ok(!err, err);
-      assert.equal(8, job_workers.length);
+      assert.equal(job_workers.length, 8);
 
       assert.equal(job_workers[0].dashboard_name, "test_dashboard1");
       assert.equal(job_workers[1].dashboard_name, "test_dashboard1");
@@ -54,7 +54,7 @@ describe ('job manager', function(){
 
     jobs_manager.getJobs(options, function(err, job_workers){
       assert.ok(!err, err);
-      assert.equal(3, job_workers.length); // 4 job items, 3 valid jobs
+      assert.equal(job_workers.length, 3); // 4 job items, 3 valid jobs
 
       assert.equal(job_workers[0].dashboard_name, "other_test_dashboard1");
       assert.equal(job_workers[1].dashboard_name, "other_test_dashboards2");
@@ -75,7 +75,7 @@ describe ('job manager', function(){
 
     jobs_manager.getJobs(options, function(err, job_workers){
       assert.ok(!err, err);
-      assert.equal(3, job_workers.length);
+      assert.equal(job_workers.length, 3);
 
       assert.equal(job_workers[0].dashboard_name, "test_dashboard1");
       assert.equal(job_workers[1].dashboard_name, "test_dashboard2");
@@ -93,7 +93,7 @@ describe ('job manager', function(){
     jobs_manager.getJobs(options, function(err, job_workers){
       assert.ok(!err);
       var disabled_jobs = job_workers.filter(function(job){ return job.widget_item.enabled;});
-      assert.equal(6, disabled_jobs.length);
+      assert.equal(disabled_jobs.length, 6);
       done();
     });
   });
@@ -106,7 +106,7 @@ describe ('job manager', function(){
 
     jobs_manager.getJobs(options, function(err, job_workers){
       assert.ok(!err);
-      assert.equal(0, job_workers.length);
+      assert.equal(job_workers.length, 0);
       done();
     });
   });
@@ -191,7 +191,7 @@ describe ('job manager', function(){
       // and other properties from the dashboard file
       var jobsWithJob1Config = job_workers.filter(function(job){return job.widget_item.config === "job1_conf";});
 
-      assert.equal(3, jobsWithJob1Config.length);
+      assert.equal(jobsWithJob1Config.length, 3);
 
       // test_dasboard1 has aditional "other_configuration_option_to_extend_test_dashboard1" config key
       assert.ok(jobsWithJob1Config[0].config.interval);
@@ -220,7 +220,7 @@ describe ('job manager', function(){
 
     jobs_manager.getJobs(options, function(err, job_workers){
       assert.ok(!err, err);
-      assert.equal(2, job_workers.length);
+      assert.equal(job_workers.length, 2);
       job_workers[0].onRun(null, null, function(err, data){
         assert.ok(!data);
         job_workers[1].onRun(null, null, function(err, data){

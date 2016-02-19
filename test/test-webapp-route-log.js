@@ -33,7 +33,7 @@ describe('logging route', function () {
     createServerWithLoggingSettings(false, function () {
       request(uri, function (err, response, body) {
         assert.ifError(err);
-        assert.equal(403, response.statusCode);
+        assert.equal(response.statusCode, 403);
         assert.ok(body.indexOf('Live logging it disabled') > -1);
         done();
       });
@@ -44,7 +44,7 @@ describe('logging route', function () {
     createServerWithLoggingSettings(true, function () {
       request(uri, function (err, response, body) {
         assert.ifError(err);
-        assert.equal(200, response.statusCode);
+        assert.equal(response.statusCode, 200);
         assert.ok(body.indexOf('use regex for dynamic filtering') > -1);
         done();
       });

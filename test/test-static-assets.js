@@ -62,7 +62,7 @@ describe('static assets', function () {
         assert.equal(response.statusCode, 200);
         // this file is not a valid image. It contains just one character to be able to assert
         // that we are fetching the one in the wallboard folder and not the one in atlasboard.
-        assert.equal(1, body.length);
+        assert.equal(body.length, 1);
         done();
       });
     });

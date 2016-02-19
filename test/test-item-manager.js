@@ -12,17 +12,17 @@ describe('item_manager', function () {
   describe('resolve location', function () {
     it('should resolve location of dashboards correctly', function () {
       var location = itemManager.resolveLocation("dashboard1", "dashboards", '.json');
-      assert.equal("dashboards/dashboard1.json", location);
+      assert.equal(location, "dashboards/dashboard1.json");
     });
 
     it('should resolve location of jobs correctly', function () {
       var location = itemManager.resolveLocation("job1", "jobs", '.js');
-      assert.equal("jobs/job1/job1.js", location);
+      assert.equal(location, "jobs/job1/job1.js");
     });
 
     it('should resolve location of widgets correctly', function () {
       var location = itemManager.resolveLocation("widget1", "widgets", '.js');
-      assert.equal("widgets/widget1/widget1.js", location);
+      assert.equal(location, "widgets/widget1/widget1.js");
     });
   });
 
@@ -34,7 +34,7 @@ describe('item_manager', function () {
             '/Volumes/SSD/confluence-wallboard/packages/atlassian/widgets/buildoverview/buildoverview.html'
           ];
       var candidates = itemManager.resolveCandidates(items, 'atlassian#buildoverview', 'widgets', '.html');
-      assert.equal(1, candidates.length);
+      assert.equal(candidates.length, 1);
       assert.equal(items[1], candidates[0]);
     });
   });
@@ -43,7 +43,7 @@ describe('item_manager', function () {
     it('should have the right number of dashboards', function (done) {
       itemManager.get([packagesLocalFolder, packagesAtlasboardFolder], "dashboards", ".json", function (err, dashboards) {
         assert.ok(!err, err);
-        assert.equal(4, dashboards.length);
+        assert.equal(dashboards.length, 4);
         done();
       });
     });
@@ -61,7 +61,7 @@ describe('item_manager', function () {
     it('should not read disabled dashboards', function (done) {
       itemManager.get([packageWithDisabledDashboards], "dashboards", ".json", function (err, dashboards) {
         assert.ok(!err, err);
-        assert.equal(1, dashboards.length);
+        assert.equal(dashboards.length, 1);
         done();
       });
     });
@@ -82,13 +82,13 @@ describe('item_manager', function () {
       itemManager.getByPackage([packagesLocalFolder], "jobs", ".js", function (err, packages) {
         assert.ok(!err, err);
 
-        assert.equal(2, packages.length);
+        assert.equal(packages.length, 2);
 
         assert.equal(packagesLocalFolder + '/default', packages[0].dir);
-        assert.equal(3, packages[0].items.length);
+        assert.equal(packages[0].items.length, 3);
 
         assert.equal(packagesLocalFolder + '/otherpackage1', packages[1].dir);
-        assert.equal(3, packages[1].items.length);
+        assert.equal(packages[1].items.length, 3);
 
         done();
       });
@@ -98,7 +98,7 @@ describe('item_manager', function () {
       itemManager.getByPackage([packagesLocalFolder, "wrongdirecto/ry"], "jobs", ".js", function (err, packages) {
         assert.ok(!err, err);
 
-        assert.equal(2, packages.length);
+        assert.equal(packages.length, 2);
         done();
       });
     });
@@ -131,7 +131,7 @@ describe('item_manager', function () {
     it('should have the right number of widgets', function (done) {
       itemManager.get([packagesLocalFolder], "widgets", ".js", function (err, widgets) {
         assert.ok(!err, err);
-        assert.equal(1, widgets.length);
+        assert.equal(widgets.length, 1);
         done();
       });
     });

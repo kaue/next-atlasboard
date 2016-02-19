@@ -73,7 +73,7 @@ describe ('fs-storage', function(){
         var fsStorage = new fsStorageClass('jobkey1', {storagePath : corruptedStoragePath});
         fsStorage.get('key1', function(error, data){
           assert.ok(error);
-          assert.equal(null, data);
+          assert.equal(data, null);
           done();
         });
       });
@@ -89,7 +89,7 @@ describe ('fs-storage', function(){
         var fsStorage = new fsStorageClass(jobkey, {storagePath : invalidStorageFilePath});
         fsStorage.get('key1', function(error, data){
           assert.ok(error);
-          assert.equal(null, data);
+          assert.equal(data, null);
           done();
         });
       });

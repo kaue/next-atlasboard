@@ -10,7 +10,7 @@ var mockedConfig, mockedDependencies;
 describe ('<%=name%> test', function(){
 
   beforeEach(function (done) {
-    
+
     mockedConfig = {
       globalAuth: {
         myconfigKey: {
@@ -56,7 +56,7 @@ describe ('<%=name%> test', function(){
 
       var config = {};
       <%=name%>SUT.onRun(config, mockedDependencies, function(err, data){
-        assert.equal('hello from google', data.html, 'expected a different reply from google: ' + data.html);
+        assert.equal(data.html, 'hello from google', 'expected a different reply from google: ' + data.html);
         done();
       });
     });

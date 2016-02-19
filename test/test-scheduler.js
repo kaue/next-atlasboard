@@ -80,7 +80,7 @@ describe ('scheduler', function(){
     scheduler.start();
     clock.tick(3000);
     clock.tick(3000);
-    assert.equal(3, mockJobWorker.counter);
+    assert.equal(mockJobWorker.counter, 3);
   });
 
   it('should schedule when received an empty data parameter', function(done){
@@ -147,8 +147,8 @@ describe ('scheduler', function(){
     clock.tick(3000);
     clock.tick(3000/3);
     clock.tick(3000/3);
-    assert.equal(4, numberJobExecutions);
-    assert.equal(1, numberCallsSendDataWithErrors);
+    assert.equal(numberJobExecutions, 4);
+    assert.equal(numberCallsSendDataWithErrors, 1);
   });
 
   it('should handle synchronous errors in job execution', function(){
@@ -188,7 +188,7 @@ describe ('scheduler', function(){
     scheduler.start();
     clock.tick(3000);
     // we expect the initial call plus one call every second (one third of the original interval in recovery mode)
-    assert.equal(4, mockJobWorker.onRun.callCount);
+    assert.equal(mockJobWorker.onRun.callCount, 4);
   });
 
   it('should not schedule more than one job when job execution takes long time', function() {
