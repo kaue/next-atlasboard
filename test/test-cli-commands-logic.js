@@ -167,6 +167,14 @@ describe ('cli commands logic', function(){
         });
       });
 
+      it('should create syntactically correct job test when job name contains \'-\' signs', function(done){
+        commandLogic.generate(projectPath, "default", "job", "new-calendar", function(err, data){
+          assert.ok(!err);
+          var jobTestPath = path.join(projectPath, "packages", "default", "jobs", "new-calendar", "test", "test-new-calendar.js");
+          assertFileContains(jobTestPath, "var new_calendar_SUT = require('../new-calendar');", done);
+        });
+      });
+
       it('should return error if job already exists', function(done){
         commandLogic.generate(projectPath, "default", "job", "newcalendar", function(err, data){
           commandLogic.generate(projectPath, "default", "job", "newcalendar", function(err){
