@@ -10,6 +10,7 @@ describe ('job manager', function(){
   var packagesWithNoWidgetField = path.join(process.cwd(), "/test/fixtures/package_dashboard_with_no_widgets");
   var packagesWithNoLayoutField = path.join(process.cwd(), "/test/fixtures/package_dashboard_with_no_layout");
   var packagesNoSharedStateForJobs = path.join(process.cwd(), "/test/fixtures/package_job_sharing_state");
+  var packageMultipleConfigs = path.join(process.cwd(), "/test/fixtures/package_with_multiple_configs");
 
   //we use only wallboard local folder, since we don´t want our tests to depend on atlasboard jobs
   //var packagesAtlasboardFolder = path.join(process.cwd(), "/packages");
@@ -263,6 +264,25 @@ describe ('job manager', function(){
 
     jobs_manager.getJobs(options, function(err, job_workers){
       assert.ok(!err, err);
+      done();
+    });
+  });
+
+  it('should work with multiple configs', function(done){
+    var options = {
+      packagesPath: [packageMultipleConfigs],
+      configPath: configPath
+    };
+
+    jobs_manager.getJobs(options, function(err, job_workers){
+      var job = job_workers[0];
+      var cfg = job.config;
+
+      assert.equal(cfg.interval, 30000, 'Config B interval should override config A interval');
+      assert.equal(cfg.config_a_unique, 'unique-config-1', 'Config A unique value should be available');
+      assert.equal(cfg.config_b_unique, 'unique-config-2', 'Config B unique value should be available');
+      assert.equal(cfg.jira_server, 'https://jira.atlassian.com', 'Global config value should be available');
+
       done();
     });
   });

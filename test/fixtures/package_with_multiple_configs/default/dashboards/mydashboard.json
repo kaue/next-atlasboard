@@ -1,0 +1,27 @@
+{
+  "layout": {
+      "widgets" : [
+          {
+            "enabled" : true, "row" : 1, "col" : 1, "width" : 2, "height" : 2,
+            "widget" : "blockers",
+            "job" : "job1",
+            "config": ["job1_conf", "config_a", "config_b"]
+          }
+      ]
+  },
+
+
+  "config": {
+
+    "config_a": {
+      "interval" : 60000,
+      "config_a_unique": "unique-config-1"
+    },
+
+    "config_b": {
+      "interval" : 30000,
+      "config_b_unique": "unique-config-2"
+    }
+
+  }
+}
