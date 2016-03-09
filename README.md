@@ -169,9 +169,9 @@ This will generate a default dashboard using [this template](https://bitbucket.o
 
         * `job` Job to be executed. The same namespace syntax applies to specifying jobs.
 
-        * `config` The config key that will be use for this dashboard item.
+        * `config` The config key or array of keys that will be used for this dashboard item.
 
-* `config` a config object for this dashboard, containing a key-value container for job configuration. 
+* `config` a config object for this dashboard, containing a key-value container for job configuration.
 
 
 ##### Example dashboard config file
@@ -188,7 +188,7 @@ This will generate a default dashboard using [this template](https://bitbucket.o
     "customJS" : [],
     "widgets" : [
       {
-        "row" : 1, "col" : 1, 
+        "row" : 1, "col" : 1,
         "width" : 2, "height" : 3,
         "widget" : "quotes", "job" : "quotes-famous", "config" : "quotes"
       }
@@ -206,6 +206,79 @@ This will generate a default dashboard using [this template](https://bitbucket.o
 ##### Using the common dashboard config file
 
 If you want to share the same configuration for more than one dashboard, place it inside `/config/dashboard_common.json` so that you don´t have to repeat it. Atlasboard will merge the configuration keys found in this file with the current dashboard configuration.
+
+##### Using multiple configurations
+
+If you want to use multiple configurations for your job, set the `config` value to an array of keys. Each key can exist in either the current configuration, the shared configuration, or both.
+
+For each configuration key in the array, the local value will override the global, and key `n+1` will override key `n`.
+
+###### Multiple Configurations Example
+
+One use case for multiple configurations is an api root URL used by multiple jobs.
+
+In the shared configuration below, the `system-api` key contains a `url` pointing to the api location. It also includes a default `path` value.
+
+_config/dashboard_common.json_
+```
+"config:" {
+  "system-api": {
+    "url": "http://localhost/api/v1",
+    "path": "/"
+  }
+}
+```
+
+There are two jobs referenced by the dashboard, `system-users` and `system-products`. Both jobs use the same api, but for different data resources, and at different update intervals.
+
+_my_dashboard.json_
+```
+{
+  "widget" : "users",
+  "job" : "system-users",
+  "config": [ "system-api", "system-users"]
+},
+{
+  "widget" : "products",
+  "job" : "system-products",
+  "config": [ "system-api", "system-products"]
+}
+
+...
+
+"config": {
+
+  "system-users": {
+    "path": "/people",
+    "interval":60000
+  },
+
+  "system-products": {
+    "path": "/products",
+    "interval":10000
+  },
+}
+```
+
+Each job references the shared key (_`system-api`_) as the first item in its `config` array. It adds the local, overriding configuration key (_`system-users`_ and _`system-products`_) as the next entry. The job's `onInit` method can then use these values to construct the correct URL for api calls.
+
+Resulting `config` for _system-users_ job:
+```
+{
+  "url": "http://localhost/api/v1",
+  "path": "/users",
+  "interval": 60000
+}
+```
+
+Resulting `config` for _system-products_ job:
+```
+{
+  "url": "http://localhost/api/v1",
+  "path": "/products",
+  "interval": 10000
+}
+```
 
 #### Jobs
 
@@ -250,7 +323,7 @@ module.exports = function(config, dependencies, job_callback) {
 				result.push($(element).find('td:nth-child(1)'));
 			});
 			// this is being sent to the widget through the socket channel
-			job_callback(null, { data: result }); 
+			job_callback(null, { data: result });
 		}
 	});
 };
