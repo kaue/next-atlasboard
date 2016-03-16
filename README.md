@@ -767,6 +767,13 @@ gulp watch
 
 # Release history
 
+## 1.1.0
+
+- New dashboards get started linked to the original dark theme instead of the new customised dark blue one.
+- Allow multiple configurations per widget (thanks William King).
+- Fix issue #120: create syntactically correct job test skeleton when job name contains '-' signs (thanks leif.hanack).
+- Allow setting the screen size that the dashboard will be displayed on (thanks Colin Edwards).
+
 ## 1.0.1
 
 - Bug fixes.
@@ -947,4 +954,4 @@ gulp watch
 
 ## 0.1.0
 
-- first release after some important changes in the core architecture.
+- first release after some important changes in the core architecture.
