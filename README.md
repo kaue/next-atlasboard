@@ -767,6 +767,10 @@ gulp watch
 
 # Release history
 
+## 1.1.1
+
+- Fix issue #133. Also removes calls to util.isArray, maintaing compatibility with 0.10.
+
 ## 1.1.0
 
 - New dashboards get started linked to the original dark theme instead of the new customised dark blue one.
@@ -954,4 +958,4 @@ gulp watch
 
 ## 0.1.0
 
-- first release after some important changes in the core architecture.
+- first release after some important changes in the core architecture.
