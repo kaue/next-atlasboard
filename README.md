@@ -767,6 +767,10 @@ gulp watch
 
 # Release history
 
+## 1.1.2
+
+- Fix issue #130. Logger configuration not working
+
 ## 1.1.1
 
 - Fix issue #133. Also removes calls to util.isArray, maintaing compatibility with 0.10.
