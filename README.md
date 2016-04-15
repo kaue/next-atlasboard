@@ -767,6 +767,10 @@ gulp watch
 
 # Release history
 
+## 1.1.3
+
+- Fix issue#125 - Don't use hard links for dashboard files
+
 ## 1.1.2
 
 - Fix issue #130. Logger configuration not working
