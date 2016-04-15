@@ -108,6 +108,23 @@ describe ('cli commands', function(){
       });
     });
 
+    it('should sanitise input', function(done){
+      var args = ['foo/bar'];
+      commands = proxyquire('../lib/cli/commands', {
+        './commands-logic': {
+          'newProject' : function(srcDir, destDir, callback){
+            assert.equal(destDir.length - destDir.lastIndexOf('foobar'), 6);
+            callback('error so we can interrupt execution and assert just for valid parameters');
+          }
+        }
+      });
+
+      commands.new.run(args, function(err) {
+        assert.ok(err, err);
+        done();
+      });
+    });
+
     it('should pass the right parameters to the logic module when item includes package', function(done){
       var args = ['mywallboard'];
       commands = proxyquire('../lib/cli/commands', {
