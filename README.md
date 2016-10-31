@@ -101,12 +101,11 @@ The [Atlassian package](https://bitbucket.org/atlassian/atlasboard-atlassian-pac
 ### Community contributions
 
 - [atlasboard-red6-package](https://github.com/red6/atlasboard-red6-package)
-- [Stuart Jones's package](http://stuartjones.me/web-development-team-dashboard/)
 - [dcopestake's atlasboard-aws package](https://www.npmjs.com/package/atlasboard-aws)
 - [arhs-atlasboard](https://www.npmjs.com/package/arhs-atlasboard)
+- [atlasboard-sonarqube-package](https://github.com/SonarQubeCommunity/atlasboard-sonarqube-package)
 
 If you'd like your packages to be included here, please send us a link.
-
 
 # Documentation
 
