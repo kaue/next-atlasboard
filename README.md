@@ -4,7 +4,7 @@
 
 [![Build Status](https://drone.io/bitbucket.org/atlassian/atlasboard/status.png)](https://drone.io/bitbucket.org/atlassian/atlasboard/latest)
 
-Atlasboard is a dashboard framework written in nodejs. Check out the [website](http://atlasboard.bitbucket.org).
+Atlasboard is a dashboard framework written in nodejs. Check out the [website](https://atlasboard.bitbucket.io).
 
 # Installation
 
